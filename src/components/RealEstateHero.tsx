@@ -32,8 +32,23 @@ export default function RealEstateHero() {
 
   return (
     <section className="relative min-h-[50vh] flex items-center justify-center px-6 py-24 overflow-hidden bg-slate-950 border-b border-slate-900/50">
+      {/* Háttér videó */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+      >
+        <source src="/videos/ingatlan-bg.mp4" type="video/mp4" />
+      </video>
+
+      {/* Sötétkék/fekete overlay réteg a mérnöki, exkluzív ingatlanos hangulathoz */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-900/75 to-slate-950 pointer-events-none z-0" />
+
       {/* Blueprint stílusú háttér rács */}
-      <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#0284c7_1px,transparent_1px),linear-gradient(to_bottom,#0284c7_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+      <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#0284c7_1px,transparent_1px),linear-gradient(to_bottom,#0284c7_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0" />
+
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-500/10 blur-[130px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-sky-600/5 blur-[130px] pointer-events-none" />
 

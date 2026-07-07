@@ -32,10 +32,25 @@ export default function AfricaHero() {
 
   return (
     <section className="relative min-h-[50vh] flex items-center justify-center px-6 py-24 overflow-hidden bg-slate-950 border-b border-slate-900/50">
+      {/* Háttér videó */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+      >
+        <source src="/videos/afrika-bg.mp4" type="video/mp4" />
+      </video>
+
+      {/* Meleg tónusú sötétítő overlay a tökéletes olvashatósághoz */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-black/75 to-slate-950 pointer-events-none z-0" />
+
       {/* Geometriai afrikai motívumok mintázat és háttérfények */}
-      <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-      <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-amber-500/10 blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-orange-600/5 blur-[130px] pointer-events-none" />
+      <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none z-0" />
+      <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-amber-500/10 blur-[130px] pointer-events-none z-0" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-orange-600/5 blur-[130px] pointer-events-none z-0" />
+
 
       {/* Finom animált körvonalak (geometriai díszítés) */}
       <div className="absolute w-[600px] h-[600px] rounded-full border border-amber-500/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
