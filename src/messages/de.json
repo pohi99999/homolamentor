@@ -61,5 +61,46 @@
     "industryPlaceholder": "z.B. Landwirtschaft, IT, Bauwesen, Fertigung...",
     "submitButton": "Beratung anfordern",
     "successMsg": "Vielen Dank für Ihre Bewerbung! Wir werden uns in Kürze mit Ihnen in Verbindung setzen."
+  },
+  "RealEstateHero": {
+    "badge": "PREMIUM INVESTITIONEN",
+    "title": "Immobilien- & Industrieportal",
+    "subtitle": "Internationaler Verkauf und Vermittlung von Industriegebieten, Logistikparks und Off-Market-Gewerbeimmobilien."
+  },
+  "PropertyRequestForm": {
+    "title": "Individuelle Anforderungen einreichen",
+    "subtitle": "Nicht das Richtige gefunden? Geben Sie Ihre Parameter an, und wir finden die ideale Industriefläche für Ihre Ziele.",
+    "nameLabel": "Vollständiger Name",
+    "emailLabel": "E-Mail-Adresse",
+    "typeLabel": "Art der gesuchten Immobilie",
+    "typePlaceholder": "z.B. Logistikhalle, Industrieland, Entwicklungsfläche...",
+    "locationLabel": "Bevorzugter Standort",
+    "locationPlaceholder": "z.B. Westungarn, österreichische Grenze...",
+    "submitButton": "Suchanfrage absenden",
+    "successMsg": "Vielen Dank! Unser Team wird sich in Kürze mit Ihnen in Verbindung setzen."
+  },
+  "PropertyTeaserGrid": {
+    "title": "Ausgewählte Angebote",
+    "subtitle": "Durchsuchen Sie unsere öffentlichen Angebote. Um das vollständige private Portfolio zu sehen, fordern Sie VIP-Zugang an.",
+    "card1Title": "Industrieentwicklungsgebiet - Győr & Region",
+    "card1Spec": "Fläche: 45.000 m² | Erschließung: Voll erschlossen",
+    "card2Title": "Logistikhalle - Region Mosonmagyaróvár",
+    "card2Spec": "Bebauung: 60% | Direkter Autobahnanschluss",
+    "card3Title": "Gewerbeentwicklungsfläche - Sopron",
+    "card3Spec": "Klassifizierung: Gksz | Grenznahe Lage",
+    "blurNotice": "Um den genauen Standort und Preis zu sehen, melden Sie sich bitte über das VIP-Gateway an."
+  },
+  "VIPAccessGateway": {
+    "title": "Exklusiver VIP-Zugang",
+    "subtitle": "Geben Sie Ihren VIP-Zugangsschlüssel ein, um private Off-Market-Angebote, Preise und genaue Standorte anzuzeigen.",
+    "passwordPlaceholder": "VIP-Zugangsschlüssel (homola-vip-2026)",
+    "submitButton": "In das private Portal einloggen",
+    "errorMsg": "Ungültiger VIP-Zugangsschlüssel. Bitte kontaktieren Sie das Management.",
+    "vipTitle": "Willkommen im privaten VIP-Portal",
+    "vipSubtitle": "Die folgenden exklusiven Off-Market-Immobilienangebote sind derzeit nur für unsere verifizierten Partner verfügbar.",
+    "vipCard1Title": "[VIP] Off-Market Logistikpark - Hegyeshalom",
+    "vipCard1Spec": "Fläche: 120.000 m² | Preis: 4,8 Mio. EUR",
+    "vipCard2Title": "[VIP] Produktionsstätte & Lager - Sopron",
+    "vipCard2Spec": "Grundfläche: 8.500 m² | Preis: 3,2 Mio. EUR"
   }
 }

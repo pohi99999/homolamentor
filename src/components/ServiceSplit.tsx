@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Globe2, Lock, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Link } from '@/i18n/routing';
 
 export default function ServiceSplit() {
   const t = useTranslations('ServiceSplit');
@@ -74,13 +75,13 @@ export default function ServiceSplit() {
               </ul>
             </div>
 
-            <a
-              href="#contact"
+            <Link
+              href="/afrika-inkubator"
               className="mt-4 px-6 py-4 bg-slate-950 hover:bg-emerald-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-xl transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
             >
               {t('incubatorCta')}
               <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-            </a>
+            </Link>
           </motion.div>
 
           {/* Ingatlan Portál Kártya */}
@@ -128,13 +129,13 @@ export default function ServiceSplit() {
               </ul>
             </div>
 
-            <a
-              href="#contact"
+            <Link
+              href="/ingatlan-portal"
               className="mt-4 px-6 py-4 bg-slate-950 hover:bg-blue-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-xl transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
             >
               {t('portalCta')}
               <Lock className="w-4 h-4 shrink-0" />
-            </a>
+            </Link>
           </motion.div>
 
         </div>

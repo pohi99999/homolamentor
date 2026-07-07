@@ -61,5 +61,46 @@
     "industryPlaceholder": "pl. Agrárium, IT, Építőipar, Gyártás...",
     "submitButton": "Jelentkezés konzultációra",
     "successMsg": "Köszönjük a jelentkezést! Hamarosan keresni fogjuk."
+  },
+  "RealEstateHero": {
+    "badge": "PRÉMIUM BEFEKTETÉSEK",
+    "title": "Ingatlan & Iparterület Portál",
+    "subtitle": "Kiemelt ipari területek, logisztikai parkok és off-market kereskedelmi ingatlanok értékesítése és közvetítése nemzetközi szinten."
+  },
+  "PropertyRequestForm": {
+    "title": "Egyedi igények benyújtása",
+    "subtitle": "Nem találta meg a megfelelőt? Adja meg specifikus paramétereit, és felkutatjuk a céljainak megfelelő ipari területet.",
+    "nameLabel": "Teljes név",
+    "emailLabel": "E-mail cím",
+    "typeLabel": "Keresett terület típusa",
+    "typePlaceholder": "pl. Logisztikai csarnok, Ipari telek, Fejlesztési terület...",
+    "locationLabel": "Preferált lokáció",
+    "locationPlaceholder": "pl. Nyugat-Magyarország, osztrák határ...",
+    "submitButton": "Keresési igény beküldése",
+    "successMsg": "Köszönjük az igény benyújtását! Hamarosan felvesszük Önnel a kapcsolatot."
+  },
+  "PropertyTeaserGrid": {
+    "title": "Kiemelt ajánlataink",
+    "subtitle": "Tekintse meg publikus kínálatunkat. A teljes, zártkörű portfólió megtekintéséhez kérjen VIP hozzáférést.",
+    "card1Title": "Ipari Fejlesztési Terület - Győr és környéke",
+    "card1Spec": "Terület: 45,000 m² | Közművek: Teljes",
+    "card2Title": "Logisztikai Csarnok - Mosonmagyaróvár régió",
+    "card2Spec": "Beépíthetőség: 60% | Autópálya kapcsolat",
+    "card3Title": "Kereskedelmi Fejlesztési Terület - Sopron",
+    "card3Spec": "Övezeti besorolás: Gksz | Határközeli lokáció",
+    "blurNotice": "Pontos lokáció és ár megtekintéséhez lépjen be a VIP kapun."
+  },
+  "VIPAccessGateway": {
+    "title": "VIP Exkluzív Belépés",
+    "subtitle": "A zártkörű off-market ajánlatok, árak és pontos lokációk megtekintéséhez adja meg az egyedi VIP hozzáférési kulcsát.",
+    "passwordPlaceholder": "VIP Hozzáférési Kulcs (homola-vip-2026)",
+    "submitButton": "Belépés a Zárt Portálra",
+    "errorMsg": "Helytelen VIP hozzáférési kulcs. Kérjük, vegye fel a kapcsolatot a menedzsmenttel.",
+    "vipTitle": "Üdvözöljük a VIP Zárt Portálon",
+    "vipSubtitle": "Az alábbi exkluzív, zártkörű ingatlanajánlatokat jelenleg csak kiemelt partnereink láthatják.",
+    "vipCard1Title": "[VIP] Off-Market Logisztikai Park - Hegyeshalom",
+    "vipCard1Spec": "Terület: 120,000 m² | Ár: 4.8M EUR",
+    "vipCard2Title": "[VIP] Gyártó Üzem & Raktár - Sopron",
+    "vipCard2Spec": "Alapterület: 8,500 m² | Ár: 3.2M EUR"
   }
 }

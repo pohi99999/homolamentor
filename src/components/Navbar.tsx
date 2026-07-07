@@ -13,10 +13,11 @@ export default function Navbar() {
 
   const menuItems = [
     { name: t('home'), href: '/' },
-    { name: t('incubator'), href: '#incubator' },
-    { name: t('portal'), href: '#portal', icon: Lock },
+    { name: t('incubator'), href: '/afrika-inkubator' },
+    { name: t('portal'), href: '/ingatlan-portal', icon: Lock },
     { name: t('contact'), href: '#contact' },
   ];
+
 
   return (
     <header className="sticky top-0 z-50 bg-slate-950/70 backdrop-blur-md border-b border-slate-900/50 px-6 py-4">

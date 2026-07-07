@@ -61,5 +61,46 @@
     "industryPlaceholder": "e.g., Agriculture, IT, Construction, Manufacturing...",
     "submitButton": "Request Consultation",
     "successMsg": "Thank you for applying! We will get in touch with you shortly."
+  },
+  "RealEstateHero": {
+    "badge": "PREMIUM INVESTMENTS",
+    "title": "Real Estate & Industrial Portal",
+    "subtitle": "International sale and brokerage of industrial areas, logistics parks, and off-market commercial properties."
+  },
+  "PropertyRequestForm": {
+    "title": "Submit Custom Requirements",
+    "subtitle": "Didn't find what you were looking for? Specify your parameters, and we will find the ideal industrial area for your goals.",
+    "nameLabel": "Full Name",
+    "emailLabel": "Email Address",
+    "typeLabel": "Type of Property Sought",
+    "typePlaceholder": "e.g., Logistics hall, Industrial land, Development plot...",
+    "locationLabel": "Preferred Location",
+    "locationPlaceholder": "e.g., Western Hungary, Austrian border...",
+    "submitButton": "Submit Request",
+    "successMsg": "Thank you! Our team will contact you shortly."
+  },
+  "PropertyTeaserGrid": {
+    "title": "Featured Offers",
+    "subtitle": "Browse our public listings. To view the complete private portfolio, request VIP access.",
+    "card1Title": "Industrial Development Area - Győr & region",
+    "card1Spec": "Area: 45,000 m² | Utilities: Fully connected",
+    "card2Title": "Logistics Hall - Mosonmagyaróvár region",
+    "card2Spec": "Coverage: 60% | Direct highway connection",
+    "card3Title": "Commercial Development Plot - Sopron",
+    "card3Spec": "Zoning: Gksz | Location near the border",
+    "blurNotice": "To view the exact location and price, please log in via the VIP gateway."
+  },
+  "VIPAccessGateway": {
+    "title": "VIP Exclusive Entry",
+    "subtitle": "Enter your unique VIP access key to view private off-market offers, prices, and exact locations.",
+    "passwordPlaceholder": "VIP Access Key (homola-vip-2026)",
+    "submitButton": "Enter Private Portal",
+    "errorMsg": "Incorrect VIP access key. Please contact the management.",
+    "vipTitle": "Welcome to the VIP Private Portal",
+    "vipSubtitle": "The following exclusive off-market property listings are currently available only to our verified partners.",
+    "vipCard1Title": "[VIP] Off-Market Logistics Park - Hegyeshalom",
+    "vipCard1Spec": "Area: 120,000 m² | Price: 4.8M EUR",
+    "vipCard2Title": "[VIP] Production Facility & Warehouse - Sopron",
+    "vipCard2Spec": "Floor Area: 8,500 m² | Price: 3.2M EUR"
   }
 }
