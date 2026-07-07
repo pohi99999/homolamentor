@@ -29,6 +29,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-07 | Teljeskörű projekt audit, lokalizált SEO metaadatok ellenőrzése, német elírás javítása a kulcsszavakban, és a végleges dokumentáció elkészítése. Sikeres végső lint és build tesztek. | Kész |
 | 2026-07-07 | Brunella Master Context és RAG alapú tudásbázis integrálása: a `src/lib/knowledge.ts` fájl létrehozása, amely strukturált tényadatokat tartalmaz a cégprofilról, az Afrika-Inkubátor 3 lépcsős rendszeréről, a SELAB Livestock Show-ról, valamint a zárt Ingatlan Portálról. Az API végpont `/api/chat/route.ts` rendszer-promptjának kibővítése a betöltött tudásbázissal a hallucinációmentes válaszadás érdekében. Sikeres lint és build ellenőrzés. | Kész |
 | 2026-07-07 | Brunella Master Context és RAG alapú tudásbázis integrálása: a tudásbázis ténystruktúrájának frissítése (`src/lib/knowledge.ts`), az API rendszerprompt és Master Context összefűzésének pontosítása (`src/app/api/chat/route.ts`), valamint státusznaplózás (`status.log`). | Kész |
+| 2026-07-07 | ServiceSplit belső kártya-igazítás javítása (`src/components/ServiceSplit.tsx`): mindkét szolgáltatáskártyán azonos, 3 oszlopos fix grid struktúra bevezetése (01/02/03 blokkok), egységes gap/sorstruktúra és stabil tördelés a horizontális és vertikális illeszkedéshez. `SelabPromo.tsx` frissítés: a teljes PDF borítókártya kattintható és új lapon nyit (`/selab-brochure.pdf`, `target=\"_blank\"`, `rel=\"noopener noreferrer\"`), külön másodlagos letöltés gomb megtartásával. | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 
@@ -52,7 +53,6 @@ A HomolaMentor KFT weboldalának fejlesztése és éles auditja sikeresen befeje
 ### Jövőbeli fejlesztési javaslatok:
 1. **Brunella AI Master Context integrálása**: Az AI chat asszisztens tudásbázisának kiterjesztése a teljes HomolaMentor KFT és a SELAB hivatalos prospektus tartalmára, hogy a látogatóknak azonnali, releváns szakmai választ adhasson.
 2. **MCP (Model Context Protocol) Architektúra**: Egy egyedi, helyi MCP szerver kiépítése, amely közvetlenül eléri és szinkronizálja a beérkező lead adatokat a belső ERP/CRM rendszerekkel, vagy automatizált e-mail válaszokat generál és küld ki.
-
 
 
 

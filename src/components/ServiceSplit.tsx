@@ -7,6 +7,16 @@ import { Link } from '@/i18n/routing';
 
 export default function ServiceSplit() {
   const t = useTranslations('ServiceSplit');
+  const incubatorSteps = [
+    'Kétoldalú gazdasági kapcsolatok (HU-AFR)',
+    'Helyi cégalapítás és jogi háttér',
+    'Piaci validáció és kapcsolatépítés'
+  ];
+  const portalSteps = [
+    'Kiemelt ipari területek és logisztikai parkok',
+    'Off-market befektetési lehetőségek',
+    'Szigorúan ellenőrzött partneri hálózat'
+  ];
 
   const cardVariants = {
     hidden: { y: 40, opacity: 0 },
@@ -58,21 +68,23 @@ export default function ServiceSplit() {
                 {t('incubatorDesc')}
               </p>
 
-              {/* Főbb pontok */}
-              <ul className="space-y-3.5 mb-8">
-                <li className="flex items-center gap-3 text-sm text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Kétoldalú gazdasági kapcsolatok (HU-AFR)
-                </li>
-                <li className="flex items-center gap-3 text-sm text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Helyi cégalapítás és jogi háttér
-                </li>
-                <li className="flex items-center gap-3 text-sm text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Piaci validáció és kapcsolatépítés
-                </li>
-              </ul>
+              {/* Főbb pontok - fix háromoszlopos grid mindkét kártyán azonos belső igazítással */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                {incubatorSteps.map((step, index) => (
+                  <div
+                    key={step}
+                    className="grid grid-rows-[auto_1fr] gap-2 rounded-2xl border border-emerald-500/20 bg-slate-950/60 p-4 min-h-[150px]"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black tracking-wider text-emerald-400">
+                        {`0${index + 1}`}
+                      </span>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    </div>
+                    <p className="text-sm leading-relaxed text-slate-300">{step}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <Link
@@ -112,21 +124,23 @@ export default function ServiceSplit() {
                 {t('portalDesc')}
               </p>
 
-              {/* Főbb pontok */}
-              <ul className="space-y-3.5 mb-8">
-                <li className="flex items-center gap-3 text-sm text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                  Kiemelt ipari területek és logisztikai parkok
-                </li>
-                <li className="flex items-center gap-3 text-sm text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                  Off-market befektetési lehetőségek
-                </li>
-                <li className="flex items-center gap-3 text-sm text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                  Szigorúan ellenőrzött partneri hálózat
-                </li>
-              </ul>
+              {/* Főbb pontok - fix háromoszlopos grid mindkét kártyán azonos belső igazítással */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                {portalSteps.map((step, index) => (
+                  <div
+                    key={step}
+                    className="grid grid-rows-[auto_1fr] gap-2 rounded-2xl border border-blue-500/20 bg-slate-950/60 p-4 min-h-[150px]"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black tracking-wider text-blue-400">
+                        {`0${index + 1}`}
+                      </span>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                    </div>
+                    <p className="text-sm leading-relaxed text-slate-300">{step}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <Link

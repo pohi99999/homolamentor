@@ -42,43 +42,53 @@ export default function SelabPromo() {
             <div className="lg:col-span-5 flex flex-col items-center gap-4">
               <div className="w-full relative group">
                 <div className="absolute inset-0 rounded-3xl bg-amber-500/5 blur-xl scale-105 group-hover:bg-amber-500/10 transition-all pointer-events-none" />
-                <div className="relative w-full h-[320px] bg-slate-950/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-4 flex flex-col justify-between overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)]">
-                  {/* PDF borítókép megjelenítő */}
-                  <div className="w-full h-[220px] rounded-2xl overflow-hidden border border-slate-900 bg-slate-900/40 relative group-hover:border-amber-500/20 transition-colors">
-                    <Image
-                      src="/selab-cover.jpg"
-                      alt="SELAB Brochure Cover"
-                      fill
-                      className="object-cover select-none pointer-events-none opacity-90 group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent pointer-events-none" />
-                    <div className="absolute bottom-3 left-4 flex items-center gap-2">
-                      <div className="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded uppercase">
-                        PDF
+                <a
+                  href="/selab-brochure.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative block w-full h-[320px] bg-slate-950/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-4 overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] transition-all hover:border-amber-500/25"
+                >
+                  <div className="flex h-full flex-col justify-between">
+                    {/* PDF borítókép megjelenítő */}
+                    <div className="w-full h-[220px] rounded-2xl overflow-hidden border border-slate-900 bg-slate-900/40 relative group-hover:border-amber-500/20 transition-colors">
+                      <Image
+                        src="/selab-cover.jpg"
+                        alt="SELAB Brochure Cover"
+                        fill
+                        className="object-cover select-none pointer-events-none opacity-90 group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent pointer-events-none" />
+                      <div className="absolute bottom-3 left-4 flex items-center gap-2">
+                        <div className="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded uppercase">
+                          PDF
+                        </div>
+                        <span className="text-[10px] text-slate-300 font-bold tracking-wide">
+                          SELAB Brochure 2026
+                        </span>
                       </div>
-                      <span className="text-[10px] text-slate-300 font-bold tracking-wide">
-                        SELAB Brochure 2026
+                    </div>
+
+                    <div className="flex items-center justify-between mt-3 px-2">
+                      <div className="text-left">
+                        <p className="text-xs font-bold text-slate-100">SELAB Livestock Show</p>
+                        <span className="text-[9px] text-slate-500">Official Brochure • 4th Edition</span>
+                      </div>
+                      <span className="px-4 py-2 bg-slate-900 text-amber-400 text-xs font-bold rounded-xl border border-slate-800 transition-all shadow-md flex items-center gap-1.5">
+                        <FileText className="w-3.5 h-3.5" />
+                        Open in new tab
                       </span>
                     </div>
                   </div>
-
-                  <div className="flex items-center justify-between mt-3 px-2">
-                    <div className="text-left">
-                      <p className="text-xs font-bold text-slate-100">SELAB Livestock Show</p>
-                      <span className="text-[9px] text-slate-500">Official Brochure • 4th Edition</span>
-                    </div>
-                    <a
-                      href="/selab-brochure.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 bg-slate-900 text-amber-400 text-xs font-bold rounded-xl border border-slate-800 hover:border-amber-500/30 transition-all shadow-md flex items-center gap-1.5 cursor-pointer relative overflow-hidden after:absolute after:top-0 after:left-0 after:w-[200%] after:h-full after:-skew-x-20 after:bg-gradient-to-r after:from-transparent after:via-white/10 after:to-transparent after:-translate-x-[150%] hover:after:translate-x-[100%] after:transition-transform after:duration-1000 after:ease-out"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      {t('downloadPdf')}
-                    </a>
-                  </div>
-                </div>
+                </a>
               </div>
+              <a
+                href="/selab-brochure.pdf"
+                download
+                className="px-4 py-2 bg-slate-900 text-amber-400 text-xs font-bold rounded-xl border border-slate-800 hover:border-amber-500/30 transition-all shadow-md flex items-center gap-1.5 cursor-pointer relative overflow-hidden after:absolute after:top-0 after:left-0 after:w-[200%] after:h-full after:-skew-x-20 after:bg-gradient-to-r after:from-transparent after:via-white/10 after:to-transparent after:-translate-x-[150%] hover:after:translate-x-[100%] after:transition-transform after:duration-1000 after:ease-out"
+              >
+                <Download className="w-3.5 h-3.5" />
+                {t('downloadPdf')}
+              </a>
             </div>
 
             {/* Jobb oszlop: Tartalom */}
