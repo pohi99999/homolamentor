@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Hero() {
   const t = useTranslations('Hero');
@@ -32,6 +33,18 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-[85vh] flex items-center justify-center px-6 py-20 overflow-hidden bg-slate-950">
+      {/* Grafikai háttérkép */}
+      <Image
+        src="/main-hero-bg.jpg"
+        alt="HomolaMentor Global Background"
+        fill
+        priority
+        className="object-cover pointer-events-none z-0"
+      />
+
+      {/* Sötét luxury overlay a tökéletes olvashatósághoz */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-black/70 to-slate-950 pointer-events-none z-0" />
+
       {/* Animált Háttér Fényfoltok (Glowing Orbs) */}
       <motion.div
         animate={{

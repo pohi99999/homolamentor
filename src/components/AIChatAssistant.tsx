@@ -12,11 +12,12 @@ export default function AIChatAssistant() {
   
   const [inputText, setInputText] = useState('');
   
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const { messages, append, isLoading } = useChat({
-    // @ts-ignore
+    // @ts-expect-error - custom baseURL client routing mismatch
     api: '/api/chat',
   }) as any;
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
 
 
