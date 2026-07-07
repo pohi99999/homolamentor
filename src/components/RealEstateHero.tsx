@@ -74,7 +74,7 @@ export default function RealEstateHero() {
           {/* Cím */}
           <motion.h1
             variants={itemVariants}
-            className="text-4xl sm:text-6xl font-black tracking-tight bg-gradient-to-r from-white via-sky-100 to-sky-300 bg-clip-text text-transparent"
+            className="text-4xl sm:text-6xl font-black tracking-wide [text-wrap:balance] bg-gradient-to-r from-white via-sky-100 to-sky-300 bg-clip-text text-transparent"
           >
             {t('title')}
           </motion.h1>

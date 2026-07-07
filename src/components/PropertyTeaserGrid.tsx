@@ -48,7 +48,7 @@ export default function PropertyTeaserGrid() {
         
         {/* Fejléc */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4 bg-gradient-to-r from-white to-slate-350 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl font-black tracking-wide [text-wrap:balance] mb-4 bg-gradient-to-r from-white to-slate-350 bg-clip-text text-transparent">
             {t('title')}
           </h2>
           <p className="text-slate-400 leading-relaxed font-light">
@@ -66,7 +66,7 @@ export default function PropertyTeaserGrid() {
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
               custom={idx}
-              className="group relative bg-slate-900/30 border border-slate-850 hover:border-slate-800 rounded-2xl p-6 hover:bg-slate-900/50 transition-all duration-300 shadow-xl shadow-slate-950/30 overflow-hidden flex flex-col justify-between"
+              className="group relative bg-slate-900/30 border border-slate-850 hover:border-slate-800 rounded-2xl p-6 hover:bg-slate-900/50 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] overflow-hidden flex flex-col justify-between"
             >
               <div>
                 {/* Kép helyőrző */}

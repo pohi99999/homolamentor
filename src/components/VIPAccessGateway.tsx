@@ -52,7 +52,7 @@ export default function VIPAccessGateway() {
                 <div className="w-16 h-16 rounded-full bg-sky-500/10 flex items-center justify-center text-sky-400 mx-auto mb-6 shadow-lg shadow-sky-500/5">
                   <Lock className="w-8 h-8 text-sky-400" />
                 </div>
-                <h2 className="text-3xl font-black tracking-tight mb-4 bg-gradient-to-r from-white to-slate-350 bg-clip-text text-transparent">
+                <h2 className="text-3xl font-black tracking-wide [text-wrap:balance] mb-4 bg-gradient-to-r from-white to-slate-350 bg-clip-text text-transparent">
                   {t('title')}
                 </h2>
                 <p className="text-slate-400 leading-relaxed font-light text-sm">
@@ -65,7 +65,7 @@ export default function VIPAccessGateway() {
                 variants={shakeVariants}
                 animate={shake ? 'shake' : 'idle'}
                 onSubmit={handleAccessSubmit}
-                className="bg-slate-900/40 backdrop-blur-md border border-slate-850 rounded-2xl p-8 shadow-2xl shadow-slate-950/40 flex flex-col gap-5"
+                className="bg-slate-900/40 backdrop-blur-md border border-slate-850 rounded-2xl p-8 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] flex flex-col gap-5 transition-all duration-300"
               >
                 <div className="flex flex-col gap-2">
                   <label htmlFor="vipKey" className="text-xs font-bold text-slate-400 uppercase tracking-wider text-left">
@@ -94,7 +94,7 @@ export default function VIPAccessGateway() {
 
                 <button
                   type="submit"
-                  className="w-full px-6 py-4 bg-gradient-to-r from-sky-500 to-blue-500 hover:from-sky-400 hover:to-blue-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-sky-500/10 hover:shadow-sky-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full px-6 py-4 bg-gradient-to-r from-sky-500 to-blue-500 text-slate-950 font-bold rounded-xl shadow-lg shadow-sky-500/10 hover:shadow-sky-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer relative overflow-hidden after:absolute after:top-0 after:left-0 after:w-[200%] after:h-full after:-skew-x-20 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:-translate-x-[150%] hover:after:translate-x-[100%] after:transition-transform after:duration-1000 after:ease-out"
                 >
                   {t('submitButton')}
                   <ArrowRight className="w-4 h-4 shrink-0" />

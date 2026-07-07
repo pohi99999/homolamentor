@@ -33,7 +33,7 @@ export default function PropertyRequestForm() {
         
         {/* Fejléc */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4 bg-gradient-to-r from-white to-slate-350 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl font-black tracking-wide [text-wrap:balance] mb-4 bg-gradient-to-r from-white to-slate-350 bg-clip-text text-transparent">
             {t('title')}
           </h2>
           <p className="text-slate-400 leading-relaxed font-light">
@@ -42,7 +42,7 @@ export default function PropertyRequestForm() {
         </div>
 
         {/* Űrlap tároló */}
-        <div className="relative bg-slate-900/40 backdrop-blur-md border border-slate-850 rounded-3xl p-8 md:p-12 shadow-2xl shadow-slate-950/50">
+        <div className="relative bg-slate-900/40 backdrop-blur-md backdrop-brightness-75 border border-slate-850 rounded-3xl p-8 md:p-12 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] transition-all duration-300">
           <AnimatePresence mode="wait">
             {status === 'success' ? (
               <motion.div
@@ -138,7 +138,7 @@ export default function PropertyRequestForm() {
                 <button
                   type="submit"
                   disabled={status === 'loading'}
-                  className="w-full mt-4 px-6 py-4 bg-gradient-to-r from-blue-500 to-sky-400 disabled:from-blue-600/50 disabled:to-sky-500/50 text-slate-950 font-bold rounded-xl shadow-lg shadow-blue-500/15 hover:shadow-blue-500/25 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:scale-100 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full mt-4 px-6 py-4 bg-gradient-to-r from-blue-500 to-sky-400 disabled:from-blue-600/50 disabled:to-sky-500/50 text-slate-950 font-bold rounded-xl shadow-lg shadow-blue-500/15 hover:shadow-blue-500/25 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:scale-100 disabled:cursor-not-allowed cursor-pointer relative overflow-hidden after:absolute after:top-0 after:left-0 after:w-[200%] after:h-full after:-skew-x-20 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:-translate-x-[150%] hover:after:translate-x-[100%] after:transition-transform after:duration-1000 after:ease-out"
                 >
                   {status === 'loading' ? (
                     <>

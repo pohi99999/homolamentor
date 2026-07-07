@@ -43,7 +43,7 @@ export default function ContactInfoCards() {
           {/* Fő kapcsolattartó kártya (László) */}
           <motion.div
             variants={cardVariants}
-            className="group relative bg-slate-900/40 backdrop-blur-xl border border-slate-800 hover:border-amber-500/30 rounded-3xl p-8 shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden"
+            className="group relative bg-slate-900/40 backdrop-blur-xl border border-slate-800 hover:border-amber-500/30 rounded-3xl p-8 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] transition-all duration-300 flex flex-col justify-between overflow-hidden"
           >
             {/* Hover highlight effekt */}
             <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/0 via-amber-500/0 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
@@ -92,7 +92,7 @@ export default function ContactInfoCards() {
           {/* Fejlesztés & AI kártya (Peter) */}
           <motion.div
             variants={cardVariants}
-            className="group relative bg-slate-900/40 backdrop-blur-xl border border-slate-800 hover:border-emerald-500/30 rounded-3xl p-8 shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden"
+            className="group relative bg-slate-900/40 backdrop-blur-xl border border-slate-800 hover:border-emerald-500/30 rounded-3xl p-8 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] transition-all duration-300 flex flex-col justify-between overflow-hidden"
           >
             {/* Hover highlight effekt */}
             <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/0 via-emerald-500/0 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />

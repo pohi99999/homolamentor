@@ -19,7 +19,7 @@ export default function SelabPromo() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ type: 'spring', stiffness: 70, damping: 15 }}
-          className="relative bg-gradient-to-br from-slate-900/80 via-slate-900/40 to-amber-950/10 border border-slate-850 hover:border-amber-500/25 rounded-3xl p-8 md:p-16 overflow-hidden shadow-2xl transition-all duration-500"
+          className="relative bg-gradient-to-br from-slate-900/80 via-slate-900/40 to-amber-950/10 backdrop-blur-md backdrop-brightness-75 border border-slate-850 hover:border-amber-500/25 rounded-3xl p-8 md:p-16 overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] transition-all duration-500"
         >
           {/* Absztrakt íves minta díszítés */}
           <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none select-none">
@@ -41,7 +41,7 @@ export default function SelabPromo() {
             <div className="lg:col-span-5 flex flex-col items-center gap-4">
               <div className="w-full relative group">
                 <div className="absolute inset-0 rounded-3xl bg-amber-500/5 blur-xl scale-105 group-hover:bg-amber-500/10 transition-all pointer-events-none" />
-                <div className="relative w-full h-[320px] bg-slate-950/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-4 flex flex-col justify-between overflow-hidden shadow-2xl">
+                <div className="relative w-full h-[320px] bg-slate-950/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-4 flex flex-col justify-between overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)]">
                   {/* PDF mock iframe vagy stilizált megjelenítő */}
                   <div className="w-full h-[220px] rounded-2xl overflow-hidden border border-slate-900 bg-slate-900/40 relative">
                     <iframe
@@ -69,7 +69,7 @@ export default function SelabPromo() {
                       href="/Plaquette_commerciale_livestock_show_4e_edition_v43.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                      className="px-4 py-2 bg-slate-900 text-amber-400 text-xs font-bold rounded-xl border border-slate-800 hover:border-amber-500/30 transition-all shadow-md flex items-center gap-1.5 cursor-pointer relative overflow-hidden after:absolute after:top-0 after:left-0 after:w-[200%] after:h-full after:-skew-x-20 after:bg-gradient-to-r after:from-transparent after:via-white/10 after:to-transparent after:-translate-x-[150%] hover:after:translate-x-[100%] after:transition-transform after:duration-1000 after:ease-out"
                     >
                       <Download className="w-3.5 h-3.5" />
                       {t('downloadPdf')}
@@ -86,7 +86,7 @@ export default function SelabPromo() {
                 {t('badge')}
               </div>
               
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-100 bg-gradient-to-r from-white via-amber-50 to-amber-200 bg-clip-text text-transparent">
+              <h2 className="text-3xl sm:text-4xl font-black tracking-wide [text-wrap:balance] text-slate-100 bg-gradient-to-r from-white via-amber-50 to-amber-200 bg-clip-text text-transparent">
                 {t('title')}
               </h2>
 
@@ -103,7 +103,7 @@ export default function SelabPromo() {
 
               <Link
                 href="/kapcsolat"
-                className="inline-flex self-start items-center gap-2 px-6 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                className="inline-flex self-start items-center gap-2 px-6 py-3.5 bg-amber-500 text-slate-950 font-bold rounded-xl shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer relative overflow-hidden after:absolute after:top-0 after:left-0 after:w-[200%] after:h-full after:-skew-x-20 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:-translate-x-[150%] hover:after:translate-x-[100%] after:transition-transform after:duration-1000 after:ease-out"
               >
                 {t('cta')}
                 <ArrowRight className="w-4 h-4 shrink-0" />

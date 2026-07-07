@@ -23,6 +23,8 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-07 | Prémium háttérvideók (`afrika-bg.mp4` és `ingatlan-bg.mp4`) integrálása a megfelelő Hero komponensekbe (`AfricaHero.tsx` és `RealEstateHero.tsx`). Mobilon is működő autoplay, loop, muted, playsinline beállítások, kontrasztos sötét overlay-ek beépítése az olvashatóság megtartásával. Sikeres build és lint ellenőrzés. | Kész |
 | 2026-07-07 | Komplex fejlesztési fázis: valós Brunella AI bekötése a GitHub Models API-val (`/api/chat` route Vercel AI SDK-val és `@ai-sdk/openai`-val, `AIChatAssistant` refaktorálás `useChat` hookra). Kapcsolat aloldal (`/kapcsolat`) és komponensek (`ContactHero`, `ContactInfoCards`) kifejlesztése. SELAB Livestock Show PDF integráció (`SelabPromo.tsx` beágyazott PDF-fel és letöltővel). Dinamikus SEO metaadatok integrálása az összes aloldalra (`generateMetadata`). | Kész |
 | 2026-07-07 | Főoldali Hero szekció (`Hero.tsx`) frissítése az egyedi `/main-hero-bg.jpg` grafikai háttérkép beépítésével Next.js `Image` komponens segítségével. A szövegek tökéletes kontrasztját és olvashatóságát biztosító sötét luxury overlay beépítése, animált orbs megtartásával. Lint és build tesztek zöldre futtatása. | Kész |
+| 2026-07-07 | DevTools AI audit alapú UI/UX és teljesítmény optimalizálás: tracking-wide és [text-wrap:balance] címsor tördelések, mély Glassmorphism árnyékok (`shadow-[0_4px_30px_...]`), Glossy Sweep fénycsík hover effektus a CTA gombokon. LCP optimalizálás `fetchPriority="high"` bevezetésével, akadálymentesítési és kontraszt finomhangolások (`backdrop-brightness-75` a form kártyákon). Lint és build ellenőrzések zöldre futtatása. | Kész |
+
 
 
 

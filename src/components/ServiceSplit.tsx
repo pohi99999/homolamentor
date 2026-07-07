@@ -38,7 +38,7 @@ export default function ServiceSplit() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             custom={0}
-            className="group relative flex flex-col justify-between bg-slate-900/40 border border-slate-850 hover:border-emerald-500/20 rounded-3xl p-8 md:p-12 hover:bg-slate-900/60 transition-all duration-300 shadow-2xl shadow-slate-950/50"
+            className="group relative flex flex-col justify-between bg-slate-900/40 border border-slate-850 hover:border-emerald-500/20 rounded-3xl p-8 md:p-12 hover:bg-slate-900/60 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)]"
           >
             <div>
               <div className="flex justify-between items-start mb-8">
@@ -92,7 +92,7 @@ export default function ServiceSplit() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             custom={1}
-            className="group relative flex flex-col justify-between bg-slate-900/40 border border-slate-850 hover:border-blue-500/20 rounded-3xl p-8 md:p-12 hover:bg-slate-900/60 transition-all duration-300 shadow-2xl shadow-slate-950/50"
+            className="group relative flex flex-col justify-between bg-slate-900/40 border border-slate-850 hover:border-blue-500/20 rounded-3xl p-8 md:p-12 hover:bg-slate-900/60 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)]"
           >
             <div>
               <div className="flex justify-between items-start mb-8">
