@@ -1,8 +1,41 @@
+import { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import AfricaHero from '@/components/AfricaHero';
 import ThreeStepProcess from '@/components/ThreeStepProcess';
 import SelabPromo from '@/components/SelabPromo';
 import LeadCaptureForm from '@/components/LeadCaptureForm';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+
+  const titles: Record<string, string> = {
+    hu: 'Afrika-Inkubátor Program | HomolaMentor KFT',
+    en: 'Africa-Incubator Program | HomolaMentor KFT',
+    de: 'Afrika-Inkubator Programm | HomolaMentor KFT',
+  };
+
+  const descriptions: Record<string, string> = {
+    hu: 'Piacra lépési és mentorálási program Nyugat-Afrikában magyar és európai cégek számára. SELAB Livestock Show szakvásár és üzletfejlesztés.',
+    en: 'Market entry and mentoring program in West Africa for European SMEs. SELAB Livestock Show exhibition and business expansion.',
+    de: 'Markteintritts- und Mentoringprogramm in Westafrika für europäische KMUs. SELAB Livestock Show Messe und Geschäftsexpansion.',
+  };
+
+  const keywordsList: Record<string, string[]> = {
+    hu: ['Afrika-Inkubátor', 'SELAB Livestock Show', 'Nyugat-Afrika', 'piacra lépés', 'HomolaMentor', 'mentoring', 'export'],
+    en: ['Africa-Incubator', 'SELAB Livestock Show', 'West Africa', 'market entry', 'HomolaMentor', 'mentorship', 'business travel'],
+    de: ['Afrika-Inrubator', 'SELAB Livestock Show', 'Westafrika', 'Markteintritt', 'HomolaMentor', 'Mentoring', 'Geschäftsreise'],
+  };
+
+  return {
+    title: titles[locale] || titles.hu,
+    description: descriptions[locale] || descriptions.hu,
+    keywords: keywordsList[locale] || keywordsList.hu,
+  };
+}
 
 export default function AfricaIncubatorPage() {
   return (

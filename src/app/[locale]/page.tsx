@@ -1,6 +1,39 @@
+import { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ServiceSplit from '@/components/ServiceSplit';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+
+  const titles: Record<string, string> = {
+    hu: 'HomolaMentor KFT | Prémium Üzletfejlesztés & Ingatlan Portál',
+    en: 'HomolaMentor KFT | Premium Business Development & Real Estate',
+    de: 'HomolaMentor KFT | Premium Business Development & Immobilien',
+  };
+
+  const descriptions: Record<string, string> = {
+    hu: 'HomolaMentor Kft. - Nemzetközi piacra lépés (Afrika-Inkubátor) és exkluzív off-market ipari ingatlanok közvetítése a nyugat-magyarországi és osztrák határ mentén.',
+    en: 'HomolaMentor Kft. - International business expansion (Africa-Incubator) and premium off-market industrial real estate brokerage near the Austrian border.',
+    de: 'HomolaMentor Kft. - Internationale Geschäftsexpansion (Afrika-Inkubator) und Vermittlung von Premium-Off-Market-Industrieimmobilien an der österreichischen Grenze.',
+  };
+
+  const keywordsList: Record<string, string[]> = {
+    hu: ['HomolaMentor', 'üzletfejlesztés', 'piacra lépés', 'Afrika-Inkubátor', 'ipari ingatlan', 'logisztikai csarnok', 'exkluzív ingatlan', 'off-market'],
+    en: ['HomolaMentor', 'business development', 'market entry', 'Africa-Incubator', 'industrial property', 'logistics park', 'exclusive property', 'off-market'],
+    de: ['HomolaMentor', 'geschäftsentwicklung', 'markteintritt', 'Afrika-Inkubator', 'industrieimmobilien', 'logistikpark', 'exklusive immobilien', 'off-market'],
+  };
+
+  return {
+    title: titles[locale] || titles.hu,
+    description: descriptions[locale] || descriptions.hu,
+    keywords: keywordsList[locale] || keywordsList.hu,
+  };
+}
 
 export default function Home() {
   return (

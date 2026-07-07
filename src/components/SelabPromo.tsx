@@ -2,7 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
-import { Sprout, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, FileText, Sparkles, Download } from 'lucide-react';
+import { Link } from '@/i18n/routing';
 
 export default function SelabPromo() {
   const t = useTranslations('SelabPromo');
@@ -36,24 +37,52 @@ export default function SelabPromo() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Bal oszlop: Vizuális ikon/kártya */}
-            <div className="lg:col-span-4 flex justify-center">
-              <div className="relative">
-                {/* Glow ring */}
-                <div className="absolute inset-0 rounded-3xl bg-amber-500/10 blur-xl scale-110 animate-pulse" />
-                <div className="relative w-40 h-40 rounded-3xl bg-slate-950 border border-slate-800 flex flex-col items-center justify-center gap-3 text-amber-400 shadow-2xl">
-                  <Sprout className="w-14 h-14 text-amber-400" />
-                  <span className="text-xs font-bold uppercase tracking-widest text-slate-400">SELAB Show</span>
-                  <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center text-slate-950">
-                    <Sparkles className="w-3.5 h-3.5 fill-current" />
+            {/* Bal oszlop: Vizuális PDF előnézet és letöltő kártya */}
+            <div className="lg:col-span-5 flex flex-col items-center gap-4">
+              <div className="w-full relative group">
+                <div className="absolute inset-0 rounded-3xl bg-amber-500/5 blur-xl scale-105 group-hover:bg-amber-500/10 transition-all pointer-events-none" />
+                <div className="relative w-full h-[320px] bg-slate-950/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-4 flex flex-col justify-between overflow-hidden shadow-2xl">
+                  {/* PDF mock iframe vagy stilizált megjelenítő */}
+                  <div className="w-full h-[220px] rounded-2xl overflow-hidden border border-slate-900 bg-slate-900/40 relative">
+                    <iframe
+                      src="/Plaquette_commerciale_livestock_show_4e_edition_v43.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                      className="w-full h-full object-cover select-none pointer-events-none opacity-80"
+                      title="SELAB PDF Preview"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent pointer-events-none" />
+                    <div className="absolute bottom-3 left-4 flex items-center gap-2">
+                      <div className="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded uppercase">
+                        PDF
+                      </div>
+                      <span className="text-[10px] text-slate-350 font-medium tracking-wide">
+                        SELAB Brochure 2026
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-3 px-2">
+                    <div className="text-left">
+                      <p className="text-xs font-bold text-slate-100">SELAB Livestock Show</p>
+                      <span className="text-[9px] text-slate-500">Official Brochure • 4th Edition</span>
+                    </div>
+                    <a
+                      href="/Plaquette_commerciale_livestock_show_4e_edition_v43.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      {t('downloadPdf')}
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Jobb oszlop: Tartalom */}
-            <div className="lg:col-span-8 flex flex-col gap-6 text-left">
+            <div className="lg:col-span-7 flex flex-col gap-6 text-left">
               <div className="inline-flex self-start items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-4 py-1 text-xs font-bold text-amber-400 tracking-wider">
+                <FileText className="w-3.5 h-3.5" />
                 {t('badge')}
               </div>
               
@@ -61,17 +90,24 @@ export default function SelabPromo() {
                 {t('title')}
               </h2>
 
-              <p className="text-slate-400 leading-relaxed font-light text-base md:text-lg">
+              <p className="text-slate-450 leading-relaxed font-light text-base md:text-lg">
                 {t('subtitle')}
               </p>
 
-              <a
-                href="#contact"
+              <div className="flex flex-col gap-1.5 border-l border-amber-500/30 pl-4 py-1 text-xs text-amber-400/80 font-medium">
+                <div className="flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{t('partnerNotice')}</span>
+                </div>
+              </div>
+
+              <Link
+                href="/kapcsolat"
                 className="inline-flex self-start items-center gap-2 px-6 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
                 {t('cta')}
                 <ArrowRight className="w-4 h-4 shrink-0" />
-              </a>
+              </Link>
             </div>
 
           </div>

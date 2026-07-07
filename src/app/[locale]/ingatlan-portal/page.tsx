@@ -1,8 +1,41 @@
+import { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import RealEstateHero from '@/components/RealEstateHero';
 import PropertyTeaserGrid from '@/components/PropertyTeaserGrid';
 import VIPAccessGateway from '@/components/VIPAccessGateway';
 import PropertyRequestForm from '@/components/PropertyRequestForm';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+
+  const titles: Record<string, string> = {
+    hu: 'Ingatlan & Iparterület Portál | HomolaMentor KFT',
+    en: 'Real Estate & Industrial Portal | HomolaMentor KFT',
+    de: 'Immobilien- & Industrieportal | HomolaMentor KFT',
+  };
+
+  const descriptions: Record<string, string> = {
+    hu: 'Zártkörű hozzáférés prémium logisztikai parkokhoz, ipari csarnokokhoz, off-market területekhez Magyarország és Ausztria határán.',
+    en: 'Exclusive off-market access to premium logistics parks, factories, and development plots near the Hungarian-Austrian border.',
+    de: 'Exklusiver Off-Market-Zugang zu Premium-Logistikparks, Produktionshallen und Entwicklungsflächen an der ungarisch-österreichischen Grenze.',
+  };
+
+  const keywordsList: Record<string, string[]> = {
+    hu: ['ipari ingatlan', 'logisztikai csarnok', 'off-market ingatlanok', 'Sopron', 'Győr', 'Mosonmagyaróvár', 'VIP ingatlanok', 'HomolaMentor'],
+    en: ['industrial real estate', 'logistics hall', 'off-market property', 'Sopron', 'Gyor', 'Mosonmagyarovar', 'VIP gateway', 'HomolaMentor'],
+    de: ['industrieimmobilien', 'logistikhalle', 'off-market immobilien', 'Sopron', 'Gyor', 'Mosonmagyarovar', 'VIP zugang', 'HomolaMentor'],
+  };
+
+  return {
+    title: titles[locale] || titles.hu,
+    description: descriptions[locale] || descriptions.hu,
+    keywords: keywordsList[locale] || keywordsList.hu,
+  };
+}
 
 export default function RealEstatePortalPage() {
   return (

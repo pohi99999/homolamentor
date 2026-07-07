@@ -15,8 +15,9 @@ export default function Navbar() {
     { name: t('home'), href: '/' },
     { name: t('incubator'), href: '/afrika-inkubator' },
     { name: t('portal'), href: '/ingatlan-portal', icon: Lock },
-    { name: t('contact'), href: '#contact' },
+    { name: t('contact'), href: '/kapcsolat' },
   ];
+
 
 
   return (

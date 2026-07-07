@@ -2,53 +2,37 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+import { useChat } from '@ai-sdk/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, Loader2, Sparkles } from 'lucide-react';
-
-interface Message {
-  sender: 'user' | 'bot';
-  text: string;
-  time: string;
-}
 
 export default function AIChatAssistant() {
   const t = useTranslations('AIChatAssistant');
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  
   const [inputText, setInputText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { messages, append, isLoading } = useChat({
+    // @ts-ignore
+    api: '/api/chat',
+  }) as any;
+
+
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Automatikus görgetés az új üzenetekhez
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+  }, [messages, isLoading]);
 
-  const handleSend = async (e: React.FormEvent) => {
+  const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputText.trim()) return;
 
-    const userMessage: Message = {
-      sender: 'user',
-      text: inputText,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
+    append({ role: 'user', content: inputText });
     setInputText('');
-    setIsTyping(true);
-
-    // Szimulált válaszadási késleltetés
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    const botMessage: Message = {
-      sender: 'bot',
-      text: t('mockResponse'),
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setMessages((prev) => [...prev, botMessage]);
-    setIsTyping(false);
   };
 
   return (
@@ -97,30 +81,24 @@ export default function AIChatAssistant() {
                 </div>
               </div>
 
-              {messages.map((msg, idx) => (
+              {messages.map((msg: { id: string; role: string; content: string }) => (
                 <div
-                  key={idx}
-                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  key={msg.id}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
                     className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-md ${
-                      msg.sender === 'user'
+                      msg.role === 'user'
                         ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 rounded-tr-none font-medium'
                         : 'bg-slate-900/60 border border-slate-850 text-slate-200 rounded-tl-none font-light'
                     }`}
                   >
-                    <p className="leading-relaxed">{msg.text}</p>
-                    <span
-                      className={`text-[9px] block text-right mt-1.5 ${
-                        msg.sender === 'user' ? 'text-slate-800' : 'text-slate-500'
-                      }`}
-                    >
-                      {msg.time}
-                    </span>
+                    <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                   </div>
                 </div>
               ))}
-              {isTyping && (
+              
+              {isLoading && (
                 <div className="flex justify-start">
                   <div className="bg-slate-900/60 border border-slate-850 text-slate-400 rounded-2xl rounded-tl-none px-4 py-3 text-sm shadow-md flex items-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
@@ -141,12 +119,12 @@ export default function AIChatAssistant() {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder={t('placeholder')}
-                disabled={isTyping}
+                disabled={isLoading}
                 className="flex-1 bg-slate-900 border border-slate-800 focus:border-amber-500/50 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500/30 transition-all disabled:opacity-50"
               />
               <button
                 type="submit"
-                disabled={isTyping || !inputText.trim()}
+                disabled={isLoading || !inputText.trim()}
                 className="p-2.5 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-400 disabled:from-slate-800 disabled:to-slate-850 text-slate-950 disabled:text-slate-600 shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer disabled:scale-100 disabled:cursor-not-allowed shrink-0"
               >
                 <Send className="w-4.5 h-4.5" />

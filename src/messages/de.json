@@ -45,7 +45,9 @@
     "badge": "HIGHLIGHT-EVENT & NETZWERK",
     "title": "SELAB Livestock Show",
     "subtitle": "Nehmen Sie an Westafrikas größter Agrar- und Nutztierausstellung teil! Eine exklusive Gelegenheit für europäische KMUs, direkte Marktkontakte zu knüpfen und Technologietransfer zu betreiben.",
-    "cta": "Interesse an der Messe"
+    "cta": "Kontaktieren Sie uns für die Messe",
+    "downloadPdf": "PDF Herunterladen",
+    "partnerNotice": "HomolaMentor Kft. ist ein wichtiger und offizieller europäischer Partner der SELAB."
   },
   "LeadCaptureForm": {
     "title": "Kostenlose Beratung anfordern",
@@ -110,5 +112,16 @@
     "welcomeMessage": "Hallo! Ich bin Brunella, die KI-Assistentin von HomolaMentor Kft. Wie kann ich Ihnen heute helfen?",
     "mockResponse": "Vielen Dank für Ihre Nachricht! Ich befinde mich derzeit im Testmodus, werde aber bald all Ihre Fragen zur Afrika-Expansion (Afrika-Inkubator) und zu Premium-Gewerbeimmobilien beantworten!",
     "send": "Senden"
+  },
+  "ContactHero": {
+    "badge": "KONTAKTIEREN SIE UNS",
+    "title": "Kontaktinformationen & Support",
+    "subtitle": "Haben Sie Fragen zum Afrika-Inkubator oder unserem Industrieimmobilien-Portfolio? Unser Team steht Ihnen gerne zur Verfügung."
+  },
+  "ContactInfoCards": {
+    "rolePrimary": "Geschäftsführer & Inhaber",
+    "descPrimary": "Gründer der HomolaMentor Kft., Experte für afrikanische Marktexpansion und Vermittler für Premium-Industrieimmobilien.",
+    "roleDev": "Lead AI Integrator & Entwickler",
+    "descDev": "Entwickler der digitalen Infrastruktur von HomolaMentor, des KI-Chat-Assistenten (Brunella) und der Portalanwendungen."
   }
 }
