@@ -14,15 +14,37 @@ export default function LeadCaptureForm() {
     industry: ''
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
+    setErrorMessage('');
     
-    // Szimulált API beküldés
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    setStatus('success');
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          source: 'LeadCaptureForm'
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Something went wrong.');
+      }
+
+      setStatus('success');
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error('Submit error:', error);
+      setErrorMessage(error.message || 'Hiba történt a küldés során.');
+      setStatus('idle');
+    }
   };
 
   return (
@@ -135,6 +157,12 @@ export default function LeadCaptureForm() {
                     />
                   </div>
                 </div>
+
+                {errorMessage && (
+                  <p className="text-xs text-red-405 font-semibold text-center mt-2">
+                    {errorMessage}
+                  </p>
+                )}
 
                 {/* Beküldés gomb */}
                 <button
