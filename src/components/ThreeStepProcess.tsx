@@ -49,8 +49,8 @@ export default function ThreeStepProcess() {
 
   return (
     <section className="relative px-6 py-24 bg-slate-950/60 border-b border-slate-900/50">
-      <div className="max-w-5xl mx-auto">
-        
+      <div className="w-full max-w-6xl mx-auto px-4 md:px-8">
+
         {/* Szekciófejléc */}
         <div className="text-center max-w-2xl mx-auto mb-20">
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
@@ -61,46 +61,35 @@ export default function ThreeStepProcess() {
           </p>
         </div>
 
-        {/* Vertikális Idővonal */}
-        <div className="relative border-l border-slate-800 ml-4 md:ml-0 md:left-1/2 md:-translate-x-px space-y-12">
+        {/* Lépések grid elrendezésben */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch justify-center">
           {steps.map((step, idx) => {
             const Icon = step.icon;
-            const isEven = idx % 2 === 0;
 
             return (
-              <div key={idx} className="relative md:flex md:justify-between items-center w-full">
-                
-                {/* Idővonal pont */}
-                <div className="absolute -left-[25px] md:left-1/2 md:-translate-x-1/2 w-12 h-12 rounded-full border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-100 z-10">
-                  <div className={`w-8 h-8 rounded-full bg-gradient-to-tr ${step.color} flex items-center justify-center text-slate-950 font-bold text-sm shadow-md`}>
+              <motion.div
+                key={idx}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-80px" }}
+                className="group relative flex flex-col h-full bg-slate-900/30 border border-slate-850 hover:border-slate-800 rounded-2xl p-8 hover:bg-slate-900/50 transition-all duration-300 shadow-xl shadow-slate-950/20"
+              >
+                <div className="flex items-center gap-4 mb-6">
+                  <div className={`w-12 h-12 rounded-xl ${step.bgColor} flex items-center justify-center ${step.textColor} group-hover:scale-105 transition-transform shrink-0`}>
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <div className={`w-9 h-9 rounded-full bg-gradient-to-tr ${step.color} flex items-center justify-center text-slate-950 font-bold text-sm shadow-md shrink-0`}>
                     {idx + 1}
                   </div>
                 </div>
-
-                {/* Kártya tartalom (váltakozó igazítással) */}
-                <div className={`w-full md:w-[45%] pl-8 md:pl-0 ${isEven ? 'md:text-right md:pr-8' : 'md:text-left md:pl-8 md:col-start-2 md:order-last'}`}>
-                  <motion.div
-                    variants={cardVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-80px" }}
-                    className="group relative bg-slate-900/30 border border-slate-850 hover:border-slate-800 rounded-2xl p-8 hover:bg-slate-900/50 transition-all duration-300 shadow-xl shadow-slate-950/20"
-                  >
-                    <div className={`w-12 h-12 rounded-xl ${step.bgColor} flex items-center justify-center ${step.textColor} mb-6 ${isEven ? 'md:ml-auto' : ''} group-hover:scale-105 transition-transform`}>
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-xl font-bold text-slate-100 mb-3 group-hover:text-amber-400 transition-colors">
-                      {step.title}
-                    </h3>
-                    <p className="text-slate-400 text-sm leading-relaxed font-light">
-                      {step.desc}
-                    </p>
-                  </motion.div>
-                </div>
-
-                {/* Desktop igazításhoz üres hely a túloldalon */}
-                <div className="hidden md:block w-[45%]" />
-              </div>
+                <h3 className="text-xl font-bold text-slate-100 mb-3 group-hover:text-amber-400 transition-colors">
+                  {step.title}
+                </h3>
+                <p className="text-slate-400 text-sm leading-relaxed font-light">
+                  {step.desc}
+                </p>
+              </motion.div>
             );
           })}
         </div>
