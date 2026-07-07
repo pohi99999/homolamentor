@@ -102,5 +102,13 @@
     "vipCard1Spec": "Terület: 120,000 m² | Ár: 4.8M EUR",
     "vipCard2Title": "[VIP] Gyártó Üzem & Raktár - Sopron",
     "vipCard2Spec": "Alapterület: 8,500 m² | Ár: 3.2M EUR"
+  },
+  "AIChatAssistant": {
+    "title": "Brunella AI Asszisztens",
+    "subtitle": "Online",
+    "placeholder": "Írjon egy üzenetet...",
+    "welcomeMessage": "Üdvözlöm! Én Brunella vagyok, a HomolaMentor Kft. AI asszisztense. Miben segíthetek ma?",
+    "mockResponse": "Köszönöm az üzenetét! Jelenleg teszt üzemmódban működöm, de hamarosan minden kérdésére válaszolok az afrikai terjeszkedéssel (Afrika-Inkubátor) és a prémium ipari ingatlanokkal kapcsolatban!",
+    "send": "Küldés"
   }
 }

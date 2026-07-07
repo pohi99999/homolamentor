@@ -102,5 +102,13 @@
     "vipCard1Spec": "Area: 120,000 m² | Price: 4.8M EUR",
     "vipCard2Title": "[VIP] Production Facility & Warehouse - Sopron",
     "vipCard2Spec": "Floor Area: 8,500 m² | Price: 3.2M EUR"
+  },
+  "AIChatAssistant": {
+    "title": "Brunella AI Assistant",
+    "subtitle": "Online",
+    "placeholder": "Type a message...",
+    "welcomeMessage": "Hello! I am Brunella, the AI assistant of HomolaMentor Kft. How can I help you today?",
+    "mockResponse": "Thank you for your message! I am currently in test mode, but soon I will answer all your questions regarding African expansion (Africa-Incubator) and premium industrial real estate!",
+    "send": "Send"
   }
 }

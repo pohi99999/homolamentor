@@ -5,6 +5,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import AIChatAssistant from '@/components/AIChatAssistant';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,6 +49,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">
         <NextIntlClientProvider messages={messages}>
           {children}
+          <AIChatAssistant />
         </NextIntlClientProvider>
       </body>
     </html>

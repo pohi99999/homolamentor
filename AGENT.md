@@ -18,6 +18,8 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-07 | Prémium UI komponensek létrehozása: Sticky Navbar (hamburger menüvel), Hero szekció animált fényfoltokkal és beúszó elemekkel, ServiceSplit szekció interaktív kártyákkal és hover effektekkel. i18n lokalizáció és Next.js 15 Server Components integráció. | Kész |
 | 2026-07-07 | Afrika-Inkubátor aloldal (`/afrika-inkubator`) létrehozása és integrálása. Kapcsolódó UI komponensek kifejlesztése: AfricaHero (meleg afrikai fényekkel), ThreeStepProcess (scrollra animált vertikális idővonal), SelabPromo (SELAB Livestock Show promóciós szekció) és LeadCaptureForm (sötét üveg hatású konzultációs űrlap mock API küldéssel). | Kész |
 | 2026-07-07 | Ingatlan és Iparterület Portál aloldal (`/ingatlan-portal`) létrehozása és integrálása. Kapcsolódó UI komponensek kifejlesztése: RealEstateHero (kék építészeti blueprint ráccsal), PropertyTeaserGrid (kiemelt ajánlatok teaser-kártyáival, elhomályosított árakkal és lokációkkal), VIPAccessGateway (jelszavas védelem `homola-vip-2026`, rázkódási és feloldási animációkkal és a zárt off-market listával), valamint PropertyRequestForm (egyedi keresési igények leadásához). Navbar és ServiceSplit navigációs hivatkozásainak frissítése. | Kész |
+| 2026-07-07 | Globális Brunella AI Chat Asszisztens (`AIChatAssistant.tsx`) kifejlesztése és integrálása a `layout.tsx`-be. Lebegő, pulzáló gomb kinyíló üveghatású chat felülettel, többnyelvű támogatással, mock válaszadási késleltetéssel és gépelési indikátorral. | Kész |
+
 
 
 
