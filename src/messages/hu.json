@@ -1,7 +1,24 @@
 {
-  "HomePage": {
-    "title": "Üdvözöljük a HomolaMentor KFT weboldalán!",
-    "description": "Prémium szolgáltatások, Zárt Ingatlan Portál és Afrika Inkubátor program."
+  "Navbar": {
+    "home": "Főoldal",
+    "incubator": "Afrika-Inkubátor",
+    "portal": "Ingatlan Portál",
+    "contact": "Kapcsolat"
+  },
+  "Hero": {
+    "badge": "GLOBAL BUSINESS & REAL ESTATE ADVISORY",
+    "title": "Prémium Vállalkozásfejlesztés & Nemzetközi Terjeszkedés",
+    "subtitle": "Támogatjuk vállalkozását a globális piacra lépésben, miközben exkluzív hozzáférést biztosítunk ipari és kereskedelmi ingatlanbefektetésekhez.",
+    "ctaPortal": "Zárt Ingatlan Portál",
+    "ctaIncubator": "Afrika-Inkubátor"
+  },
+  "ServiceSplit": {
+    "incubatorTitle": "Afrika-Inkubátor",
+    "incubatorDesc": "Komplex piacralépési és mentorprogram a növekedő afrikai piacokon. Segítünk a helyi szabályozások megértésében, a kapcsolatépítésben és a sikeres üzleti indulásban.",
+    "incubatorCta": "Megismerem a programot",
+    "portalTitle": "Ingatlan & Iparterület Portál",
+    "portalDesc": "Zártkörű hozzáférés prémium logisztikai parkokhoz, gyárakhoz, fejlesztési területekhez és exkluzív ingatlanbefektetési ajánlatokhoz a partnereink számára.",
+    "portalCta": "Belépés a portálra"
   },
   "LanguageSwitcher": {
     "label": "Nyelv választása",

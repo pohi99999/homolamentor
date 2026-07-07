@@ -1,7 +1,24 @@
 {
-  "HomePage": {
-    "title": "Welcome to HomolaMentor KFT!",
-    "description": "Premium services, Closed Real Estate Portal, and Africa Incubator program."
+  "Navbar": {
+    "home": "Home",
+    "incubator": "Africa-Incubator",
+    "portal": "Real Estate Portal",
+    "contact": "Contact"
+  },
+  "Hero": {
+    "badge": "GLOBAL BUSINESS & REAL ESTATE ADVISORY",
+    "title": "Premium Business Development & Global Expansion",
+    "subtitle": "We support your business in expanding globally while providing exclusive access to industrial and commercial real estate investments.",
+    "ctaPortal": "Private Property Portal",
+    "ctaIncubator": "Africa-Incubator"
+  },
+  "ServiceSplit": {
+    "incubatorTitle": "Africa-Incubator",
+    "incubatorDesc": "Comprehensive market entry and mentoring program in rising African markets. We assist in understanding local regulations, building networks, and launching businesses successfully.",
+    "incubatorCta": "Discover the Program",
+    "portalTitle": "Real Estate & Industrial Portal",
+    "portalDesc": "Private access to premium logistics parks, factories, development areas, and exclusive real estate investment proposals for our verified partners.",
+    "portalCta": "Access Portal"
   },
   "LanguageSwitcher": {
     "label": "Select Language",
