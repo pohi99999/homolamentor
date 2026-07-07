@@ -34,9 +34,10 @@ export default async function RootLayout({
   const { locale } = await params;
 
   // Ellenőrizzük, hogy a kapott locale támogatott-e
-  if (!routing.locales.includes(locale as any)) {
+  if (!(routing.locales as readonly string[]).includes(locale)) {
     notFound();
   }
+
 
   // Fordítások lekérése szerver oldalon
   const messages = await getMessages();

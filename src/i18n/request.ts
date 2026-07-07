@@ -6,9 +6,10 @@ export default getRequestConfig(async ({ requestLocale }) => {
   let locale = await requestLocale;
 
   // Ha nincs megadva locale, vagy nem támogatott, akkor az alapértelmezettet használjuk
-  if (!locale || !routing.locales.includes(locale as any)) {
+  if (!locale || !(routing.locales as readonly string[]).includes(locale)) {
     locale = routing.defaultLocale;
   }
+
 
   return {
     locale,

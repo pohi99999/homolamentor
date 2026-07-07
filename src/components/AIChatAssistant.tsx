@@ -19,17 +19,6 @@ export default function AIChatAssistant() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Az üdvözlő üzenet inicializálása
-  useEffect(() => {
-    setMessages([
-      {
-        sender: 'bot',
-        text: t('welcomeMessage'),
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }
-    ]);
-  }, [t]);
-
   // Automatikus görgetés az új üzenetekhez
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -101,6 +90,13 @@ export default function AIChatAssistant() {
 
             {/* Üzenetlista */}
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 bg-slate-950/20">
+              {/* Alapértelmezett üdvözlő üzenet (Brunella bemutatkozása) */}
+              <div className="flex justify-start">
+                <div className="max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-md bg-slate-900/60 border border-slate-850 text-slate-200 rounded-tl-none font-light">
+                  <p className="leading-relaxed">{t('welcomeMessage')}</p>
+                </div>
+              </div>
+
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
@@ -116,7 +112,7 @@ export default function AIChatAssistant() {
                     <p className="leading-relaxed">{msg.text}</p>
                     <span
                       className={`text-[9px] block text-right mt-1.5 ${
-                        msg.sender === 'user' ? 'text-slate-805' : 'text-slate-500'
+                        msg.sender === 'user' ? 'text-slate-800' : 'text-slate-500'
                       }`}
                     >
                       {msg.time}
@@ -127,7 +123,7 @@ export default function AIChatAssistant() {
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="bg-slate-900/60 border border-slate-850 text-slate-400 rounded-2xl rounded-tl-none px-4 py-3 text-sm shadow-md flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-amber-450" />
+                    <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
                     <span>Brunella gépel...</span>
                   </div>
                 </div>
@@ -146,7 +142,7 @@ export default function AIChatAssistant() {
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder={t('placeholder')}
                 disabled={isTyping}
-                className="flex-1 bg-slate-900 border border-slate-800 focus:border-amber-500/50 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-650 focus:outline-none focus:ring-1 focus:ring-amber-500/30 transition-all disabled:opacity-50"
+                className="flex-1 bg-slate-900 border border-slate-800 focus:border-amber-500/50 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500/30 transition-all disabled:opacity-50"
               />
               <button
                 type="submit"
