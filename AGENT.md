@@ -28,6 +28,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-07 | Megjelenítési és elrendezési hibák javítása képernyőfotók alapján: `ServiceSplit.tsx`-ben a kártyák elcsúszásának javítása `items-stretch` and `h-full` osztályokkal (tökéletes felső él illeszkedés). `SelabPromo.tsx` PDF integrációjának átírása: a hibásan betöltődő iframe helyett a leggenerált optimalizált `/selab-cover.jpg` borítókép használata Next.js `Image` segítségével, a szóköz/ékezetmentesített `/selab-brochure.pdf` letöltési hivatkozás beállításával. Lint és build tesztek zöldre futtatása. | Kész |
 | 2026-07-07 | Teljeskörű projekt audit, lokalizált SEO metaadatok ellenőrzése, német elírás javítása a kulcsszavakban, és a végleges dokumentáció elkészítése. Sikeres végső lint és build tesztek. | Kész |
 | 2026-07-07 | Brunella Master Context és RAG alapú tudásbázis integrálása: a `src/lib/knowledge.ts` fájl létrehozása, amely strukturált tényadatokat tartalmaz a cégprofilról, az Afrika-Inkubátor 3 lépcsős rendszeréről, a SELAB Livestock Show-ról, valamint a zárt Ingatlan Portálról. Az API végpont `/api/chat/route.ts` rendszer-promptjának kibővítése a betöltött tudásbázissal a hallucinációmentes válaszadás érdekében. Sikeres lint és build ellenőrzés. | Kész |
+| 2026-07-07 | Brunella Master Context és RAG alapú tudásbázis integrálása: a tudásbázis ténystruktúrájának frissítése (`src/lib/knowledge.ts`), az API rendszerprompt és Master Context összefűzésének pontosítása (`src/app/api/chat/route.ts`), valamint státusznaplózás (`status.log`). | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 
@@ -51,7 +52,6 @@ A HomolaMentor KFT weboldalának fejlesztése és éles auditja sikeresen befeje
 ### Jövőbeli fejlesztési javaslatok:
 1. **Brunella AI Master Context integrálása**: Az AI chat asszisztens tudásbázisának kiterjesztése a teljes HomolaMentor KFT és a SELAB hivatalos prospektus tartalmára, hogy a látogatóknak azonnali, releváns szakmai választ adhasson.
 2. **MCP (Model Context Protocol) Architektúra**: Egy egyedi, helyi MCP szerver kiépítése, amely közvetlenül eléri és szinkronizálja a beérkező lead adatokat a belső ERP/CRM rendszerekkel, vagy automatizált e-mail válaszokat generál és küld ki.
-
 
 
 
