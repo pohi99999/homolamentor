@@ -25,5 +25,41 @@
     "hu": "Magyar",
     "en": "English",
     "de": "Deutsch"
+  },
+  "AfricaHero": {
+    "badge": "PIACRA LÉPÉSI PROGRAM",
+    "title": "Afrika-Inkubátor",
+    "subtitle": "Hozzuk létre az Ön vállalkozásának új növekedési pályáját Nyugat-Afrika dinamikusan fejlődő piacain szakértő mentorálással."
+  },
+  "ThreeStepProcess": {
+    "title": "Az inkubációs folyamat lépései",
+    "subtitle": "Strukturált, biztonságos és ellenőrzött módszertanunkkal minimalizáljuk a belépési kockázatokat.",
+    "step1Title": "1. Piackutatás és Validáció",
+    "step1Desc": "Részletes elemzést készítünk a célpiacról, felmérjük a versenytársakat és validáljuk a terméket vagy szolgáltatást a helyi igények alapján.",
+    "step2Title": "2. Partnerkeresés és Kapcsolatok",
+    "step2Desc": "Közvetlen kapcsolatot teremtünk helyi döntéshozókkal, megbízható disztribútorokkal és potenciális partnerekkel.",
+    "step3Title": "3. Implementáció és Kiutazás",
+    "step3Desc": "Támogatjuk a jogi háttér kiépítését, a cégalapítást, megszervezzük a személyes üzleti utat és delegációt helyszíni kísérettel."
+  },
+  "SelabPromo": {
+    "badge": "KIEMELT ESEMÉNY & KAPCSOLATÉPÍTÉS",
+    "title": "SELAB Livestock Show",
+    "subtitle": "Vegyen részt Nyugat-Afrika legnagyobb agrár- és állattenyésztési szakkiállításán! Exkluzív lehetőség magyar KKV-k számára a közvetlen piaci kapcsolatok kiépítésére és technológiai transzferre.",
+    "cta": "Érdekel a kiállítás"
+  },
+  "LeadCaptureForm": {
+    "title": "Kérjen Ingyenes Konzultációt",
+    "subtitle": "Szakértőink segítenek felmérni vállalkozása lehetőségeit a nyugat-afrikai piacokon.",
+    "nameLabel": "Teljes név",
+    "emailLabel": "E-mail cím",
+    "companySizeLabel": "Cégméret",
+    "companySize1": "1 - 9 fő (Mikrovállalkozás)",
+    "companySize2": "10 - 49 fő (Kisvállalkozás)",
+    "companySize3": "50 - 249 fő (Középvállalkozás)",
+    "companySize4": "250+ fő (Nagyvállalat)",
+    "industryLabel": "Iparág",
+    "industryPlaceholder": "pl. Agrárium, IT, Építőipar, Gyártás...",
+    "submitButton": "Jelentkezés konzultációra",
+    "successMsg": "Köszönjük a jelentkezést! Hamarosan keresni fogjuk."
   }
 }

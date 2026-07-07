@@ -25,5 +25,41 @@
     "hu": "Magyar",
     "en": "English",
     "de": "Deutsch"
+  },
+  "AfricaHero": {
+    "badge": "MARKET ENTRY PROGRAM",
+    "title": "Africa-Incubator",
+    "subtitle": "Create a new growth path for your business in the dynamically evolving markets of West Africa with expert mentorship."
+  },
+  "ThreeStepProcess": {
+    "title": "Incubation Process Steps",
+    "subtitle": "We minimize market entry risks through our structured, secure, and verified methodology.",
+    "step1Title": "1. Market Research & Validation",
+    "step1Desc": "We prepare a detailed analysis of the target market, evaluate competitors, and validate your product or service based on local needs.",
+    "step2Title": "2. Partner Search & Connections",
+    "step2Desc": "We establish direct connections with local decision-makers, reliable distributors, and potential partners.",
+    "step3Title": "3. Implementation & Business Travel",
+    "step3Desc": "We support legal structuring, company registration, and organize your business trip and delegation with local guidance."
+  },
+  "SelabPromo": {
+    "badge": "FEATURED EVENT & NETWORKING",
+    "title": "SELAB Livestock Show",
+    "subtitle": "Participate in West Africa's largest agricultural and livestock exhibition! An exclusive opportunity for European SMEs to build direct market contacts and engage in technology transfer.",
+    "cta": "Interested in the Exhibition"
+  },
+  "LeadCaptureForm": {
+    "title": "Request a Free Consultation",
+    "subtitle": "Our experts will help assess your business opportunities in the West African markets.",
+    "nameLabel": "Full Name",
+    "emailLabel": "Email Address",
+    "companySizeLabel": "Company Size",
+    "companySize1": "1 - 9 employees (Micro)",
+    "companySize2": "10 - 49 employees (Small)",
+    "companySize3": "50 - 249 employees (Medium)",
+    "companySize4": "250+ employees (Large)",
+    "industryLabel": "Industry",
+    "industryPlaceholder": "e.g., Agriculture, IT, Construction, Manufacturing...",
+    "submitButton": "Request Consultation",
+    "successMsg": "Thank you for applying! We will get in touch with you shortly."
   }
 }

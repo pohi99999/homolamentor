@@ -16,5 +16,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-07 | Git inicializálása, távoli repó hozzáadása és az alapvető `AGENT.md` struktúra létrehozása a modulok leírásával. | Kész |
 | 2026-07-07 | Next.js projekt inicializálása (TS, Tailwind CSS, App Router, src), UI és i18n csomagok (framer-motion, lucide-react, next-intl) telepítése, [locale] routing struktúra, LanguageSwitcher komponens és a prémium sötét főoldal kialakítása. | Kész |
 | 2026-07-07 | Prémium UI komponensek létrehozása: Sticky Navbar (hamburger menüvel), Hero szekció animált fényfoltokkal és beúszó elemekkel, ServiceSplit szekció interaktív kártyákkal és hover effektekkel. i18n lokalizáció és Next.js 15 Server Components integráció. | Kész |
+| 2026-07-07 | Afrika-Inkubátor aloldal (`/afrika-inkubator`) létrehozása és integrálása. Kapcsolódó UI komponensek kifejlesztése: AfricaHero (meleg afrikai fényekkel), ThreeStepProcess (scrollra animált vertikális idővonal), SelabPromo (SELAB Livestock Show promóciós szekció) és LeadCaptureForm (sötét üveg hatású konzultációs űrlap mock API küldéssel). | Kész |
+
 
 

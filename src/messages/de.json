@@ -25,5 +25,41 @@
     "hu": "Magyar",
     "en": "English",
     "de": "Deutsch"
+  },
+  "AfricaHero": {
+    "badge": "MARKTEINTRITTSPROGRAMM",
+    "title": "Afrika-Inkubator",
+    "subtitle": "Schaffen Sie mit fachkundiger Betreuung einen neuen Wachstumspfad für Ihr Unternehmen in den sich dynamisch entwickelnden Märkten Westafrikas."
+  },
+  "ThreeStepProcess": {
+    "title": "Schritte des Inkubationsprozesses",
+    "subtitle": "Wir minimieren Ihre Markteintrittsrisiken durch unsere strukturierte, sichere und verifizierte Methodik.",
+    "step1Title": "1. Marktforschung & Validierung",
+    "step1Desc": "Wir erstellen eine detaillierte Analyse des Zielmarktes, bewerten Wettbewerber und validieren Ihr Produkt oder Ihre Dienstleistung basierend auf lokalen Bedürfnissen.",
+    "step2Title": "2. Partnersuche & Verbindungen",
+    "step2Desc": "Wir stellen direkte Kontakte zu lokalen Entscheidungsträgern, zuverlässigen Händlern und potenziellen Partnern her.",
+    "step3Title": "3. Implementierung & Geschäftsreise",
+    "step3Desc": "Wir unterstützen Sie bei der rechtlichen Strukturierung, der Unternehmensregistrierung und organisieren Ihre Geschäftsreise und Delegation mit lokaler Begleitung."
+  },
+  "SelabPromo": {
+    "badge": "HIGHLIGHT-EVENT & NETZWERK",
+    "title": "SELAB Livestock Show",
+    "subtitle": "Nehmen Sie an Westafrikas größter Agrar- und Nutztierausstellung teil! Eine exklusive Gelegenheit für europäische KMUs, direkte Marktkontakte zu knüpfen und Technologietransfer zu betreiben.",
+    "cta": "Interesse an der Messe"
+  },
+  "LeadCaptureForm": {
+    "title": "Kostenlose Beratung anfordern",
+    "subtitle": "Unsere Experten helfen Ihnen dabei, Ihre Geschäftsmöglichkeiten in den westafrikanischen Märkten zu bewerten.",
+    "nameLabel": "Vollständiger Name",
+    "emailLabel": "E-Mail-Adresse",
+    "companySizeLabel": "Unternehmensgröße",
+    "companySize1": "1 - 9 Mitarbeiter (Mikro)",
+    "companySize2": "10 - 49 Mitarbeiter (Klein)",
+    "companySize3": "50 - 249 Mitarbeiter (Mittel)",
+    "companySize4": "250+ Mitarbeiter (Groß)",
+    "industryLabel": "Branche",
+    "industryPlaceholder": "z.B. Landwirtschaft, IT, Bauwesen, Fertigung...",
+    "submitButton": "Beratung anfordern",
+    "successMsg": "Vielen Dank für Ihre Bewerbung! Wir werden uns in Kürze mit Ihnen in Verbindung setzen."
   }
 }
