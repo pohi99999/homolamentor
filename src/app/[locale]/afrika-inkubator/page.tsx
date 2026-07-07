@@ -27,7 +27,7 @@ export async function generateMetadata({
   const keywordsList: Record<string, string[]> = {
     hu: ['Afrika-Inkubátor', 'SELAB Livestock Show', 'Nyugat-Afrika', 'piacra lépés', 'HomolaMentor', 'mentoring', 'export'],
     en: ['Africa-Incubator', 'SELAB Livestock Show', 'West Africa', 'market entry', 'HomolaMentor', 'mentorship', 'business travel'],
-    de: ['Afrika-Inrubator', 'SELAB Livestock Show', 'Westafrika', 'Markteintritt', 'HomolaMentor', 'Mentoring', 'Geschäftsreise'],
+    de: ['Afrika-Inkubator', 'SELAB Livestock Show', 'Westafrika', 'Markteintritt', 'HomolaMentor', 'Mentoring', 'Geschäftsreise'],
   };
 
   return {
