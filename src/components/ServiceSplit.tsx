@@ -28,7 +28,7 @@ export default function ServiceSplit() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] rounded-full bg-emerald-500/3 blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
           
           {/* Afrika Inkubátor Kártya */}
           <motion.div
@@ -38,7 +38,7 @@ export default function ServiceSplit() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             custom={0}
-            className="group relative flex flex-col justify-between bg-slate-900/40 border border-slate-850 hover:border-emerald-500/20 rounded-3xl p-8 md:p-12 hover:bg-slate-900/60 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)]"
+            className="group relative flex flex-col justify-between bg-slate-900/40 border border-slate-850 hover:border-emerald-500/20 rounded-3xl p-8 md:p-12 hover:bg-slate-900/60 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] h-full"
           >
             <div>
               <div className="flex justify-between items-start mb-8">
@@ -92,7 +92,7 @@ export default function ServiceSplit() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             custom={1}
-            className="group relative flex flex-col justify-between bg-slate-900/40 border border-slate-850 hover:border-blue-500/20 rounded-3xl p-8 md:p-12 hover:bg-slate-900/60 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)]"
+            className="group relative flex flex-col justify-between bg-slate-900/40 border border-slate-850 hover:border-blue-500/20 rounded-3xl p-8 md:p-12 hover:bg-slate-900/60 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] h-full"
           >
             <div>
               <div className="flex justify-between items-start mb-8">
