@@ -1,0 +1,12 @@
+{
+  "HomePage": {
+    "title": "Welcome to HomolaMentor KFT!",
+    "description": "Premium services, Closed Real Estate Portal, and Africa Incubator program."
+  },
+  "LanguageSwitcher": {
+    "label": "Select Language",
+    "hu": "Magyar",
+    "en": "English",
+    "de": "Deutsch"
+  }
+}

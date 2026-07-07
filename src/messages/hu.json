@@ -1,0 +1,12 @@
+{
+  "HomePage": {
+    "title": "Üdvözöljük a HomolaMentor KFT weboldalán!",
+    "description": "Prémium szolgáltatások, Zárt Ingatlan Portál és Afrika Inkubátor program."
+  },
+  "LanguageSwitcher": {
+    "label": "Nyelv választása",
+    "hu": "Magyar",
+    "en": "English",
+    "de": "Deutsch"
+  }
+}

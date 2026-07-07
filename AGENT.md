@@ -14,3 +14,5 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | Dátum | Elvégzett feladat | Státusz |
 | :--- | :--- | :--- |
 | 2026-07-07 | Git inicializálása, távoli repó hozzáadása és az alapvető `AGENT.md` struktúra létrehozása a modulok leírásával. | Kész |
+| 2026-07-07 | Next.js projekt inicializálása (TS, Tailwind CSS, App Router, src), UI és i18n csomagok (framer-motion, lucide-react, next-intl) telepítése, [locale] routing struktúra, LanguageSwitcher komponens és a prémium sötét főoldal kialakítása. | Kész |
+
