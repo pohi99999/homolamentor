@@ -1,0 +1,175 @@
+{
+  "name": "Homola Lead Management Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "homola-leads",
+        "responseMode": "responseCode",
+        "responseCode": 200,
+        "options": {}
+      },
+      "id": "webhook-node-id",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.body.source }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "LeadCaptureForm"
+            },
+            {
+              "value2": "afrika_inkubator"
+            },
+            {
+              "value2": "PropertyRequestForm"
+            },
+            {
+              "value2": "ingatlan_portal"
+            }
+          ]
+        }
+      },
+      "id": "switch-node-id",
+      "name": "Switch Source",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        350,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendRow",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_AFRIKA_MOCK",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leadek",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Név": "={{ $json.body.name }}",
+            "E-mail": "={{ $json.body.email }}",
+            "Cégméret": "={{ $json.body.companySize }}",
+            "Iparág": "={{ $json.body.industry }}",
+            "Forrás": "={{ $json.body.source }}",
+            "Dátum": "={{ $json.body.timestamp }}"
+          },
+          "matchingColumns": []
+        },
+        "options": {}
+      },
+      "id": "gsheet-afrika-id",
+      "name": "Google Sheets - Afrika Inkubátor",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        650,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendRow",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_INGATLAN_MOCK",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leadek",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Név": "={{ $json.body.name }}",
+            "E-mail": "={{ $json.body.email }}",
+            "Ingatlan típus": "={{ $json.body.propertyType }}",
+            "Lokáció": "={{ $json.body.location }}",
+            "Forrás": "={{ $json.body.source }}",
+            "Dátum": "={{ $json.body.timestamp }}"
+          },
+          "matchingColumns": []
+        },
+        "options": {}
+      },
+      "id": "gsheet-ingatlan-id",
+      "name": "Google Sheets - Ingatlan Portál",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        650,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch Source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Source": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Afrika Inkubátor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Sheets - Afrika Inkubátor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Sheets - Ingatlan Portál",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Sheets - Ingatlan Portál",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "homola-workflow-template",
+  "tags": []
+}
