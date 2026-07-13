@@ -35,6 +35,8 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-08 | Workflow élesítése n8n API-n keresztül és aktiválás. A script megpróbálja az API-n keresztüli importálást és aktiválást, valamint lokális CLI fallback-et biztosít, és lekéri a Vercel környezeti változóhoz szükséges webhook URL-t. | Kész |
 | 2026-07-13 | Fix: Hivatalos HOMLAMENTOR KFT cégnév és Abidjan központ integrálása László visszajelzése alapján | Kész |
 | 2026-07-13 | Feat: B2B Outreach e-mail sablonok és n8n kampány-automatizáció integrálása | Kész |
+| 2026-07-13 | Check: Resend e-mail címek ellenőrzése, feladó javítása onboarding@resend.dev-re a teszteléshez | Kész |
+| 2026-07-13 | Feat: B2B kampány CSV adatbázis és Node.js tesztkörnyezet kialakítása | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 

@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     if (resend) {
       tasks.push(
         resend.emails.send({
-          from: 'HOMLAMENTOR KFT <noreply@resend.dev>', // Ha van egyedi domain, ide jöhet
+          from: 'HOMLAMENTOR <onboarding@resend.dev>', // Resend ingyenes tier korlátozás miatt
           to: ['homlamentor@gmail.com', 'peterpohankapersonal@gmail.com'],
           subject: `Új Érdeklődés: ${name} (${formName})`,
           html: htmlEmail,
