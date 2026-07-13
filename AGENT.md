@@ -41,6 +41,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-13 | Feat: B2B kampány sikeresen élesítve és aktiválva a helyi localhost n8n motoron programozottan | Kész |
 | 2026-07-13 | Feat: Generated localized B2B outreach drafts via GWS and synced Master CRM programmatically | Kész |
 | 2026-07-13 | Feat: Generated second batch of 10 B2B outreach drafts via GWS and verified CRM integrity | Kész |
+| 2026-07-13 | Feat: Synced sent and bounced emails with CRM | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 
