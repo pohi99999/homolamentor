@@ -2,9 +2,11 @@
   "Navbar": {
     "home": "Home",
     "incubator": "Africa-Incubator",
+    "mobilehome": "Mobile Home",
     "portal": "Real Estate Portal",
     "contact": "Contact"
   },
+
   "Hero": {
     "badge": "GLOBAL BUSINESS & REAL ESTATE ADVISORY",
     "title": "Premium Business Development & Global Expansion",

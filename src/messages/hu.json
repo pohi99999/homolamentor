@@ -2,9 +2,11 @@
   "Navbar": {
     "home": "Főoldal",
     "incubator": "Afrika-Inkubátor",
+    "mobilehome": "Mobilház Projekt",
     "portal": "Ingatlan Portál",
     "contact": "Kapcsolat"
   },
+
   "Hero": {
     "badge": "GLOBAL BUSINESS & REAL ESTATE ADVISORY",
     "title": "Prémium Vállalkozásfejlesztés & Nemzetközi Terjeszkedés",

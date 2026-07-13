@@ -14,9 +14,11 @@ export default function Navbar() {
   const menuItems = [
     { name: t('home'), href: '/' },
     { name: t('incubator'), href: '/afrika-inkubator' },
+    { name: t('mobilehome'), href: '/mobilhaz-projekt' },
     { name: t('portal'), href: '/ingatlan-portal', icon: Lock },
     { name: t('contact'), href: '/kapcsolat' },
   ];
+
 
 
 
