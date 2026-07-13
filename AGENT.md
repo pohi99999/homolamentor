@@ -42,6 +42,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-13 | Feat: Generated localized B2B outreach drafts via GWS and synced Master CRM programmatically | Kész |
 | 2026-07-13 | Feat: Generated second batch of 10 B2B outreach drafts via GWS and verified CRM integrity | Kész |
 | 2026-07-13 | Feat: Synced sent and bounced emails with CRM | Kész |
+| 2026-07-13 | Log: Updated CRM with OOO replies for Aron Gorog and Rudolf Nemes | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 
