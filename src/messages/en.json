@@ -136,6 +136,31 @@
     "feature2Desc": "Utilizing local workforce in West African (Abidjan) and Southern African (Lusaka) assembly hubs.",
     "feature3Title": "100% Transport Profit",
     "feature3Desc": "Highly optimized shipping volume of flat-packed modular units assembled locally."
+  },
+  "MobileHomeForm": {
+    "companyNameLabel": "Company Name",
+    "companyNamePlaceholder": "e.g., WING Zrt.",
+    "roleLabel": "Role",
+    "rolePlaceholder": "e.g., Procurement Director",
+    "interestedModelLabel": "Interested Model",
+    "model30": "Compact Minimal - 30 sqm",
+    "model50": "Family Layout - 50 sqm",
+    "model80-100": "Premium Design - 80-100 sqm",
+    "projectedVolumeLabel": "Projected Volume (B2B)",
+    "volume1-5": "1 - 5 units (Trial)",
+    "volume6-20": "6 - 20 units (Project size)",
+    "volume21+": "21+ units (Regional development)",
+    "fundingStatusLabel": "Funding Status",
+    "fundingEquity": "Equity / Secured budget",
+    "fundingLoan": "Co-financing / Project loan",
+    "fundingPartner": "Looking for investment partners",
+    "submitBtn": "Consultation & B2B Quote",
+    "errorCompanyRequired": "Company name is required.",
+    "errorRoleRequired": "Role is required.",
+    "successTitle": "Thank you for your request!",
+    "successMessage": "Our business development team will contact you within 24 hours and send the detailed technical catalog.",
+    "newSubmission": "Submit new request"
   }
 }
+
 

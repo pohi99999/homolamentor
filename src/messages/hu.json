@@ -136,6 +136,31 @@
     "feature2Desc": "Az afrikai (Abidjan és Lusaka) összeszerelő üzemek helyi munkaerejének bevonásával.",
     "feature3Title": "100% Transzport Profit",
     "feature3Desc": "A lapraszerelt, helyszínen felállított moduláris házak szállítási hatékonysága révén."
+  },
+  "MobileHomeForm": {
+    "companyNameLabel": "Cég neve",
+    "companyNamePlaceholder": "pl. WING Zrt.",
+    "roleLabel": "Pozíció",
+    "rolePlaceholder": "pl. Beszerzési Igazgató",
+    "interestedModelLabel": "Érdeklődési modell",
+    "model30": "Kompakt Minimál - 30 m²",
+    "model50": "Családi Kialakítás - 50 m²",
+    "model80-100": "Prémium Kivitel - 80-100 m²",
+    "projectedVolumeLabel": "Tervezett mennyiség (B2B)",
+    "volume1-5": "1 - 5 egység (Próbatétel)",
+    "volume6-20": "6 - 20 egység (Projekt méret)",
+    "volume21+": "21+ egység (Regionális fejlesztés)",
+    "fundingStatusLabel": "Finanszírozás státusza",
+    "fundingEquity": "Saját tőke / Biztosított költségvetés",
+    "fundingLoan": "Társfinanszírozás / Projekt hitel",
+    "fundingPartner": "Befektetői partnert keresünk",
+    "submitBtn": "Konzultáció & B2B Ajánlatkérés",
+    "errorCompanyRequired": "A cég nevének megadása kötelező.",
+    "errorRoleRequired": "A pozíció megadása kötelező.",
+    "successTitle": "Köszönjük az ajánlatkérést!",
+    "successMessage": "Üzletfejlesztési csapatunk 24 órán belül felveszi Önnel a kapcsolatot, és elküldi a részletes technikai katalógust.",
+    "newSubmission": "Új ajánlatkérés küldése"
   }
 }
+
 

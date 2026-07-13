@@ -136,6 +136,31 @@
     "feature2Desc": "Nutzung lokaler Arbeitskräfte in westafrikanischen (Abidjan) und südafrikanischen (Lusaka) Montagezentren.",
     "feature3Title": "100% Transportgewinn",
     "feature3Desc": "Hochgradig optimiertes Versandvolumen von flach verpackten Moduleinheiten, die vor Ort montiert werden."
+  },
+  "MobileHomeForm": {
+    "companyNameLabel": "Firmenname",
+    "companyNamePlaceholder": "z.B., WING Zrt.",
+    "roleLabel": "Position",
+    "rolePlaceholder": "z.B., Einkaufsleiter",
+    "interestedModelLabel": "Gewünschtes Modell",
+    "model30": "Kompakt Minimal - 30 m²",
+    "model50": "Familien-Layout - 50 m²",
+    "model80-100": "Premium-Ausführung - 80-100 m²",
+    "projectedVolumeLabel": "Geplantes Volumen (B2B)",
+    "volume1-5": "1 - 5 Einheiten (Testphase)",
+    "volume6-20": "6 - 20 Einheiten (Projektgröße)",
+    "volume21+": "21+ Einheiten (Regionale Expansion)",
+    "fundingStatusLabel": "Finanzierungsstatus",
+    "fundingEquity": "Eigenkapital / Gesichertes Budget",
+    "fundingLoan": "Kofinanzierung / Projektkredit",
+    "fundingPartner": "Suchen Investitionspartner",
+    "submitBtn": "Beratung & B2B-Angebot anfordern",
+    "errorCompanyRequired": "Firmenname ist erforderlich.",
+    "errorRoleRequired": "Position ist erforderlich.",
+    "successTitle": "Vielen Dank für Ihre Anfrage!",
+    "successMessage": "Unser Geschäftsentwicklungsteam wird Sie innerhalb von 24 Stunden kontaktieren und Ihnen den detaillierten technischen Katalog zusenden.",
+    "newSubmission": "Neue Anfrage senden"
   }
 }
+
 

@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import { useTranslations } from 'next-intl';
-import { Home as HomeIcon, Award, Shield, CheckCircle, ArrowRight } from 'lucide-react';
+import { Home as HomeIcon, Award, Shield, CheckCircle, ArrowRight, Zap, Truck, DollarSign } from 'lucide-react';
+import MobileHomeContactForm from '@/components/MobileHomeContactForm';
 
 export async function generateMetadata({
   params,
@@ -105,7 +106,63 @@ export default function MobileHomeProjectPage() {
         </div>
       </section>
 
+      {/* Technology & Efficiency Block (Modular Logistics Advantage) */}
+      <section className="py-20 px-6 border-t border-slate-900/60 bg-slate-950/60 relative">
+        <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <span className="text-emerald-400 font-bold text-xs uppercase tracking-wider">B2B Hatékonyság & Technológia</span>
+            <h2 className="text-3xl sm:text-4xl font-black mt-2 mb-4">A Moduláris Logisztikai Előny (Modular Logistics Advantage)</h2>
+            <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+              Az európai exportpiacokra és afrikai növekedési régiókra szabott logisztikai és összeszerelési modellünk kiemelkedő pénzügyi hatékonyságot biztosít partnereink számára.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-8 rounded-2xl bg-slate-900/30 border border-slate-900 hover:border-slate-800 transition-all flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6 border border-emerald-500/20">
+                  <DollarSign className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-black text-white mb-2">50% Munkaköltség Megtakarítás</h3>
+                <span className="text-emerald-400/80 text-xs font-semibold uppercase tracking-wider block mb-4">Factory Labor Cost Savings</span>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  A moduláris panelek gyári előszerelésével és a célországokban (pl. Abidjan, Lusaka hubok) történő helyszíni összeszereléssel az élőerő-költség felére csökken a hagyományos építési módokhoz képest.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-8 rounded-2xl bg-slate-900/30 border border-slate-900 hover:border-slate-800 transition-all flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-400 mb-6 border border-teal-500/20">
+                  <Truck className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-black text-white mb-2">Konténeres Modularitás</h3>
+                <span className="text-teal-400/80 text-xs font-semibold uppercase tracking-wider block mb-4">Containerized Modularity</span>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  Minden szerkezeti elem, falpanel és hibrid napelemes részegség úgy lett tervezve, hogy milliméterre pontosan illeszkedjen a szabványos tengeri konténerekbe, minimalizálva a tengerentúli szállítási költségeket.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-8 rounded-2xl bg-slate-900/30 border border-slate-900 hover:border-slate-800 transition-all flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6 border border-emerald-500/20">
+                  <Zap className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-black text-white mb-2">100% Profit Realizáció</h3>
+                <span className="text-emerald-400/80 text-xs font-semibold uppercase tracking-wider block mb-4">Profit Realization Model</span>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  A helyszíni, lapraszerelt (flat-packed) technológiára épülő összeszerelési franchise struktúra lehetővé teszi a fejlesztők számára a szállítási térfogat megtakarításából adódó teljes profit realizálását a lokális piacokon.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Részletes termék és méret specifikáció szekció */}
+
       <section id="concept" className="py-20 px-6 border-t border-slate-900/60 bg-slate-950/40">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -220,33 +277,14 @@ export default function MobileHomeProjectPage() {
       {/* Kapcsolati űrlap szekció */}
       <section id="contact" className="py-20 px-6 border-t border-slate-900/60 bg-slate-950/60">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-black mb-4">Vegye fel velünk a kapcsolatot</h2>
+          <h2 className="text-3xl font-black mb-4">B2B Konzultáció & Ajánlatkérés</h2>
           <p className="text-slate-400 mb-8">
-            Kérjen részletes termékkatalógust vagy egyeztessen időpontot afrikai piacralépési tanácsadásunkra.
+            Adja meg projektje adatait, és kérjen egyedi B2B ajánlatot moduláris mobilház portfóliónkra.
           </p>
-          <form className="space-y-4 text-left p-8 rounded-2xl bg-slate-900/40 border border-slate-800/80 backdrop-blur-sm">
-            <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Teljes Név</label>
-              <input type="text" className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors" placeholder="pl. Kovács János" />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">E-mail Cím</label>
-              <input type="email" className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors" placeholder="pl. janos@cegnev.hu" />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Érdeklődés tárgya</label>
-              <select className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 focus:outline-none focus:border-emerald-500 transition-colors">
-                <option>Modular Mobile Home Export (EU)</option>
-                <option>African Manufacturing Partnership (Abidjan/Lusaka)</option>
-                <option>Egyéb üzletfejlesztés</option>
-              </select>
-            </div>
-            <button type="button" className="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-base shadow-lg shadow-emerald-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer mt-4">
-              Jelentkezés konzultációra
-            </button>
-          </form>
+          <MobileHomeContactForm />
         </div>
       </section>
+
 
       {/* Lábléc */}
       <footer className="border-t border-slate-900/60 py-12 px-6 bg-slate-950/60 mt-auto">
