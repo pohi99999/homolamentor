@@ -37,6 +37,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-13 | Feat: B2B Outreach e-mail sablonok és n8n kampány-automatizáció integrálása | Kész |
 | 2026-07-13 | Check: Resend e-mail címek ellenőrzése, feladó javítása onboarding@resend.dev-re a teszteléshez | Kész |
 | 2026-07-13 | Feat: B2B kampány CSV adatbázis és Node.js tesztkörnyezet kialakítása | Kész |
+| 2026-07-13 | Feat: B2B kampány n8n workflow frissítése és automatizált validációs script élesítése | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 

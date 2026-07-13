@@ -5,3 +5,4 @@
 2026-07-13T09:30:00+02:00 | Kész | Feat: B2B Outreach e-mail sablonok és n8n kampány-automatizáció integrálása.
 2026-07-13T09:35:00+02:00 | Kész | Initial: homola-mcp-hub szerver repozitórium inicializálása.
 2026-07-13T09:55:00+02:00 | Kész | Feat: B2B kampány CSV adatbázis és Node.js tesztkörnyezet kialakítása.
+2026-07-13T10:00:00+02:00 | Kész | Feat: B2B kampány n8n workflow frissítése és automatizált validációs script élesítése.
