@@ -1,0 +1,156 @@
+{
+  "name": "Homola B2B Outreach Campaign Automation",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger-id",
+      "name": "When clicking 'Execute Workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        100,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "value": 1
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger-id",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        100,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_B2B_CRM_PARTNERS",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Célvállalatok",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "read-crm-node-id",
+      "name": "Read CRM (Google Sheets)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        380,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headers": {
+          "keypair": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "bodyParameters": {
+          "keypair": [
+            {
+              "name": "from",
+              "value": "HOMLAMENTOR KFT <noreply@resend.dev>"
+            },
+            {
+              "name": "to",
+              "value": "={{ $json[\"E-mail\"] || $json[\"email\"] }}"
+            },
+            {
+              "name": "subject",
+              "value": "=Afrikai piacnyitás és megbízások felkutatása a(z) {{ $json[\"Cégnév\"] || $json[\"company\"] }} részére – HOMLAMENTOR KFT"
+            },
+            {
+              "name": "html",
+              "value": "=<div style=\"background-color: #0b0f19; color: #f1f5f9; font-family: sans-serif; padding: 40px; border-radius: 16px; max-width: 600px; margin: 0 auto; border: 1px solid #1e293b;\">\n  <div style=\"text-align: center; margin-bottom: 30px;\">\n    <h1 style=\"color: #ffffff; font-size: 24px; font-weight: 900; margin: 0 0 10px 0; letter-spacing: 1px;\">HOMLAMENTOR KFT</h1>\n    <span style=\"font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #34d399; background-color: rgba(255,255,255,0.05); padding: 6px 16px; border-radius: 9999px;\">\n      B2B Outreach Program\n    </span>\n  </div>\n  \n  <div style=\"line-height: 1.6; font-size: 14px; color: #cbd5e1;\">\n    <p>Tisztelt <strong>{{ $json[\"Név\"] || $json[\"contactName\"] }}</strong>!</p>\n    \n    <p>Azért fordulok Önhöz, mert a(z) <strong>{{ $json[\"Cégnév\"] || $json[\"company\"] }}</strong> tevékenysége a(z) <em>{{ $json[\"Iparág\"] || $json[\"industry\"] }}</em> szektorban kiemelkedő, és úgy látjuk, hogy az Önök technológiája és szakértelme hatalmas versenyelőnyt jelenthetne a dinamikusan fejlődő nyugat-afrikai piacokon.</p>\n    \n    <p>A <strong>HOMLAMENTOR KFT</strong> (európai és Elefántcsontpart - Abidjan központtal) kifejezetten arra szakosodott, hogy európai ipari, építőipari, energetikai és mezőgazdasági vállalatok számára kutasson fel közvetlen kormányzati és magánszektorbeli megbízásokat Nyugat-Afrikában, valamint támogassa a helyi jelenlét és telephely kiépítését.</p>\n    \n    <p><strong>Miért érdemes most lépni az Abidjan-i operatív és logisztikai központunk segítségével?</strong></p>\n    <ul style=\"padding-left: 20px;\">\n      <li style=\"margin-bottom: 8px;\"><strong>Helyszíni jelenlét előnyei</strong>: Teljes körű jogi, adminisztratív és partnerkapcsolati támogatást biztosítunk közvetlenül a helyszínen.</li>\n      <li style=\"margin-bottom: 8px;\"><strong>100% profit a szállítási költségeken</strong>: A helyi összeszereléssel és gyártással kiküszöbölhetőek a magas tengerentúli szállítási díjak és importvámok, így a megtakarítás közvetlen profitként realizálódik.</li>\n      <li style=\"margin-bottom: 8px;\"><strong>Kiemelkedő adókedvezmények</strong>: Az afrikai piacnyitási és beruházás-ösztönző programok keretében jelentős adómentességek érhetők el az első években.</li>\n      <li style=\"margin-bottom: 8px;\"><strong>50%-os bérköltség</strong>: A rendkívül versenyképes helyi munkaerő alkalmazásával a bérköltségek az európai szint töredékére (akár 50%-ára) csökkenthetők.</li>\n    </ul>\n    \n    <p>Szeretnénk felajánlani egy rövid, 15 perces online konzultációt, ahol bemutatjuk a jelenleg elérhető konkrét afrikai projektlehetőségeket és megbízásokat a(z) {{ $json[\"Iparág\"] || $json[\"industry\"] }} területén.</p>\n    \n    <p>Melyik nap lenne alkalmas Önnek a hét folyamán egy rövid egyeztetésre?</p>\n    \n    <p style=\"margin-top: 30px;\">Üdvözlettel,<br><br>\n    <strong>Homola László</strong><br>\n    Ügyvezető Menedzser & Tulajdonos<br>\n    HOMLAMENTOR KFT<br>\n    <a href=\"mailto:homlamentor@gmail.com\" style=\"color: #34d399; text-decoration: none;\">homlamentor@gmail.com</a></p>\n  </div>\n  \n  <div style=\"text-align: center; font-size: 11px; color: #64748b; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;\">\n    Ezt a rendszerüzenetet a HOMLAMENTOR KFT automatizált B2B Outreach rendszere generálta.\n  </div>\n</div>"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-request-resend-id",
+      "name": "HTTP Request / Resend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        660,
+        320
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "resend-api-credential-id",
+          "name": "Resend API Auth Header"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking 'Execute Workflow'": {
+      "main": [
+        [
+          {
+            "node": "Read CRM (Google Sheets)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read CRM (Google Sheets)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read CRM (Google Sheets)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request / Resend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "homola-b2b-outreach-campaign",
+  "tags": []
+}

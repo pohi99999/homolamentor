@@ -34,6 +34,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-08 | n8n automatizációs mappa és `homola_lead_workflow.json` munkafolyamat sablon létrehozása a leadek kezeléséhez. A sablon tartalmaz egy Webhook node-ot, egy Switch node-ot a leadek forrás szerinti szétválasztásához, és Google Sheets node-okat az adatok mentéséhez. | Kész |
 | 2026-07-08 | Workflow élesítése n8n API-n keresztül és aktiválás. A script megpróbálja az API-n keresztüli importálást és aktiválást, valamint lokális CLI fallback-et biztosít, és lekéri a Vercel környezeti változóhoz szükséges webhook URL-t. | Kész |
 | 2026-07-13 | Fix: Hivatalos HOMLAMENTOR KFT cégnév és Abidjan központ integrálása László visszajelzése alapján | Kész |
+| 2026-07-13 | Feat: B2B Outreach e-mail sablonok és n8n kampány-automatizáció integrálása | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 

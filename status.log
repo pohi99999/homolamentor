@@ -2,3 +2,4 @@
 2026-07-08T11:55:00+02:00 | Kész | n8n webhook workflow sablon létrehozása a leadek kezeléséhez.
 2026-07-08T12:06:00+02:00 | Kész | Workflow élesítése n8n API-n keresztül és aktiválás.
 2026-07-13T09:25:00+02:00 | Kész | Fix: Hivatalos HOMLAMENTOR KFT cégnév és Abidjan központ integrálása László visszajelzése alapján.
+2026-07-13T09:30:00+02:00 | Kész | Feat: B2B Outreach e-mail sablonok és n8n kampány-automatizáció integrálása.
