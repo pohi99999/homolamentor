@@ -123,5 +123,19 @@
     "descPrimary": "HOMLAMENTOR KFT alapítója, afrikai expanziós stratéga és prémium ipari ingatlanok közvetítője.",
     "roleDev": "Lead AI Integrátor & Fejlesztő",
     "descDev": "A HOMLAMENTOR KFT digitális rendszereinek, AI chat asszisztensének (Brunella) és portálmegoldásainak fejlesztője."
+  },
+  "MobileHome": {
+    "badge": "MODULÁRIS JÖVŐ & EXPORT",
+    "title": "Konténeres Mobilházak & Regionális Expanzió",
+    "subtitle": "Kiváló minőségű, konténerben szállítható, önellátó napelemes rendszerrel ellátott moduláris lakóterek (30 m², 50 m², 80-100 m²) európai exportra és afrikai összeszerelésre optimalizálva.",
+    "ctaPrimary": "Ajánlatkérés & Katalógus",
+    "ctaSecondary": "Helyszíni Gyártási Koncepció",
+    "feature1Title": "Konténerben Szállítható",
+    "feature1Desc": "Bárhol a világon gyorsan és egyszerűen telepíthető szabványos tengeri konténeres logisztikával.",
+    "feature2Title": "50% Munkaköltség Megtakarítás",
+    "feature2Desc": "Az afrikai (Abidjan és Lusaka) összeszerelő üzemek helyi munkaerejének bevonásával.",
+    "feature3Title": "100% Transzport Profit",
+    "feature3Desc": "A lapraszerelt, helyszínen felállított moduláris házak szállítási hatékonysága révén."
   }
 }
+

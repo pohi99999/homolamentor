@@ -123,5 +123,19 @@
     "descPrimary": "Gründer der HOMLAMENTOR KFT, Experte für afrikanische Marktexpansion und Vermittler für Premium-Industrieimmobilien.",
     "roleDev": "Lead AI Integrator & Entwickler",
     "descDev": "Entwickler der digitalen Infrastruktur von HOMLAMENTOR KFT, des KI-Chat-Assistenten (Brunella) und der Portalanwendungen."
+  },
+  "MobileHome": {
+    "badge": "MODULARE ZUKUNFT & EXPORT",
+    "title": "Containerisierte Mobilheime & Regionale Expansion",
+    "subtitle": "Hochwertige, im Container transportierbare modulare Wohnräume (30 m², 50 m², 80-100 m²) ausgestattet mit autarken Solarsystemen, optimiert für den europäischen Export und die afrikanische regionale Montage.",
+    "ctaPrimary": "Angebot & Katalog anfordern",
+    "ctaSecondary": "Vor-Ort-Montagekonzept",
+    "feature1Title": "Container-Logistik",
+    "feature1Desc": "Schnelle und einfache Installation weltweit unter Verwendung standardmäßiger Seecontainer-Logistik.",
+    "feature2Title": "50% Einsparung bei den Arbeitskosten",
+    "feature2Desc": "Nutzung lokaler Arbeitskräfte in westafrikanischen (Abidjan) und südafrikanischen (Lusaka) Montagezentren.",
+    "feature3Title": "100% Transportgewinn",
+    "feature3Desc": "Hochgradig optimiertes Versandvolumen von flach verpackten Moduleinheiten, die vor Ort montiert werden."
   }
 }
+

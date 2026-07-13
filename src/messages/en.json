@@ -123,5 +123,19 @@
     "descPrimary": "Founder of HOMLAMENTOR KFT, strategist for African business expansion, and broker for premium industrial real estate.",
     "roleDev": "Lead AI Integrator & Developer",
     "descDev": "Developer of HOMLAMENTOR KFT's digital infrastructure, AI chat assistant (Brunella), and portal applications."
+  },
+  "MobileHome": {
+    "badge": "MODULAR FUTURE & EXPORT",
+    "title": "Containerized Mobile Homes & Regional Expansion",
+    "subtitle": "High-quality, container-transportable modular living spaces (30 sqm, 50 sqm, 80-100 sqm) equipped with self-sustaining solar systems, optimized for European export and African regional assembly.",
+    "ctaPrimary": "Request Quote & Catalog",
+    "ctaSecondary": "On-Site Assembly Concept",
+    "feature1Title": "Containerized Logistics",
+    "feature1Desc": "Quick and simple installation worldwide using standard marine container logistics.",
+    "feature2Title": "50% Labor Cost Savings",
+    "feature2Desc": "Utilizing local workforce in West African (Abidjan) and Southern African (Lusaka) assembly hubs.",
+    "feature3Title": "100% Transport Profit",
+    "feature3Desc": "Highly optimized shipping volume of flat-packed modular units assembled locally."
   }
 }
+
