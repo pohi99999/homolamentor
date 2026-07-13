@@ -125,10 +125,10 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "id": "homola-b2b-outreach-campaign",
-  "tags": []
+  "tags": [],
+  "id": "tHeEDAoZtTFQCHG2"
 }
