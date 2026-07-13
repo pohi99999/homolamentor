@@ -39,6 +39,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-13 | Feat: B2B kampány CSV adatbázis és Node.js tesztkörnyezet kialakítása | Kész |
 | 2026-07-13 | Feat: B2B kampány n8n workflow frissítése és automatizált validációs script élesítése | Kész |
 | 2026-07-13 | Feat: B2B kampány sikeresen élesítve és aktiválva a helyi localhost n8n motoron programozottan | Kész |
+| 2026-07-13 | Feat: Generated localized B2B outreach drafts via GWS and synced Master CRM programmatically | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 

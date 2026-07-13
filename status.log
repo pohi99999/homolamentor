@@ -7,3 +7,4 @@
 2026-07-13T09:55:00+02:00 | Kész | Feat: B2B kampány CSV adatbázis és Node.js tesztkörnyezet kialakítása.
 2026-07-13T10:00:00+02:00 | Kész | Feat: B2B kampány n8n workflow frissítése és automatizált validációs script élesítése.
 2026-07-13T10:10:00+02:00 | Kész | Feat: B2B kampány sikeresen élesítve és aktiválva a helyi localhost n8n motoron programozottan.
+2026-07-13T10:30:00+02:00 | Kész | Feat: Generated localized B2B outreach drafts via GWS and synced Master CRM programmatically.
