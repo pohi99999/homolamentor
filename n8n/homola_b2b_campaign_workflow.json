@@ -54,7 +54,13 @@
       "position": [
         380,
         320
-      ]
+      ],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "gmail-oauth2-credential-id",
+          "name": "Google Sheets (via Gmail Connection)"
+        }
+      }
     },
     {
       "parameters": {

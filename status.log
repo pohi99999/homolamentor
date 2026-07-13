@@ -6,3 +6,4 @@
 2026-07-13T09:35:00+02:00 | Kész | Initial: homola-mcp-hub szerver repozitórium inicializálása.
 2026-07-13T09:55:00+02:00 | Kész | Feat: B2B kampány CSV adatbázis és Node.js tesztkörnyezet kialakítása.
 2026-07-13T10:00:00+02:00 | Kész | Feat: B2B kampány n8n workflow frissítése és automatizált validációs script élesítése.
+2026-07-13T10:05:00+02:00 | Kész | Feat: N8n workflow élesítése és hitelesítése programozottan a külső .env fájl alapján.
