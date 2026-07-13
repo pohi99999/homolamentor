@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HomolaMentor KFT",
+  title: "HOMLAMENTOR KFT",
   description: "Prémium szolgáltatások, Zárt Ingatlan Portál és Afrika Inkubátor program.",
 };
 

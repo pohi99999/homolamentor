@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const htmlEmail = `
       <div style="background-color: #0b0f19; color: #f1f5f9; font-family: sans-serif; padding: 40px; border-radius: 16px; max-width: 600px; margin: 0 auto; border: 1px solid #1e293b;">
         <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="color: #ffffff; font-size: 24px; font-weight: 900; margin: 0 0 10px 0; letter-spacing: 1px;">HOMOLAMENTOR</h1>
+          <h1 style="color: #ffffff; font-size: 24px; font-weight: 900; margin: 0 0 10px 0; letter-spacing: 1px;">HOMLAMENTOR KFT</h1>
           <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: ${isLeadCapture ? '#34d399' : '#38bdf8'}; background-color: rgba(255,255,255,0.05); padding: 6px 16px; border-radius: 9999px;">
             ${formName}
           </span>
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
         </div>
 
         <div style="text-align: center; font-size: 11px; color: #64748b; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
-          Ezt az e-mailt a HomolaMentor KFT weboldal automatikus hibrid rendszere küldte.
+          Ezt az e-mailt a HOMLAMENTOR KFT weboldal automatikus hibrid rendszere küldte.
         </div>
       </div>
     `;
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     if (resend) {
       tasks.push(
         resend.emails.send({
-          from: 'HomolaMentor <noreply@resend.dev>', // Ha van egyedi domain, ide jöhet
+          from: 'HOMLAMENTOR KFT <noreply@resend.dev>', // Ha van egyedi domain, ide jöhet
           to: ['homlamentor@gmail.com', 'peterpohankapersonal@gmail.com'],
           subject: `Új Érdeklődés: ${name} (${formName})`,
           html: htmlEmail,

@@ -13,9 +13,9 @@ export async function generateMetadata({
   const { locale } = await params;
 
   const titles: Record<string, string> = {
-    hu: 'Afrika-Inkubátor Program | HomolaMentor KFT',
-    en: 'Africa-Incubator Program | HomolaMentor KFT',
-    de: 'Afrika-Inkubator Programm | HomolaMentor KFT',
+    hu: 'Afrika-Inkubátor Program | HOMLAMENTOR KFT',
+    en: 'Africa-Incubator Program | HOMLAMENTOR KFT',
+    de: 'Afrika-Inkubator Programm | HOMLAMENTOR KFT',
   };
 
   const descriptions: Record<string, string> = {
@@ -25,9 +25,9 @@ export async function generateMetadata({
   };
 
   const keywordsList: Record<string, string[]> = {
-    hu: ['Afrika-Inkubátor', 'SELAB Livestock Show', 'Nyugat-Afrika', 'piacra lépés', 'HomolaMentor', 'mentoring', 'export'],
-    en: ['Africa-Incubator', 'SELAB Livestock Show', 'West Africa', 'market entry', 'HomolaMentor', 'mentorship', 'business travel'],
-    de: ['Afrika-Inkubator', 'SELAB Livestock Show', 'Westafrika', 'Markteintritt', 'HomolaMentor', 'Mentoring', 'Geschäftsreise'],
+    hu: ['Afrika-Inkubátor', 'SELAB Livestock Show', 'Nyugat-Afrika', 'piacra lépés', 'HOMLAMENTOR', 'mentoring', 'export'],
+    en: ['Africa-Incubator', 'SELAB Livestock Show', 'West Africa', 'market entry', 'HOMLAMENTOR', 'mentorship', 'business travel'],
+    de: ['Afrika-Inkubator', 'SELAB Livestock Show', 'Westafrika', 'Markteintritt', 'HOMLAMENTOR', 'Mentoring', 'Geschäftsreise'],
   };
 
   return {
@@ -59,7 +59,7 @@ export default function AfricaIncubatorPage() {
       <footer className="border-t border-slate-900/60 py-12 px-6 bg-slate-950/60 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-500">
           <div>
-            © {new Date().getFullYear()} HomolaMentor KFT. Minden jog fenntartva.
+            © {new Date().getFullYear()} HOMLAMENTOR KFT. Minden jog fenntartva.
           </div>
           <div className="flex gap-6">
             <a href="#" className="hover:text-slate-300 transition-colors">Adatkezelés</a>

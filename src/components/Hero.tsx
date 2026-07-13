@@ -36,7 +36,7 @@ export default function Hero() {
       {/* Grafikai háttérkép */}
       <Image
         src="/main-hero-bg.jpg"
-        alt="HomolaMentor Global Background"
+        alt="HOMLAMENTOR KFT Global Background"
         fill
         priority
         fetchPriority="high"

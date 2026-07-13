@@ -29,7 +29,7 @@ export default function Navbar() {
             H
           </div>
           <span className="font-black text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-            HomolaMentor<span className="text-emerald-400 font-medium">KFT</span>
+            HOMLAMENTOR<span className="text-emerald-400 font-medium"> KFT</span>
           </span>
         </Link>
 

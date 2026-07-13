@@ -33,6 +33,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-07 | Kritikus asztali elrendezési hiba javítása az Afrika-Inkubátor oldal "Az inkubációs folyamat lépései" szekciójában (`src/components/ThreeStepProcess.tsx`): a korábbi váltakozó (zig-zag) idővonal elrendezés lecserélve egy robusztus, középre igazított `w-full max-w-6xl mx-auto px-4 md:px-8` konténerre, a 3 lépés kártya pedig egy bulletproof `grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch justify-center` elrendezésbe került, megszüntetve a képernyőn kívülre csúszó/eltűnő második kártya hibáját. Sikeres lint és build ellenőrzés. | Kész |
 | 2026-07-08 | n8n automatizációs mappa és `homola_lead_workflow.json` munkafolyamat sablon létrehozása a leadek kezeléséhez. A sablon tartalmaz egy Webhook node-ot, egy Switch node-ot a leadek forrás szerinti szétválasztásához, és Google Sheets node-okat az adatok mentéséhez. | Kész |
 | 2026-07-08 | Workflow élesítése n8n API-n keresztül és aktiválás. A script megpróbálja az API-n keresztüli importálást és aktiválást, valamint lokális CLI fallback-et biztosít, és lekéri a Vercel környezeti változóhoz szükséges webhook URL-t. | Kész |
+| 2026-07-13 | Fix: Hivatalos HOMLAMENTOR KFT cégnév és Abidjan központ integrálása László visszajelzése alapján | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 

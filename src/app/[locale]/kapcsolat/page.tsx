@@ -11,21 +11,21 @@ export async function generateMetadata({
   const { locale } = await params;
 
   const titles: Record<string, string> = {
-    hu: 'Kapcsolat | HomolaMentor KFT - Prémium Üzletfejlesztés',
-    en: 'Contact | HomolaMentor KFT - Premium Business Advisory',
-    de: 'Kontakt | HomolaMentor KFT - Premium Business Advisory',
+    hu: 'Kapcsolat | HOMLAMENTOR KFT - Prémium Üzletfejlesztés',
+    en: 'Contact | HOMLAMENTOR KFT - Premium Business Advisory',
+    de: 'Kontakt | HOMLAMENTOR KFT - Premium Business Advisory',
   };
 
   const descriptions: Record<string, string> = {
-    hu: 'Vegye fel a kapcsolatot a HomolaMentor Kft. vezetőségével és fejlesztői csapatával. Globális üzletfejlesztés és prémium ingatlanok.',
-    en: 'Get in touch with the management and development team of HomolaMentor Kft. Global business development and premium real estate.',
-    de: 'Kontaktieren Sie das Management und Entwicklungsteam von HomolaMentor Kft. Globale Geschäftsentwicklung und Premium-Immobilien.',
+    hu: 'Vegye fel a kapcsolatot a HOMLAMENTOR KFT vezetőségével és fejlesztői csapatával. Globális üzletfejlesztés és prémium ingatlanok.',
+    en: 'Get in touch with the management and development team of HOMLAMENTOR KFT. Global business development and premium real estate.',
+    de: 'Kontaktieren Sie das Management und Entwicklungsteam von HOMLAMENTOR KFT. Globale Geschäftsentwicklung und Premium-Immobilien.',
   };
 
   const keywordsList: Record<string, string[]> = {
-    hu: ['kapcsolat', 'HomolaMentor', 'Homola László', 'Pohánka József Péter', 'üzletfejlesztés', 'ipari ingatlanok'],
-    en: ['contact', 'HomolaMentor', 'Laszlo Homola', 'Peter Pohanka', 'business expansion', 'industrial real estate'],
-    de: ['kontakt', 'HomolaMentor', 'Laszlo Homola', 'Peter Pohanka', 'geschäftsexpansion', 'industrieimmobilien'],
+    hu: ['kapcsolat', 'HOMLAMENTOR', 'Homola László', 'Pohánka József Péter', 'üzletfejlesztés', 'ipari ingatlanok'],
+    en: ['contact', 'HOMLAMENTOR', 'Laszlo Homola', 'Peter Pohanka', 'business expansion', 'industrial real estate'],
+    de: ['kontakt', 'HOMLAMENTOR', 'Laszlo Homola', 'Peter Pohanka', 'geschäftsexpansion', 'industrieimmobilien'],
   };
 
   return {
@@ -51,7 +51,7 @@ export default function KapcsolatPage() {
       <footer className="border-t border-slate-900/60 py-12 px-6 bg-slate-950/60 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-500">
           <div>
-            © {new Date().getFullYear()} HomolaMentor KFT. Minden jog fenntartva.
+            © {new Date().getFullYear()} HOMLAMENTOR KFT. Minden jog fenntartva.
           </div>
           <div className="flex gap-6">
             <a href="#" className="hover:text-slate-300 transition-colors">Adatkezelés</a>
