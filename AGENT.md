@@ -43,6 +43,8 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-13 | Feat: Generated second batch of 10 B2B outreach drafts via GWS and verified CRM integrity | Kész |
 | 2026-07-13 | Feat: Synced sent and bounced emails with CRM | Kész |
 | 2026-07-13 | Log: Updated CRM with OOO replies for Aron Gorog and Rudolf Nemes | Kész |
+| 2026-07-13 | Feat: Initialized mobilehome project page and built Hero section | Kész |
+| 2026-07-13 | Feat: Implemented Tech Value Block and Lead-Capture Form | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 
