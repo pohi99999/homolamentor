@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+
+const execFilePromise = promisify(execFile);
 
 // Resend inicializálása csak akkor, ha a kulcs rendelkezésre áll
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -7,10 +11,31 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, companySize, industry, propertyType, location, source } = body;
+    const {
+      name,
+      email,
+      companySize,
+      industry,
+      propertyType,
+      location,
+      source,
+      // Mobilház specifikus mezők
+      project,
+      companyName,
+      contactName,
+      phone,
+      preferredSize,
+      role,
+      projectedVolume,
+      fundingStatus,
+      message,
+    } = body;
+
+    const isMobileHome = project === 'mobilehome';
+    const finalName = isMobileHome ? (contactName || name) : name;
 
     // Minimum ellenőrzés
-    if (!name || !email) {
+    if (!finalName || !email) {
       return NextResponse.json(
         { error: 'Name and email are required fields.' },
         { status: 400 }
@@ -18,56 +43,128 @@ export async function POST(request: Request) {
     }
 
     const isLeadCapture = source === 'LeadCaptureForm';
-    const formName = isLeadCapture ? 'Afrika-Inkubátor Érdeklődés' : 'Ingatlan Portál Érdeklődés';
+    let formName = 'Ingatlan Portál Érdeklődés';
+    if (isLeadCapture) {
+      formName = 'Afrika-Inkubátor Érdeklődés';
+    } else if (isMobileHome) {
+      formName = 'Mobilház-Projekt Jelentkezés';
+    }
 
     // HTML E-mail formázás (Luxury Sötét & Arany/Kék stílusban)
-    const htmlEmail = `
-      <div style="background-color: #0b0f19; color: #f1f5f9; font-family: sans-serif; padding: 40px; border-radius: 16px; max-width: 600px; margin: 0 auto; border: 1px solid #1e293b;">
-        <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="color: #ffffff; font-size: 24px; font-weight: 900; margin: 0 0 10px 0; letter-spacing: 1px;">HOMLAMENTOR KFT</h1>
-          <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: ${isLeadCapture ? '#34d399' : '#38bdf8'}; background-color: rgba(255,255,255,0.05); padding: 6px 16px; border-radius: 9999px;">
-            ${formName}
-          </span>
-        </div>
-        
-        <div style="background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 12px; margin-bottom: 25px;">
-          <h2 style="color: #ffffff; font-size: 16px; margin: 0 0 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Ügyfél Információk</h2>
-          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-            <tr>
-              <td style="padding: 8px 0; color: #94a3b8; width: 120px; font-weight: bold;">Név:</td>
-              <td style="padding: 8px 0; color: #ffffff;">${name}</td>
-            </tr>
-            <tr>
-              <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">E-mail:</td>
-              <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${email}" style="color: ${isLeadCapture ? '#34d399' : '#38bdf8'}; text-decoration: none;">${email}</a></td>
-            </tr>
-            ${isLeadCapture ? `
-              <tr>
-                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Cégméret:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${companySize} fő</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Iparág:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${industry}</td>
-              </tr>
-            ` : `
-              <tr>
-                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Ingatlan típus:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${propertyType}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Lokáció:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${location}</td>
-              </tr>
-            `}
-          </table>
-        </div>
+    let htmlEmail = '';
 
-        <div style="text-align: center; font-size: 11px; color: #64748b; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
-          Ezt az e-mailt a HOMLAMENTOR KFT weboldal automatikus hibrid rendszere küldte.
+    if (isMobileHome) {
+      htmlEmail = `
+        <div style="background-color: #0b0f19; color: #f1f5f9; font-family: sans-serif; padding: 40px; border-radius: 16px; max-width: 600px; margin: 0 auto; border: 1px solid #1e293b;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #ffffff; font-size: 24px; font-weight: 900; margin: 0 0 10px 0; letter-spacing: 1px;">HOMLAMENTOR KFT</h1>
+            <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #38bdf8; background-color: rgba(255,255,255,0.05); padding: 6px 16px; border-radius: 9999px;">
+              ${formName}
+            </span>
+          </div>
+          
+          <div style="background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+            <h2 style="color: #ffffff; font-size: 16px; margin: 0 0 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Partner Információk</h2>
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; width: 150px; font-weight: bold;">Kapcsolattartó:</td>
+                <td style="padding: 8px 0; color: #ffffff;">${finalName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Cégnév:</td>
+                <td style="padding: 8px 0; color: #ffffff;">${companyName || ''}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Pozíció:</td>
+                <td style="padding: 8px 0; color: #ffffff;">${role || ''}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">E-mail:</td>
+                <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${email}" style="color: #38bdf8; text-decoration: none;">${email}</a></td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Telefon:</td>
+                <td style="padding: 8px 0; color: #ffffff;">${phone || ''}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Preferált Méret:</td>
+                <td style="padding: 8px 0; color: #34d399; font-weight: bold;">${preferredSize || ''} m²</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Tervezett Mennyiség:</td>
+                <td style="padding: 8px 0; color: #ffffff;">${projectedVolume || ''} db</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Finanszírozás:</td>
+                <td style="padding: 8px 0; color: #ffffff;">${fundingStatus || ''}</td>
+              </tr>
+              ${message ? `
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold; vertical-align: top;">Üzenet:</td>
+                <td style="padding: 8px 0; color: #ffffff; white-space: pre-wrap;">${message}</td>
+              </tr>
+              ` : ''}
+            </table>
+          </div>
+
+          <div style="text-align: center; font-size: 11px; color: #64748b; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+            Ezt az e-mailt a HOMLAMENTOR KFT weboldal automatikus hibrid rendszere küldte.
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    } else {
+      htmlEmail = `
+        <div style="background-color: #0b0f19; color: #f1f5f9; font-family: sans-serif; padding: 40px; border-radius: 16px; max-width: 600px; margin: 0 auto; border: 1px solid #1e293b;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #ffffff; font-size: 24px; font-weight: 900; margin: 0 0 10px 0; letter-spacing: 1px;">HOMLAMENTOR KFT</h1>
+            <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: ${isLeadCapture ? '#34d399' : '#38bdf8'}; background-color: rgba(255,255,255,0.05); padding: 6px 16px; border-radius: 9999px;">
+              ${formName}
+            </span>
+          </div>
+          
+          <div style="background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+            <h2 style="color: #ffffff; font-size: 16px; margin: 0 0 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Ügyfél Információk</h2>
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; width: 120px; font-weight: bold;">Név:</td>
+                <td style="padding: 8px 0; color: #ffffff;">${finalName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">E-mail:</td>
+                <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${email}" style="color: ${isLeadCapture ? '#34d399' : '#38bdf8'}; text-decoration: none;">${email}</a></td>
+              </tr>
+              ${isLeadCapture ? `
+                <tr>
+                  <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Cégméret:</td>
+                  <td style="padding: 8px 0; color: #ffffff;">${companySize || ''} fő</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Iparág:</td>
+                  <td style="padding: 8px 0; color: #ffffff;">${industry || ''}</td>
+                </tr>
+              ` : `
+                <tr>
+                  <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Ingatlan típus:</td>
+                  <td style="padding: 8px 0; color: #ffffff;">${propertyType || ''}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Lokáció:</td>
+                  <td style="padding: 8px 0; color: #ffffff;">${location || ''}</td>
+                </tr>
+              `}
+            </table>
+          </div>
+
+          <div style="text-align: center; font-size: 11px; color: #64748b; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+            Ezt az e-mailt a HOMLAMENTOR KFT weboldal automatikus hibrid rendszere küldte.
+          </div>
+        </div>
+      `;
+    }
+
+    const subject = isMobileHome
+      ? 'ÚJ B2B JELENTKEZÉS: Kínai Mobilház-Projekt Partner'
+      : `Új Érdeklődés: ${finalName} (${formName})`;
 
     // Feladatok párhuzamos futtatása
     const tasks: Promise<{ success?: boolean; error?: boolean; source?: string; message?: string }>[] = [];
@@ -78,7 +175,7 @@ export async function POST(request: Request) {
         resend.emails.send({
           from: 'HOMLAMENTOR <onboarding@resend.dev>', // Resend ingyenes tier korlátozás miatt
           to: ['homlamentor@gmail.com', 'peterpohankapersonal@gmail.com'],
-          subject: `Új Érdeklődés: ${name} (${formName})`,
+          subject: subject,
           html: htmlEmail,
         })
           .then((res) => {
@@ -95,7 +192,7 @@ export async function POST(request: Request) {
     } else {
       console.log('--- RESEND EMAIL MOCK ---');
       console.log(`To: homlamentor@gmail.com, peterpohankapersonal@gmail.com`);
-      console.log(`Subject: Új Érdeklődés: ${name} (${formName})`);
+      console.log(`Subject: ${subject}`);
       console.log('--- END MOCK ---');
     }
 
@@ -110,6 +207,7 @@ export async function POST(request: Request) {
           },
           body: JSON.stringify({
             ...body,
+            name: finalName,
             timestamp: new Date().toISOString(),
           }),
         })
@@ -130,18 +228,65 @@ export async function POST(request: Request) {
       console.log('--- END MOCK ---');
     }
 
+    // 3. Google Sheets CRM Ingestion via GWS CLI (csak mobilház esetén)
+    if (isMobileHome) {
+      tasks.push(
+        new Promise((resolve) => {
+          void (async () => {
+            try {
+              const spreadsheetId = '1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ';
+              const datum = new Date().toISOString().split('T')[0];
+              const rowValues = [
+                datum,
+                finalName || '',
+                role || '',
+                companyName || '',
+                email || '',
+                phone || '',
+                preferredSize || '',
+                'Uj Erdeklodo',
+              ];
+
+              const paramsStr = JSON.stringify({
+                spreadsheetId,
+                range: 'Mobilhaz_Jelentkezok!A1',
+                valueInputOption: 'USER_ENTERED',
+              });
+
+              const bodyStr = JSON.stringify({
+                values: [rowValues],
+              });
+
+              console.log('Ingesting Mobilház B2B inquiry to GWS CRM...');
+              await execFilePromise('gws', [
+                'sheets',
+                'spreadsheets',
+                'values',
+                'append',
+                '--params',
+                paramsStr,
+                '--json',
+                bodyStr,
+              ]);
+              console.log('Sikeres Google Sheets CRM rögzítés GWS CLI-vel.');
+              resolve({ success: true, source: 'GWS' });
+            } catch (err: unknown) {
+              const message = err instanceof Error ? err.message : 'Unknown GWS error';
+              console.error('Hiba a Google Sheets (GWS) CRM rögzítés közben:', message);
+              // Nem dobunk végzetes hibát, hogy a többi integráció (Resend, n8n) fusson tovább
+              resolve({ error: true, source: 'GWS', message });
+            }
+            })();
+          })
+      );
+    }
+
     // Párhuzamos végrehajtás
     const results = await Promise.all(tasks);
     
-    // Vizsgáljuk meg, hogy történt-e valami kritikus hiba a futó feladatoknál
+    // Vizsgáljuk meg a hibákat
     const errors = results.filter((r) => r && r.error);
-    if (errors.length > 0 && errors.length === tasks.length) {
-      // Ha minden integráció elbukott
-      return NextResponse.json(
-        { error: 'Failed to send data to backend integrations.', details: errors },
-        { status: 500 }
-      );
-    }
+    const gwsResult = results.find((r) => r && r.source === 'GWS');
 
     return NextResponse.json({
       success: true,
@@ -149,7 +294,9 @@ export async function POST(request: Request) {
       integrations: {
         resend: resend ? 'active' : 'mocked',
         n8n: n8nUrl ? 'active' : 'mocked',
-      }
+        gws: isMobileHome ? (gwsResult && !gwsResult.error ? 'success' : 'failed') : 'not_applicable'
+      },
+      errors: errors.length > 0 ? errors : undefined
     });
 
   } catch (error: unknown) {

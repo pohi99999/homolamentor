@@ -17,3 +17,4 @@ LOG: Test lead received from Test Corp B2B
 Log: Merged and deployed MobileHome page to production
 2026-07-14T13:40:00+02:00 | Kész | Fix: Chrome AI audit alapján az accessibility és prémium vizuális hierarchia javítva.
 2026-07-14T13:50:00+02:00 | Kész | Feat: Integrated Strategic B2B Value Block into MobileHome project page.
+2026-07-14T14:03:39+02:00 | Kész | Feat: Connected MobileHome contact pipeline directly to Master CRM and Resend alert hooks.

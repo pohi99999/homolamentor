@@ -47,6 +47,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-13 | Feat: Implemented Tech Value Block and Lead-Capture Form. | Kész |
 | 2026-07-14 | Fix: Chrome AI audit alapján az accessibility és prémium vizuális hierarchia javítva. | Kész |
 | 2026-07-14 | Feat: Integrated Strategic B2B Value Block into MobileHome project page | Kész |
+| 2026-07-14 | Feat: Connected MobileHome contact pipeline directly to Master CRM and Resend alert hooks. | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 
@@ -70,7 +71,6 @@ A HomolaMentor KFT weboldalának fejlesztése és éles auditja sikeresen befeje
 ### Jövőbeli fejlesztési javaslatok:
 1. **Brunella AI Master Context integrálása**: Az AI chat asszisztens tudásbázisának kiterjesztése a teljes HomolaMentor KFT és a SELAB hivatalos prospektus tartalmára, hogy a látogatóknak azonnali, releváns szakmai választ adhasson.
 2. **MCP (Model Context Protocol) Architektúra**: Egy egyedi, helyi MCP szerver kiépítése, amely közvetlenül eléri és szinkronizálja a beérkező lead adatokat a belső ERP/CRM rendszerekkel, vagy automatizált e-mail válaszokat generál és küld ki.
-
 
 
 
