@@ -61,7 +61,7 @@ export default function MobileHomeContactForm() {
         </p>
         <button
           onClick={() => setIsSubmitted(false)}
-          className="px-6 py-2 rounded-xl bg-slate-900 border border-slate-800 text-emerald-400 hover:border-slate-700 transition-all font-semibold text-sm cursor-pointer"
+          className="px-6 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-emerald-400 hover:border-slate-700 transition-all font-semibold text-sm cursor-pointer shadow-xl shadow-black/50"
         >
           {t('newSubmission')}
         </button>
@@ -147,7 +147,7 @@ export default function MobileHomeContactForm() {
 
       <button
         type="submit"
-        className="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-base shadow-lg shadow-emerald-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer mt-4"
+        className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-base shadow-xl shadow-black/50 hover:shadow-black/70 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer mt-4"
       >
         {t('submitBtn')}
       </button>

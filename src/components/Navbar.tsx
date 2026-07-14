@@ -60,7 +60,7 @@ export default function Navbar() {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 text-slate-300 hover:text-emerald-400 transition-colors focus:outline-none cursor-pointer"
-            aria-label="Toggle menu"
+            aria-label={isOpen ? "Menü bezárása" : "Menü megnyitása"}
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>

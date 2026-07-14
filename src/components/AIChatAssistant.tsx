@@ -68,6 +68,7 @@ export default function AIChatAssistant() {
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-850/50 transition-all cursor-pointer"
+                aria-label="Chat ablak bezárása"
               >
                 <X className="w-4.5 h-4.5" />
               </button>
@@ -126,7 +127,8 @@ export default function AIChatAssistant() {
               <button
                 type="submit"
                 disabled={isLoading || !inputText.trim()}
-                className="p-2.5 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-400 disabled:from-slate-800 disabled:to-slate-850 text-slate-950 disabled:text-slate-600 shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer disabled:scale-100 disabled:cursor-not-allowed shrink-0"
+                className="p-2.5 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-400 disabled:from-slate-800 disabled:to-slate-850 text-slate-950 disabled:text-slate-600 shadow-xl shadow-black/50 hover:shadow-black/70 hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer disabled:scale-100 disabled:cursor-not-allowed shrink-0"
+                aria-label="Üzenet küldése"
               >
                 <Send className="w-4.5 h-4.5" />
               </button>
@@ -140,7 +142,8 @@ export default function AIChatAssistant() {
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500 to-emerald-400 flex items-center justify-center text-slate-950 shadow-2xl shadow-emerald-500/25 cursor-pointer relative"
+        className="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500 to-emerald-400 flex items-center justify-center text-slate-950 shadow-2xl shadow-emerald-500/25 hover:shadow-black/40 cursor-pointer relative"
+        aria-label="AI Chat asszisztens megnyitása"
       >
         <span className="absolute inset-0 rounded-full bg-emerald-400/20 scale-110 animate-ping pointer-events-none" />
         <MessageSquare className="w-6 h-6" />

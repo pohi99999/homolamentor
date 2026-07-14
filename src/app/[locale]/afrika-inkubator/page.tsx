@@ -43,21 +43,24 @@ export default function AfricaIncubatorPage() {
       {/* Fő Navigációs Sáv */}
       <Navbar />
 
-      {/* Afrika Hero Fejléc */}
-      <AfricaHero />
+      {/* Fő Tartalom */}
+      <main className="flex-grow">
+        {/* Afrika Hero Fejléc */}
+        <AfricaHero />
 
-      {/* 3 Lépéses Inkubációs Modell */}
-      <ThreeStepProcess />
+        {/* 3 Lépéses Inkubációs Modell */}
+        <ThreeStepProcess />
 
-      {/* SELAB Livestock Show Promóció */}
-      <SelabPromo />
+        {/* SELAB Livestock Show Promóció */}
+        <SelabPromo />
 
-      {/* Kapcsolati Konzultációs Űrlap */}
-      <LeadCaptureForm />
+        {/* Kapcsolati Konzultációs Űrlap */}
+        <LeadCaptureForm />
+      </main>
 
       {/* Lábléc */}
       <footer className="border-t border-slate-900/60 py-12 px-6 bg-slate-950/60 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-500">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-400">
           <div>
             © {new Date().getFullYear()} HOMLAMENTOR KFT. Minden jog fenntartva.
           </div>

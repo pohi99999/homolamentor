@@ -48,7 +48,12 @@ export default function ServiceSplit() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             custom={0}
-            className="group relative flex flex-col justify-between bg-slate-900/40 border border-slate-850 hover:border-emerald-500/20 rounded-3xl p-8 md:p-12 hover:bg-slate-900/60 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] h-full"
+            className="group relative flex flex-col justify-between rounded-3xl p-8 md:p-12 transition-all duration-300 shadow-2xl hover:shadow-emerald-500/5 h-full"
+            style={{
+              background: 'rgba(255, 255, 255, 0.03)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.08)'
+            }}
           >
             <div>
               <div className="flex justify-between items-start mb-8">
@@ -60,9 +65,9 @@ export default function ServiceSplit() {
                 </span>
               </div>
 
-              <h3 className="text-3xl font-black text-slate-100 group-hover:text-emerald-400 transition-colors mb-4">
+              <h2 className="text-3xl font-black text-slate-100 group-hover:text-emerald-400 transition-colors mb-4">
                 {t('incubatorTitle')}
-              </h3>
+              </h2>
 
               <p className="text-slate-400 leading-relaxed text-base font-light mb-8">
                 {t('incubatorDesc')}
@@ -73,7 +78,12 @@ export default function ServiceSplit() {
                 {incubatorSteps.map((step, index) => (
                   <div
                     key={step}
-                    className="grid grid-rows-[auto_1fr] gap-2 rounded-2xl border border-emerald-500/20 bg-slate-950/60 p-4 min-h-[150px]"
+                    className="grid grid-rows-[auto_1fr] gap-2 rounded-2xl p-4 min-h-[150px] transition-all duration-300"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.03)',
+                      backdropFilter: 'blur(12px)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)'
+                    }}
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-black tracking-wider text-emerald-400">
@@ -89,7 +99,7 @@ export default function ServiceSplit() {
 
             <Link
               href="/afrika-inkubator"
-              className="mt-4 px-6 py-4 bg-slate-950 hover:bg-emerald-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-xl transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
+              className="mt-4 px-6 py-4 bg-slate-950 hover:bg-emerald-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-2xl shadow-lg shadow-black/50 hover:shadow-black/70 transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
             >
               {t('incubatorCta')}
               <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -116,9 +126,9 @@ export default function ServiceSplit() {
                 </span>
               </div>
 
-              <h3 className="text-3xl font-black text-slate-100 group-hover:text-blue-400 transition-colors mb-4">
+              <h2 className="text-3xl font-black text-slate-100 group-hover:text-blue-400 transition-colors mb-4">
                 {t('portalTitle')}
-              </h3>
+              </h2>
 
               <p className="text-slate-400 leading-relaxed text-base font-light mb-8">
                 {t('portalDesc')}
@@ -145,7 +155,7 @@ export default function ServiceSplit() {
 
             <Link
               href="/ingatlan-portal"
-              className="mt-4 px-6 py-4 bg-slate-950 hover:bg-blue-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-xl transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
+              className="mt-4 px-6 py-4 bg-slate-950 hover:bg-blue-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-2xl shadow-lg shadow-black/50 hover:shadow-black/70 transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
             >
               {t('portalCta')}
               <Lock className="w-4 h-4 shrink-0" />

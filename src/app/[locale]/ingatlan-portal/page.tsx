@@ -43,21 +43,24 @@ export default function RealEstatePortalPage() {
       {/* Fő Navigációs Sáv */}
       <Navbar />
 
-      {/* Ingatlan Hero Fejléc */}
-      <RealEstateHero />
+      {/* Fő Tartalom */}
+      <main className="flex-grow">
+        {/* Ingatlan Hero Fejléc */}
+        <RealEstateHero />
 
-      {/* Kiemelt Ajánlatok Grid (Teaser) */}
-      <PropertyTeaserGrid />
+        {/* Kiemelt Ajánlatok Grid (Teaser) */}
+        <PropertyTeaserGrid />
 
-      {/* VIP Beléptető Kapu & Zártkörű Ingatlanok */}
-      <VIPAccessGateway />
+        {/* VIP Beléptető Kapu & Zártkörű Ingatlanok */}
+        <VIPAccessGateway />
 
-      {/* Egyedi Keresési Igények Leadása */}
-      <PropertyRequestForm />
+        {/* Egyedi Keresési Igények Leadása */}
+        <PropertyRequestForm />
+      </main>
 
       {/* Lábléc */}
       <footer className="border-t border-slate-900/60 py-12 px-6 bg-slate-950/60 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-500">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-400">
           <div>
             © {new Date().getFullYear()} HOMLAMENTOR KFT. Minden jog fenntartva.
           </div>

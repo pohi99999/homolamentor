@@ -37,8 +37,10 @@ export default function MobileHomeProjectPage() {
       {/* Fő Navigációs Sáv */}
       <Navbar />
 
-      {/* Hero Szekció */}
-      <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 px-6 overflow-hidden">
+      {/* Fő Tartalom */}
+      <main className="flex-grow">
+        {/* Hero Szekció */}
+        <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 px-6 overflow-hidden">
         {/* Háttér fényeffektusok */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-teal-500/10 rounded-full blur-[100px] pointer-events-none" />
@@ -60,18 +62,17 @@ export default function MobileHomeProjectPage() {
             {t('subtitle')}
           </p>
 
-          {/* Gombok */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16">
             <a
               href="#contact"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-base shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer group"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-base shadow-xl shadow-black/50 hover:shadow-black/70 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer group"
             >
               {t('ctaPrimary')}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
             <a
               href="#concept"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-slate-900/60 border border-slate-800 text-slate-200 hover:text-white hover:bg-slate-900 hover:border-slate-700 font-semibold text-base transition-all cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-slate-900/60 border border-slate-800 text-slate-200 hover:text-white hover:bg-slate-900 hover:border-slate-700 font-semibold text-base transition-all shadow-xl shadow-black/50 hover:shadow-black/70 cursor-pointer"
             >
               {t('ctaSecondary')}
             </a>
@@ -286,9 +287,11 @@ export default function MobileHomeProjectPage() {
       </section>
 
 
+      </main>
+
       {/* Lábléc */}
       <footer className="border-t border-slate-900/60 py-12 px-6 bg-slate-950/60 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-500">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-400">
           <div>
             © {new Date().getFullYear()} HOMLAMENTOR KFT. Minden jog fenntartva.
           </div>

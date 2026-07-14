@@ -22,7 +22,9 @@ export default function LanguageSwitcher() {
   return (
     <div className="flex items-center gap-2 bg-slate-900/90 backdrop-blur-md border border-slate-800 rounded-full px-3.5 py-1.5 shadow-lg shadow-slate-950/40 hover:border-slate-700 transition-colors">
       <Globe className={`w-4 h-4 text-emerald-400 ${isPending ? 'animate-spin' : ''}`} />
+      <label htmlFor="language-switcher-select" className="sr-only">Nyelv választása / Select Language / Sprache auswählen</label>
       <select
+        id="language-switcher-select"
         defaultValue={locale}
         disabled={isPending}
         onChange={(e) => onSelectChange(e.target.value)}

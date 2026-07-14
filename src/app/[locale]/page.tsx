@@ -41,15 +41,18 @@ export default function Home() {
       {/* Fő Navigációs Sáv */}
       <Navbar />
 
-      {/* Hero Szekció */}
-      <Hero />
+      {/* Fő Tartalom */}
+      <main className="flex-grow">
+        {/* Hero Szekció */}
+        <Hero />
 
-      {/* Szolgáltatásválasztó Szekció */}
-      <ServiceSplit />
+        {/* Szolgáltatásválasztó Szekció */}
+        <ServiceSplit />
+      </main>
       
       {/* Lábléc */}
       <footer className="border-t border-slate-900/60 py-12 px-6 bg-slate-950/60 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-500">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-400">
           <div>
             © {new Date().getFullYear()} HOMLAMENTOR KFT. Minden jog fenntartva.
           </div>
