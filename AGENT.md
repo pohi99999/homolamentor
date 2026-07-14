@@ -46,6 +46,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-13 | Feat: Initialized mobilehome project page and built Hero section | Kész |
 | 2026-07-13 | Feat: Implemented Tech Value Block and Lead-Capture Form. | Kész |
 | 2026-07-14 | Fix: Chrome AI audit alapján az accessibility és prémium vizuális hierarchia javítva. | Kész |
+| 2026-07-14 | Feat: Integrated Strategic B2B Value Block into MobileHome project page | Kész |
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
 

@@ -137,7 +137,15 @@
     "feature2Title": "50% Munkaköltség Megtakarítás",
     "feature2Desc": "Az afrikai (Abidjan és Lusaka) összeszerelő üzemek helyi munkaerejének bevonásával.",
     "feature3Title": "100% Transzport Profit",
-    "feature3Desc": "A lapraszerelt, helyszínen felállított moduláris házak szállítási hatékonysága révén."
+    "feature3Desc": "A lapraszerelt, helyszínen felállított moduláris házak szállítási hatékonysága révén.",
+    "b2bTitle": "Stratégiai és Gazdasági Előnyök a Gyártó Partnerek Számára",
+    "b2bSubtitle": "A HOMLAMENTOR KFT logisztikai és összeszerelési franchise struktúrája közvetlen pénzügyi és versenyképességi előnyt biztosít a nemzetközi piacon.",
+    "b2bCard1Title": "100% Logisztikai Profit",
+    "b2bCard1Desc": "Kész házak exportálása Európából a rendkívül magas tengeri fuvardíjak miatt nem versenyképes. A lapraszerelt, konténerizált rendszerek importálásával és a HOMLAMENTOR KFT helyi központjaiban történő összeszerelésével a logisztikai megtakarítás 100%-a közvetlenül nettó működési profittá válik.",
+    "b2bCard2Title": "50%-os Bérköltség-Optimalizáció",
+    "b2bCard2Desc": "A nyugat-afrikai (pl. Abidjan, Elefántcsontpart) logisztikai és elosztó központunkban a magasan képzett helyi munkaerő alkalmazása drasztikusan, mintegy 50%-kal csökkenti az összeszerelési és gyártási bérköltségeket.",
+    "b2bCard3Title": "Szigorú Adókedvezmények",
+    "b2bCard3Desc": "A Nyugat-Afrikában helyben alapított gyártó és összeszerelő entitások különleges társasági adómentességekben (tax holidays), valamint a regionális szabadkereskedelmi megállapodásokból (ECOWAS) adódó teljes vámmentességben részesülnek."
   },
   "MobileHomeForm": {
     "companyNameLabel": "Cég neve",

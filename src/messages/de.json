@@ -137,7 +137,15 @@
     "feature2Title": "50% Einsparung bei den Arbeitskosten",
     "feature2Desc": "Nutzung lokaler Arbeitskräfte in westafrikanischen (Abidjan) und südafrikanischen (Lusaka) Montagezentren.",
     "feature3Title": "100% Transportgewinn",
-    "feature3Desc": "Hochgradig optimiertes Versandvolumen von flach verpackten Moduleinheiten, die vor Ort montiert werden."
+    "feature3Desc": "Hochgradig optimiertes Versandvolumen von flach verpackten Moduleinheiten, die vor Ort montiert werden.",
+    "b2bTitle": "Strategische und wirtschaftliche Vorteile für Herstellungspartner",
+    "b2bSubtitle": "Die Logistik- und Montage-Franchisestruktur der HOMLAMENTOR KFT bietet direkte finanzielle und wettbewerbliche Vorteile auf internationalen Märkten.",
+    "b2bCard1Title": "100% Logistikgewinn",
+    "b2bCard1Desc": "Der Export von fertigen Häusern aus Europa ist aufgrund der extrem hohen Frachtraten nicht wettbewerbsfähig. Durch den Import von flach verpackten, containerisierten Systemen zur lokalen Montage im Hub der HOMLAMENTOR KFT wandeln sich 100% der Logistikeinsparungen direkt in operativen Nettogewinn um.",
+    "b2bCard2Title": "50% Lohnkosten-Optimierung",
+    "b2bCard2Desc": "Die Nutzung hochqualifizierter lokaler Arbeitskräfte im Logistik- und Vertriebszentrum in Abidjan/Elfenbeinküste reduziert die Montage- und Herstellungslöhne um 50%.",
+    "b2bCard3Title": "Steuer- & Zollvergünstigungen",
+    "b2bCard3Desc": "Lokale Produktions- und Montageunternehmen in Westafrika genießen besondere Körperschaftsteuerbefreiungen (Steuerferien) und regionale Zollvorteile im Rahmen von Freihandelsabkommen (ECOWAS)."
   },
   "MobileHomeForm": {
     "companyNameLabel": "Firmenname",

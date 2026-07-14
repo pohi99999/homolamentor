@@ -137,7 +137,15 @@
     "feature2Title": "50% Labor Cost Savings",
     "feature2Desc": "Utilizing local workforce in West African (Abidjan) and Southern African (Lusaka) assembly hubs.",
     "feature3Title": "100% Transport Profit",
-    "feature3Desc": "Highly optimized shipping volume of flat-packed modular units assembled locally."
+    "feature3Desc": "Highly optimized shipping volume of flat-packed modular units assembled locally.",
+    "b2bTitle": "Strategic and Financial Benefits for Manufacturing Partners",
+    "b2bSubtitle": "The logistics and assembly franchise structure of HOMLAMENTOR KFT provides direct financial and competitive advantages in international markets.",
+    "b2bCard1Title": "100% Logistics Profit",
+    "b2bCard1Desc": "Exporting finished houses from Europe is uncompetitive due to immense shipping rates. By importing flat-packed containerized systems for local assembly at the HOMLAMENTOR KFT hub, 100% of the logistics savings convert straight into net operational profit.",
+    "b2bCard2Title": "50% Labor Optimization",
+    "b2bCard2Desc": "Utilizing the highly trained local labor force at the Abidjan/Ivory Coast logistics and distribution center reduces assembly and manufacturing wage costs by 50%.",
+    "b2bCard3Title": "Tax & Custom Exemptions",
+    "b2bCard3Desc": "Local manufacturing and assembly entities established in West Africa enjoy special corporate tax exemptions (tax holidays) and regional custom duty benefits under free trade agreements (ECOWAS)."
   },
   "MobileHomeForm": {
     "companyNameLabel": "Company Name",

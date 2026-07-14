@@ -228,6 +228,74 @@ export default function MobileHomeProjectPage() {
         </div>
       </section>
 
+      {/* Stratégiai és Gazdasági Előnyök a Gyártó Partnerek Számára */}
+      <section className="py-20 px-6 border-t border-slate-900/60 bg-slate-950/60 relative">
+        {/* Háttér fénydekoráció */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-emerald-500/5 blur-[130px] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <span className="text-emerald-400 font-bold text-xs uppercase tracking-wider block mb-2">B2B Financial Advantages</span>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-wide mb-4 [text-wrap:balance] bg-gradient-to-r from-white to-slate-350 bg-clip-text text-transparent">
+              {t('b2bTitle')}
+            </h2>
+            <p className="text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
+              {t('b2bSubtitle')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Kártya 1 */}
+            <div 
+              className="p-8 rounded-3xl shadow-xl shadow-black/50 hover:shadow-black/70 transition-all duration-300 flex flex-col justify-between"
+              style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.08)'
+              }}
+            >
+              <div>
+                <span className="text-emerald-400 font-bold text-xs uppercase tracking-wider block mb-4">Logistics Profit Layout</span>
+                <h3 className="text-xl font-bold text-white mb-4 tracking-wide">{t('b2bCard1Title')}</h3>
+                <p className="text-slate-400 text-sm font-light leading-relaxed">{t('b2bCard1Desc')}</p>
+              </div>
+            </div>
+
+            {/* Kártya 2 */}
+            <div 
+              className="p-8 rounded-3xl shadow-xl shadow-black/50 hover:shadow-black/70 transition-all duration-300 flex flex-col justify-between"
+              style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.08)'
+              }}
+            >
+              <div>
+                <span className="text-emerald-400 font-bold text-xs uppercase tracking-wider block mb-4">Labor Cost Optimization</span>
+                <h3 className="text-xl font-bold text-white mb-4 tracking-wide">{t('b2bCard2Title')}</h3>
+                <p className="text-slate-400 text-sm font-light leading-relaxed">{t('b2bCard2Desc')}</p>
+              </div>
+            </div>
+
+            {/* Kártya 3 */}
+            <div 
+              className="p-8 rounded-3xl shadow-xl shadow-black/50 hover:shadow-black/70 transition-all duration-300 flex flex-col justify-between"
+              style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.08)'
+              }}
+            >
+              <div>
+                <span className="text-emerald-400 font-bold text-xs uppercase tracking-wider block mb-4">Government Subsidies</span>
+                <h3 className="text-xl font-bold text-white mb-4 tracking-wide">{t('b2bCard3Title')}</h3>
+                <p className="text-slate-400 text-sm font-light leading-relaxed">{t('b2bCard3Desc')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Globális & Afrikai Piacnyitási előnyök */}
       <section className="py-20 px-6 border-t border-slate-900/60 bg-slate-950/20 relative">
         <div className="max-w-7xl mx-auto">
