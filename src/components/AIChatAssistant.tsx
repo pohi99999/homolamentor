@@ -67,7 +67,7 @@ export default function AIChatAssistant() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-850/50 transition-all cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-850/50 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
                 aria-label="Chat ablak bezárása"
               >
                 <X className="w-4.5 h-4.5" />
@@ -121,13 +121,14 @@ export default function AIChatAssistant() {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder={t('placeholder')}
+                aria-label={t('placeholder')}
                 disabled={isLoading}
-                className="flex-1 bg-slate-900 border border-slate-800 focus:border-amber-500/50 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500/30 transition-all disabled:opacity-50"
+                className="flex-1 bg-slate-900 border border-slate-800 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:outline-none focus:outline-none focus:border-amber-500/50 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-600 transition-all disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={isLoading || !inputText.trim()}
-                className="p-2.5 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-400 disabled:from-slate-800 disabled:to-slate-850 text-slate-950 disabled:text-slate-600 shadow-xl shadow-black/50 hover:shadow-black/70 hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer disabled:scale-100 disabled:cursor-not-allowed shrink-0"
+                className="p-2.5 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-400 disabled:from-slate-800 disabled:to-slate-850 text-slate-950 disabled:text-slate-600 shadow-xl shadow-black/50 hover:shadow-black/70 hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer disabled:scale-100 disabled:cursor-not-allowed shrink-0 focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
                 aria-label="Üzenet küldése"
               >
                 <Send className="w-4.5 h-4.5" />
@@ -142,7 +143,7 @@ export default function AIChatAssistant() {
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500 to-emerald-400 flex items-center justify-center text-slate-950 shadow-2xl shadow-emerald-500/25 hover:shadow-black/40 cursor-pointer relative"
+        className="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500 to-emerald-400 flex items-center justify-center text-slate-950 shadow-2xl shadow-emerald-500/25 hover:shadow-black/40 cursor-pointer relative focus-visible:ring-2 focus-visible:ring-emerald-450 focus-visible:outline-none"
         aria-label="AI Chat asszisztens megnyitása"
       >
         <span className="absolute inset-0 rounded-full bg-emerald-400/20 scale-110 animate-ping pointer-events-none" />

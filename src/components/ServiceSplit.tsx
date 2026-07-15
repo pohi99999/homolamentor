@@ -99,7 +99,7 @@ export default function ServiceSplit() {
 
             <Link
               href="/afrika-inkubator"
-              className="mt-4 px-6 py-4 bg-slate-950 hover:bg-emerald-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-2xl shadow-lg shadow-black/50 hover:shadow-black/70 transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
+              className="mt-4 px-6 py-4 bg-slate-950 hover:bg-emerald-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-2xl shadow-lg shadow-black/50 hover:shadow-black/70 transition-all flex items-center justify-center gap-2 group/btn cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none"
             >
               {t('incubatorCta')}
               <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -155,7 +155,7 @@ export default function ServiceSplit() {
 
             <Link
               href="/ingatlan-portal"
-              className="mt-4 px-6 py-4 bg-slate-950 hover:bg-blue-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-2xl shadow-lg shadow-black/50 hover:shadow-black/70 transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
+              className="mt-4 px-6 py-4 bg-slate-950 hover:bg-blue-500 hover:text-slate-950 border border-slate-800 hover:border-transparent text-slate-200 font-bold rounded-2xl shadow-lg shadow-black/50 hover:shadow-black/70 transition-all flex items-center justify-center gap-2 group/btn cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
             >
               {t('portalCta')}
               <Lock className="w-4 h-4 shrink-0" />

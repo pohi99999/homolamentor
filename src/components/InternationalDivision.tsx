@@ -147,7 +147,7 @@ export default function InternationalDivision() {
             </p>
           </div>
 
-          <div className="relative bg-slate-900/20 backdrop-blur-lg border border-slate-900 rounded-3xl p-8 md:p-12 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.02)]">
+          <div className="relative bg-slate-900/60 backdrop-blur-lg border border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl hover:border-amber-500/20 transition-all duration-300">
             <AnimatePresence mode="wait">
               {status === 'success' ? (
                 <motion.div
@@ -172,14 +172,15 @@ export default function InternationalDivision() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Cégnév */}
                     <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <label htmlFor="companyName" className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
                         <Building className="w-3.5 h-3.5 text-amber-400" />
                         {t('companyNameLabel')} *
                       </label>
                       <input
                         type="text"
+                        id="companyName"
                         required
-                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/30 transition-all text-sm"
+                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus-visible:ring-2 focus-visible:ring-amber-550 focus-visible:outline-none focus:outline-none focus:border-amber-400/50 transition-all text-sm"
                         value={formData.companyName}
                         onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                       />
@@ -187,14 +188,15 @@ export default function InternationalDivision() {
 
                     {/* Képviselő */}
                     <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <label htmlFor="representativeName" className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
                         <User className="w-3.5 h-3.5 text-amber-400" />
                         {t('representativeLabel')} *
                       </label>
                       <input
                         type="text"
+                        id="representativeName"
                         required
-                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/30 transition-all text-sm"
+                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus-visible:ring-2 focus-visible:ring-amber-550 focus-visible:outline-none focus:outline-none focus:border-amber-400/50 transition-all text-sm"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       />
@@ -202,14 +204,15 @@ export default function InternationalDivision() {
 
                     {/* E-mail */}
                     <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <label htmlFor="email" className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
                         <Mail className="w-3.5 h-3.5 text-amber-400" />
                         {t('emailLabel')} *
                       </label>
                       <input
                         type="email"
+                        id="email"
                         required
-                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/30 transition-all text-sm"
+                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus-visible:ring-2 focus-visible:ring-amber-550 focus-visible:outline-none focus:outline-none focus:border-amber-400/50 transition-all text-sm"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       />
@@ -217,13 +220,14 @@ export default function InternationalDivision() {
 
                     {/* Telefon */}
                     <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <label htmlFor="phone" className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
                         <Phone className="w-3.5 h-3.5 text-amber-400" />
                         {t('phoneLabel')}
                       </label>
                       <input
                         type="tel"
-                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/30 transition-all text-sm"
+                        id="phone"
+                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus-visible:ring-2 focus-visible:ring-amber-550 focus-visible:outline-none focus:outline-none focus:border-amber-400/50 transition-all text-sm"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       />
@@ -231,13 +235,14 @@ export default function InternationalDivision() {
 
                     {/* Érintett Szektor */}
                     <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <label htmlFor="targetedSector" className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
                         <Layers className="w-3.5 h-3.5 text-amber-400" />
                         {t('sectorLabel')} *
                       </label>
                       <select
+                        id="targetedSector"
                         required
-                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/30 transition-all text-sm appearance-none cursor-pointer"
+                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-300 focus-visible:ring-2 focus-visible:ring-amber-550 focus-visible:outline-none focus:outline-none focus:border-amber-400/50 transition-all text-sm appearance-none cursor-pointer"
                         value={formData.targetedSector}
                         onChange={(e) => setFormData({ ...formData, targetedSector: e.target.value })}
                       >
@@ -251,14 +256,15 @@ export default function InternationalDivision() {
 
                     {/* Befektetési Volumen */}
                     <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <label htmlFor="investmentVolume" className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
                         <DollarSign className="w-3.5 h-3.5 text-amber-400" />
                         {t('volumeLabel')}
                       </label>
                       <input
                         type="text"
+                        id="investmentVolume"
                         placeholder={t('volumePlaceholder')}
-                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/30 transition-all text-sm"
+                        className="bg-slate-950/50 border border-slate-900 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus-visible:ring-2 focus-visible:ring-amber-550 focus-visible:outline-none focus:outline-none focus:border-amber-400/50 transition-all text-sm"
                         value={formData.investmentVolume}
                         onChange={(e) => setFormData({ ...formData, investmentVolume: e.target.value })}
                       />
@@ -275,7 +281,7 @@ export default function InternationalDivision() {
                     <button
                       type="submit"
                       disabled={status === 'loading'}
-                      className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold tracking-wide text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-500/10 hover:shadow-xl hover:shadow-amber-500/20 active:scale-98 transition-all disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
+                      className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold tracking-wide text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-500/10 hover:shadow-xl hover:shadow-amber-500/20 active:scale-98 transition-all disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                     >
                       {status === 'loading' ? (
                         <>

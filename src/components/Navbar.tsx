@@ -44,7 +44,7 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="flex items-center gap-1.5 text-sm font-semibold text-slate-355 hover:text-emerald-400 transition-colors"
+                className="flex items-center gap-1.5 text-sm font-semibold text-slate-300 hover:text-emerald-400 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus-visible:rounded-lg px-2 py-1"
               >
                 {Icon && <Icon className="w-3.5 h-3.5 text-emerald-400/80" />}
                 {item.name}
@@ -60,7 +60,7 @@ export default function Navbar() {
           <LanguageSwitcher />
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-slate-300 hover:text-emerald-400 transition-colors focus:outline-none cursor-pointer"
+            className="p-2 text-slate-300 hover:text-emerald-400 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus-visible:rounded-lg cursor-pointer"
             aria-label={isOpen ? "Menü bezárása" : "Menü megnyitása"}
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

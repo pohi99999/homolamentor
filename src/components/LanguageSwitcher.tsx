@@ -28,7 +28,7 @@ export default function LanguageSwitcher() {
         defaultValue={locale}
         disabled={isPending}
         onChange={(e) => onSelectChange(e.target.value)}
-        className="bg-transparent text-xs text-slate-200 focus:outline-none cursor-pointer font-semibold uppercase tracking-wider appearance-none pr-1"
+        className="bg-transparent text-xs text-slate-200 focus-visible:ring-1 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none cursor-pointer font-semibold uppercase tracking-wider appearance-none pr-1"
         style={{ WebkitAppearance: 'none' }}
       >
         <option value="hu" className="bg-slate-950 text-slate-200">HU</option>

@@ -148,7 +148,7 @@ export default function MobileHomeContactForm() {
   }
 
   return (
-    <form onSubmit={handleFormSubmit} className="space-y-6 max-w-xl mx-auto p-8 rounded-2xl bg-slate-900/40 border border-slate-800/80 backdrop-blur-sm shadow-xl">
+    <form onSubmit={handleFormSubmit} className="space-y-6 max-w-xl mx-auto p-8 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-lg shadow-2xl">
       {submitError && (
         <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold">
           {submitError}
@@ -157,14 +157,15 @@ export default function MobileHomeContactForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-slate-300 mb-2">{t('contactNameLabel')}</label>
+          <label htmlFor="contactName" className="block text-sm font-semibold text-slate-300 mb-2">{t('contactNameLabel')}</label>
           <input
             type="text"
+            id="contactName"
             name="contactName"
             value={formData.contactName}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus:outline-none transition-colors ${
-              errors.contactName ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500'
+            className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none transition-colors ${
+              errors.contactName ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500/50'
             }`}
             placeholder={t('contactNamePlaceholder')}
           />
@@ -172,14 +173,15 @@ export default function MobileHomeContactForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-slate-300 mb-2">{t('companyNameLabel')}</label>
+          <label htmlFor="companyName" className="block text-sm font-semibold text-slate-300 mb-2">{t('companyNameLabel')}</label>
           <input
             type="text"
+            id="companyName"
             name="companyName"
             value={formData.companyName}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus:outline-none transition-colors ${
-              errors.companyName ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500'
+            className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none transition-colors ${
+              errors.companyName ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500/50'
             }`}
             placeholder={t('companyNamePlaceholder')}
           />
@@ -189,14 +191,15 @@ export default function MobileHomeContactForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-slate-300 mb-2">{t('roleLabel')}</label>
+          <label htmlFor="role" className="block text-sm font-semibold text-slate-300 mb-2">{t('roleLabel')}</label>
           <input
             type="text"
+            id="role"
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus:outline-none transition-colors ${
-              errors.role ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500'
+            className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none transition-colors ${
+              errors.role ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500/50'
             }`}
             placeholder={t('rolePlaceholder')}
           />
@@ -204,14 +207,15 @@ export default function MobileHomeContactForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-slate-300 mb-2">{t('phoneLabel')}</label>
+          <label htmlFor="phone" className="block text-sm font-semibold text-slate-300 mb-2">{t('phoneLabel')}</label>
           <input
             type="text"
+            id="phone"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus:outline-none transition-colors ${
-              errors.phone ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500'
+            className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none transition-colors ${
+              errors.phone ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500/50'
             }`}
             placeholder={t('phonePlaceholder')}
           />
@@ -220,14 +224,15 @@ export default function MobileHomeContactForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-slate-300 mb-2">{t('emailLabel')}</label>
+        <label htmlFor="email" className="block text-sm font-semibold text-slate-300 mb-2">{t('emailLabel')}</label>
         <input
           type="email"
+          id="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-          className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus:outline-none transition-colors ${
-            errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500'
+          className={`w-full px-4 py-3 rounded-xl bg-slate-950 border text-slate-100 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none transition-colors ${
+            errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-emerald-500/50'
           }`}
           placeholder={t('emailPlaceholder')}
         />
@@ -236,12 +241,13 @@ export default function MobileHomeContactForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-slate-300 mb-2">{t('interestedModelLabel')}</label>
+          <label htmlFor="interestedModel" className="block text-sm font-semibold text-slate-300 mb-2">{t('interestedModelLabel')}</label>
           <select
+            id="interestedModel"
             name="interestedModel"
             value={formData.interestedModel}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none focus:border-emerald-500 transition-colors"
           >
             <option value="30">{t('model30')}</option>
             <option value="50">{t('model50')}</option>
@@ -250,12 +256,13 @@ export default function MobileHomeContactForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-slate-300 mb-2">{t('projectedVolumeLabel')}</label>
+          <label htmlFor="projectedVolume" className="block text-sm font-semibold text-slate-300 mb-2">{t('projectedVolumeLabel')}</label>
           <select
+            id="projectedVolume"
             name="projectedVolume"
             value={formData.projectedVolume}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none focus:border-emerald-500 transition-colors"
           >
             <option value="1-5">{t('volume1-5')}</option>
             <option value="6-20">{t('volume6-20')}</option>
@@ -265,12 +272,13 @@ export default function MobileHomeContactForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-slate-300 mb-2">{t('fundingStatusLabel')}</label>
+        <label htmlFor="fundingStatus" className="block text-sm font-semibold text-slate-300 mb-2">{t('fundingStatusLabel')}</label>
         <select
+          id="fundingStatus"
           name="fundingStatus"
           value={formData.fundingStatus}
           onChange={handleChange}
-          className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 focus:outline-none focus:border-emerald-500 transition-colors"
+          className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none focus:border-emerald-500 transition-colors"
         >
           <option value="equity">{t('fundingEquity')}</option>
           <option value="loan">{t('fundingLoan')}</option>
@@ -279,13 +287,14 @@ export default function MobileHomeContactForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-slate-300 mb-2">{t('messageLabel')}</label>
+        <label htmlFor="message" className="block text-sm font-semibold text-slate-300 mb-2">{t('messageLabel')}</label>
         <textarea
+          id="message"
           name="message"
           value={formData.message}
           onChange={handleChange}
           rows={4}
-          className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+          className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus:outline-none focus:border-emerald-500 transition-colors resize-none"
           placeholder={t('messagePlaceholder')}
         />
       </div>
@@ -293,7 +302,7 @@ export default function MobileHomeContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-base shadow-xl shadow-black/50 hover:shadow-black/70 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-base shadow-xl shadow-black/50 hover:shadow-black/70 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer mt-4 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting ? 'Küldés folyamatban...' : t('submitBtn')}
       </button>

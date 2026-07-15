@@ -65,7 +65,7 @@ export default function VIPAccessGateway() {
                 variants={shakeVariants}
                 animate={shake ? 'shake' : 'idle'}
                 onSubmit={handleAccessSubmit}
-                className="bg-slate-900/40 backdrop-blur-md border border-slate-850 rounded-2xl p-8 shadow-[0_4px_30px_rgba(0,0,0,0.1),inset_0_0_0_1px_rgba(255,255,255,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2),inset_0_0_0_1px_rgba(255,255,255,0.2)] flex flex-col gap-5 transition-all duration-300"
+                className="bg-slate-900/60 backdrop-blur-lg border border-slate-800 rounded-2xl p-8 shadow-2xl hover:border-sky-500/20 flex flex-col gap-5 transition-all duration-300"
               >
                 <div className="flex flex-col gap-2">
                   <label htmlFor="vipKey" className="text-xs font-bold text-slate-400 uppercase tracking-wider text-left">
@@ -78,7 +78,7 @@ export default function VIPAccessGateway() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-sky-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-500/30 transition-all text-center tracking-widest font-black"
+                    className="w-full bg-slate-950 border border-slate-800 focus-visible:ring-2 focus-visible:ring-sky-500/50 focus-visible:outline-none focus:outline-none focus:border-sky-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-700 transition-all text-center tracking-widest font-black"
                   />
                 </div>
 
@@ -94,7 +94,7 @@ export default function VIPAccessGateway() {
 
                 <button
                   type="submit"
-                  className="w-full px-6 py-4 bg-gradient-to-r from-sky-500 to-blue-500 text-slate-950 font-bold rounded-2xl shadow-xl shadow-black/50 hover:shadow-black/70 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer relative overflow-hidden after:absolute after:top-0 after:left-0 after:w-[200%] after:h-full after:-skew-x-20 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:-translate-x-[150%] hover:after:translate-x-[100%] after:transition-transform after:duration-1000 after:ease-out"
+                  className="w-full px-6 py-4 bg-gradient-to-r from-sky-500 to-blue-500 text-slate-950 font-bold rounded-2xl shadow-xl shadow-black/50 hover:shadow-black/70 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer relative overflow-hidden focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 after:absolute after:top-0 after:left-0 after:w-[200%] after:h-full after:-skew-x-20 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:-translate-x-[150%] hover:after:translate-x-[100%] after:transition-transform after:duration-1000 after:ease-out"
                 >
                   {t('submitButton')}
                   <ArrowRight className="w-4 h-4 shrink-0" />
