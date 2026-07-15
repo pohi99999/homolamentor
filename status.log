@@ -20,3 +20,4 @@ Log: Merged and deployed MobileHome page to production
 2026-07-14T14:03:39+02:00 | Kész | Feat: Connected MobileHome contact pipeline directly to Master CRM and Resend alert hooks.
 2026-07-15T10:43:00+02:00 | Kész | Feat: Inicializáltuk az Afrikai Infrastruktúra-Finanszírozási kampány sablonjait és a CRM új fülét.
 2026-07-15T10:51:00+02:00 | Kész | Feat: GWS alapú postaláda szinkronizáció lefutott, a Master CRM státuszai frissítve a kiküldések és visszadobások alapján.
+2026-07-15T10:55:00+02:00 | Kész | Fix: Beépítettük a SPAM mappa ellenőrzését a kézbesítési hibák (bounces) pontosabb kiszűrésére.

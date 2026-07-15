@@ -473,7 +473,91 @@ async function main() {
     }
   }
 
+  // 6. SPAM mappában lévő levelek lekérdezése (utolsó 50)
+  console.log('\n6. Levélszemét (SPAM) mappában lévő levelek elemzése (Bounce keresés)...');
+  let spamListOutput;
+  try {
+    const res = spawnSync('gws', [
+      'gmail', 'users', 'messages', 'list',
+      '--params', `"${JSON.stringify({ userId: 'me', q: 'in:spam', maxResults: 50 }).replace(/"/g, '\\"')}"`
+    ], { encoding: 'utf-8', shell: true });
+    spamListOutput = JSON.parse(res.stdout);
+  } catch (err) {
+    console.error('❌ Hiba a SPAM levelek listázása közben:', err.message);
+    spamListOutput = { messages: [] };
+  }
+
+  const spamMessages = spamListOutput.messages || [];
+  console.log(`✓ Talált beérkező levelek száma a Gmailed SPAM mappájában: ${spamMessages.length}`);
+
+  for (const msg of spamMessages) {
+    const detailRes = spawnSync('gws', [
+      'gmail', 'users', 'messages', 'get',
+      '--params', `"${JSON.stringify({ userId: 'me', id: msg.id }).replace(/"/g, '\\"')}"`
+    ], { encoding: 'utf-8', shell: true });
+    
+    if (detailRes.status !== 0) continue;
+    
+    try {
+      const msgDetail = JSON.parse(detailRes.stdout);
+      const snippet = msgDetail.snippet || '';
+      const headers = msgDetail.payload.headers || [];
+      
+      const subjectHeader = headers.find(h => h.name.toLowerCase() === 'subject');
+      const fromHeader = headers.find(h => h.name.toLowerCase() === 'from');
+      
+      const subject = subjectHeader ? subjectHeader.value.toLowerCase() : '';
+      const from = fromHeader ? fromHeader.value.toLowerCase() : '';
+      
+      const isBounceSender = from.includes('mailer-daemon') || from.includes('postmaster') || from.includes('mail-delivery');
+      const isBounceSubject = subject.includes('undelivered') || subject.includes('failure') || subject.includes('failed') || subject.includes('notice') || subject.includes('returned') || subject.includes('delivery status');
+      
+      if (isBounceSender || isBounceSubject) {
+        for (const email of allMonitoredEmails) {
+          if (snippet.toLowerCase().includes(email) && !processedInboxEmails.has(email)) {
+            processedInboxEmails.add(email);
+            let hasBounceMatch = false;
+
+            // Master CRM frissítés
+            const masterRec = emailToMasterRecord[email];
+            if (masterRec) {
+              console.log(`  ⚠ SPAM BOUNCE észlelve (Master CRM): ${email} (${masterRec['Cégnév']})`);
+              hasBounceMatch = true;
+              spawnSync('gws', [
+                'sheets', 'spreadsheets', 'values', 'update',
+                '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdMaster, range: `Master_Vevőlista!N${masterRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
+                '--json', `"${JSON.stringify({ values: [["Visszadobva / Hibás email"]] }).replace(/"/g, '\\"')}"`
+              ], { encoding: 'utf-8', shell: true });
+            }
+
+            // Contacts frissítés
+            const contactsRec = emailToContactsRecord[email];
+            if (contactsRec) {
+              console.log(`  ⚠ SPAM BOUNCE észlelve (Contacts): ${email} (${contactsRec.company})`);
+              hasBounceMatch = true;
+              spawnSync('gws', [
+                'sheets', 'spreadsheets', 'values', 'update',
+                '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdContacts, range: `CONTACTS!L${contactsRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
+                '--json', `"${JSON.stringify({ values: [["Visszadobva / Hibás email"]] }).replace(/"/g, '\\"')}"`
+              ], { encoding: 'utf-8', shell: true });
+            }
+
+            if (hasBounceMatch) {
+              bounceCount++;
+              if (pairedSentEmails.has(email)) {
+                sentCount = Math.max(0, sentCount - 1);
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      // Hiba
+    }
+  }
+
   console.log(`\n========================================================================`);
+
   console.log(`🎉 POSTALÁDA SZINKRONIZÁLÁS STATISZTIKA:`);
   console.log(`- Sikeresen "Kiküldve" státuszú lett: ${sentCount} db`);
   console.log(`- Visszadobódott (Visszadobva / Hibás email): ${bounceCount} db`);
