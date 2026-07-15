@@ -4,6 +4,7 @@
     "incubator": "Africa-Incubator",
     "mobilehome": "Mobile Home",
     "portal": "Real Estate Portal",
+    "international": "International Division",
     "contact": "Contact"
   },
 
@@ -181,6 +182,33 @@
     "successTitle": "Thank you for your request!",
     "successMessage": "Our business development team will contact you within 24 hours and send the detailed technical catalog.",
     "newSubmission": "Submit new request"
+  },
+  "InternationalDivision": {
+    "badge": "INTERNATIONAL DIVISION",
+    "title": "West African Infrastructure & Project Finance",
+    "subtitle": "Premium off-market investment and co-investment opportunities in Ivory Coast (centered in Abidjan). Dedicated to Private Equity funds and banks, featuring sovereign guarantees, high yields, and tax exemptions within the ECOWAS free trade zone.",
+    "energyTitle": "Renewable Energy",
+    "energyDesc": "Development of 50+ MW solar PV power plants and grid infrastructure, backed by long-term government power purchase agreements and multilateral risk guarantees.",
+    "telecomTitle": "Telecom Infrastructure",
+    "telecomDesc": "Construction and operation of a nationwide telecommunications tower network (towerco model) in prime locations, supported by long-term master lease agreements.",
+    "agriTitle": "Agriculture & Food Processing",
+    "agriDesc": "Establishment of modern agricultural feed and food processing facilities to serve the rapidly expanding local demand, located within customs and tax-free economic zones.",
+    "formTitle": "Investor Inquiry Form",
+    "formSubtitle": "Please provide your institution's details, and our manager will contact you to present our active pipeline and detailed financial models.",
+    "companyNameLabel": "Institution / Company Name",
+    "representativeLabel": "Representative Name",
+    "emailLabel": "Email Address",
+    "phoneLabel": "Phone Number",
+    "sectorLabel": "Targeted Sector",
+    "sectorPlaceholder": "Select a sector...",
+    "sectorOption1": "Renewable Energy (50+ MW solar)",
+    "sectorOption2": "Telecom Infrastructure",
+    "sectorOption3": "Agriculture & Food Processing",
+    "sectorOption4": "All / Mixed Portfolio",
+    "volumeLabel": "Projected Investment Volume",
+    "volumePlaceholder": "e.g., 1M - 5M EUR",
+    "submitButton": "Submit Investment Inquiry",
+    "successMsg": "Thank you for your interest! Our team will contact you shortly with the official investment teaser and NDA documents."
   }
 }
 

@@ -16,6 +16,7 @@ export default function Navbar() {
     { name: t('incubator'), href: '/afrika-inkubator' },
     { name: t('mobilehome'), href: '/mobilhaz-projekt' },
     { name: t('portal'), href: '/ingatlan-portal', icon: Lock },
+    { name: t('international'), href: '/nemzetkozi-divizio' },
     { name: t('contact'), href: '/kapcsolat' },
   ];
 

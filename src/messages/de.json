@@ -4,6 +4,7 @@
     "incubator": "Afrika-Inkubator",
     "mobilehome": "Mobilheime",
     "portal": "Immobilienportal",
+    "international": "Internationale Division",
     "contact": "Kontakt"
   },
 
@@ -181,6 +182,33 @@
     "successTitle": "Vielen Dank für Ihre Anfrage!",
     "successMessage": "Unser Geschäftsentwicklungsteam wird Sie innerhalb von 24 Stunden kontaktieren und Ihnen den detaillierten technischen Katalog zusenden.",
     "newSubmission": "Neue Anfrage senden"
+  },
+  "InternationalDivision": {
+    "badge": "INTERNATIONALE DIVISION",
+    "title": "Infrastruktur- und Projektfinanzierung in Westafrika",
+    "subtitle": "Erstklassige Off-Market-Investitions- und Co-Investment-Möglichkeiten in der Elfenbeinküste (Zentrum Abidjan). Für Private-Equity-Fonds und Banken, mit staatlichen Garantien und hervorragenden Renditen in der ECOWAS-Freihandelszone.",
+    "energyTitle": "Erneuerbare Energien",
+    "energyDesc": "Entwicklung von Solarkraftwerken mit einer Kapazität von 50+ MW und Netzinfrastruktur, unterstützt durch langfristige staatliche Abnahmegarantien und multilaterale Absicherungen.",
+    "telecomTitle": "Telekommunikationsinfrastruktur",
+    "telecomDesc": "Bau und Betrieb eines landesweiten Telekommunikationsmastnetzes (Towerco-Modelle) an stark frequentierten Standorten in der Elfenbeinküste mit langfristigen Mietverträgen.",
+    "agriTitle": "Agrar- und Lebensmittelindustrie",
+    "agriDesc": "Errichtung moderner landwirtschaftlicher Futtermittel- und Lebensmittelproduktionsanlagen zur Deckung des wachsenden lokalen Bedarfs in zoll- und steuerfreien Zonen.",
+    "formTitle": "Kontaktformular für Investoren",
+    "formSubtitle": "Bitte geben Sie die Daten Ihres Instituts an. Unser Vertreter wird sich mit Ihnen in Verbindung setzen, um die konkreten Projekte und Finanzmodelle vorzustellen.",
+    "companyNameLabel": "Name der Institution / Firma",
+    "representativeLabel": "Name des Vertreters",
+    "emailLabel": "E-Mail-Adresse",
+    "phoneLabel": "Telefonnummer",
+    "sectorLabel": "Betroffener Sektor",
+    "sectorPlaceholder": "Sektor auswählen...",
+    "sectorOption1": "Erneuerbare Energien (50+ MW Solar)",
+    "sectorOption2": "Telekommunikationsinfrastruktur",
+    "sectorOption3": "Agrar- und Lebensmittelindustrie",
+    "sectorOption4": "Gesamt- / Gemischtes Portfolio",
+    "volumeLabel": "Geplantes Investitionsvolumen",
+    "volumePlaceholder": "z.B. 1M - 5M EUR",
+    "submitButton": "Investitionsanfrage absenden",
+    "successMsg": "Vielen Dank für Ihr Interesse! Unser Kollege wird sich in Kürze bezüglich des offiziellen Teasers und der NDA-Dokumente mit Ihnen in Verbindung setzen."
   }
 }
 

@@ -4,6 +4,7 @@
     "incubator": "Afrika-Inkubátor",
     "mobilehome": "Mobilház Projekt",
     "portal": "Ingatlan Portál",
+    "international": "Nemzetközi Divízió",
     "contact": "Kapcsolat"
   },
 
@@ -181,6 +182,33 @@
     "successTitle": "Köszönjük az ajánlatkérést!",
     "successMessage": "Üzletfejlesztési csapatunk 24 órán belül felveszi Önnel a kapcsolatot, és elküldi a részletes technikai katalógust.",
     "newSubmission": "Új ajánlatkérés küldése"
+  },
+  "InternationalDivision": {
+    "badge": "NEMZETKÖZI DIVÍZIÓ",
+    "title": "Nyugat-Afrikai Infrastruktúra- és Projekt-Finanszírozás",
+    "subtitle": "Kiemelkedő off-market befektetési és társbefektetői lehetőségek Elefántcsontparton (Abidjan központtal). Magántőkealapok és bankok részére, állami garanciákkal és kiemelkedő megtérüléssel az ECOWAS szabadkereskedelmi övezetben.",
+    "energyTitle": "Megújuló Energia",
+    "energyDesc": "50+ MW kapacitású napelemes kiserőművek és hálózatok fejlesztése, hosszú távú állami átvételi garanciákkal és multilaterális fedezetvállalással.",
+    "telecomTitle": "Távközlési Infrastruktúra",
+    "telecomDesc": "Országos távközlési oszlophálózat (towerco) építése és üzemeltetése Elefántcsontpart frekventált pontjain, hosszú távú bérleti szerződésekkel.",
+    "agriTitle": "Agrár- és Élelmiszeripar",
+    "agriDesc": "Modern mezőgazdasági takarmány- és élelmiszer-előállító üzemek létesítése a növekvő helyi élelmiszerigény kiszolgálására, vám- és adómentes övezetben.",
+    "formTitle": "Kapcsolatfelvétel Befektetőknek",
+    "formSubtitle": "Kérjük, adja meg intézménye paramétereit, és képviselőnk felveszi Önnel a kapcsolatot a konkrét deal-flow és pénzügyi modellek bemutatására.",
+    "companyNameLabel": "Intézmény / Cég neve",
+    "representativeLabel": "Képviselő neve",
+    "emailLabel": "E-mail cím",
+    "phoneLabel": "Telefonszám",
+    "sectorLabel": "Érintett Szektor",
+    "sectorPlaceholder": "Válasszon szektort...",
+    "sectorOption1": "Megújuló Energia (50+ MW solar)",
+    "sectorOption2": "Távközlési Infrastruktúra",
+    "sectorOption3": "Agrár- és Élelmiszeripar",
+    "sectorOption4": "Összes / Vegyes portfólió",
+    "volumeLabel": "Tervezett Befektetési Volumen",
+    "volumePlaceholder": "pl. 1M - 5M EUR",
+    "submitButton": "Befektetői Igény Beküldése",
+    "successMsg": "Köszönjük az érdeklődést! Kollégánk hamarosan felveszi Önnel a kapcsolatot a hivatalos teaser és NDA dokumentumok ügyében."
   }
 }
 
