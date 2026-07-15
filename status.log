@@ -22,3 +22,4 @@ Log: Merged and deployed MobileHome page to production
 2026-07-15T10:51:00+02:00 | Kész | Feat: GWS alapú postaláda szinkronizáció lefutott, a Master CRM státuszai frissítve a kiküldések és visszadobások alapján.
 2026-07-15T10:55:00+02:00 | Kész | Fix: Beépítettük a SPAM mappa ellenőrzését a kézbesítési hibák (bounces) pontosabb kiszűrésére.
 2026-07-15T11:04:00+02:00 | Kész | Feat: Élesítettük az új Nemzetközi Divízió (Elefántcsontpart) szekciót és a hozzá tartozó CRM-bekötésű befektetői űrlapot.
+2026-07-15T11:14:00+02:00 | Kész | Feat: GWS alapú Gmail piszkozatok auditálása és batch CRM szinkronizáció lefutott (76 piszkozat ellenőrizve, 51 db Nagycenk, 4 db frissített státusz).

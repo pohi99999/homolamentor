@@ -52,6 +52,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-15 | Feat: GWS alapú postaláda szinkronizáció lefutott, a Master CRM státuszai frissítve a kiküldések és visszadobások alapján. | Kész |
 | 2026-07-15 | Fix: Beépítettük a SPAM mappa ellenőrzését a kézbesítési hibák (bounces) pontosabb kiszűrésére. | Kész |
 | 2026-07-15 | Feat: Élesítettük az új Nemzetközi Divízió (Elefántcsontpart) szekciót és a hozzá tartozó CRM-bekötésű befektetői űrlapot. | Kész |
+| 2026-07-15 | Feat: GWS alapú Gmail piszkozatok auditálása és batch CRM szinkronizáció lefutott (76 piszkozat ellenőrizve, 51 db Nagycenk, 4 db frissített státusz) | Kész |
 
 
 
