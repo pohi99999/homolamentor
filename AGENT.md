@@ -49,6 +49,8 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-14 | Feat: Integrated Strategic B2B Value Block into MobileHome project page | Kész |
 | 2026-07-14 | Feat: Connected MobileHome contact pipeline directly to Master CRM and Resend alert hooks. | Kész |
 | 2026-07-15 | Feat: Inicializáltuk az Afrikai Infrastruktúra-Finanszírozási kampány sablonjait és a CRM új fülét. | Kész |
+| 2026-07-15 | Feat: GWS alapú postaláda szinkronizáció lefutott, a Master CRM státuszai frissítve a kiküldések és visszadobások alapján. | Kész |
+
 
 
 ## Projekt Záró Összefoglaló és Státusz (2026-07-07)
