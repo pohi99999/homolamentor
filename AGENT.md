@@ -54,6 +54,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-15 | Feat: Élesítettük az új Nemzetközi Divízió (Elefántcsontpart) szekciót és a hozzá tartozó CRM-bekötésű befektetői űrlapot. | Kész |
 | 2026-07-15 | Feat: GWS alapú Gmail piszkozatok auditálása és batch CRM szinkronizáció lefutott (76 piszkozat ellenőrizve, 51 db Nagycenk, 4 db frissített státusz) | Kész |
 | 2026-07-15 | Feat: Megterveztük a célzott LinkedIn outreach manifestet a Nagycenk, Afrika és a Bounce mentő kampányokhoz, és inicializáltuk a CRM LinkedIn követő mezőit | Kész |
+| 2026-07-16 | Feat: Újabb kiküldési hullám utáni postafiók- és SPAM-szinkronizáció lefutott, a CRM státuszok frissítve. | Kész |
 
 
 

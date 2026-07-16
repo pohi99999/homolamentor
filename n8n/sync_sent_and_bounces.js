@@ -29,6 +29,8 @@ function parseRecipient(toValue) {
 }
 
 async function main() {
+  const masterUpdates = new Map();
+  const contactsUpdates = new Map();
   console.log('1. CRM adatok beolvasása a Google Sheets-ből...');
   
   // a) Master_Vevőlista beolvasása
@@ -223,7 +225,7 @@ async function main() {
 
   console.log(`✓ Monitored e-mailek száma: ${monitoredEmails.size}`);
 
-  const today = '2026-07-15';
+  const today = '2026-07-16';
   let sentCount = 0;
   let bounceCount = 0;
   let oooCount = 0;
@@ -281,19 +283,11 @@ async function main() {
 
             if (!masterRec['Email']) {
               console.log(`    Pótlás Master CRM H${masterRec._rowNum}: ${recipientEmail}`);
-              spawnSync('gws', [
-                'sheets', 'spreadsheets', 'values', 'update',
-                '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdMaster, range: `Master_Vevőlista!H${masterRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-                '--json', `"${JSON.stringify({ values: [[recipientEmail]] }).replace(/"/g, '\\"')}"`
-              ], { encoding: 'utf-8', shell: true });
+              masterUpdates.set(`Master_Vevőlista!H${masterRec._rowNum}`, [[recipientEmail]]);
               masterRec['Email'] = recipientEmail;
             }
 
-            spawnSync('gws', [
-              'sheets', 'spreadsheets', 'values', 'update',
-              '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdMaster, range: `Master_Vevőlista!L${masterRec._rowNum}:N${masterRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-              '--json', `"${JSON.stringify({ values: [[today, "", "Kiküldve"]] }).replace(/"/g, '\\"')}"`
-            ], { encoding: 'utf-8', shell: true });
+            masterUpdates.set(`Master_Vevőlista!L${masterRec._rowNum}:N${masterRec._rowNum}`, [[today, "", "Kiküldve"]]);
           }
 
           // b) Párosítás a CONTACTS fülhöz
@@ -306,20 +300,12 @@ async function main() {
 
             if (!contactsRec.email) {
               console.log(`    Pótlás Contacts G${contactsRec._rowNum}: ${recipientEmail}`);
-              spawnSync('gws', [
-                'sheets', 'spreadsheets', 'values', 'update',
-                '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdContacts, range: `CONTACTS!G${contactsRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-                '--json', `"${JSON.stringify({ values: [[recipientEmail]] }).replace(/"/g, '\\"')}"`
-              ], { encoding: 'utf-8', shell: true });
+              contactsUpdates.set(`CONTACTS!G${contactsRec._rowNum}`, [[recipientEmail]]);
               contactsRec.email = recipientEmail;
             }
 
             // L: Status, M: Last Interaction Date
-            spawnSync('gws', [
-              'sheets', 'spreadsheets', 'values', 'update',
-              '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdContacts, range: `CONTACTS!L${contactsRec._rowNum}:M${contactsRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-              '--json', `"${JSON.stringify({ values: [["Kiküldve", today]] }).replace(/"/g, '\\"')}"`
-            ], { encoding: 'utf-8', shell: true });
+            contactsUpdates.set(`CONTACTS!L${contactsRec._rowNum}:M${contactsRec._rowNum}`, [["Kiküldve", today]]);
           }
 
           if (hasAnyMatch) {
@@ -394,11 +380,7 @@ async function main() {
             if (masterRec) {
               console.log(`  ⚠ BOUNCE észlelve (Master CRM): ${email} (${masterRec['Cégnév']})`);
               hasBounceMatch = true;
-              spawnSync('gws', [
-                'sheets', 'spreadsheets', 'values', 'update',
-                '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdMaster, range: `Master_Vevőlista!N${masterRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-                '--json', `"${JSON.stringify({ values: [["Visszadobva / Hibás email"]] }).replace(/"/g, '\\"')}"`
-              ], { encoding: 'utf-8', shell: true });
+              masterUpdates.set(`Master_Vevőlista!N${masterRec._rowNum}`, [["Visszadobva / Hibás email"]]);
             }
 
             // Contacts frissítés
@@ -406,11 +388,7 @@ async function main() {
             if (contactsRec) {
               console.log(`  ⚠ BOUNCE észlelve (Contacts): ${email} (${contactsRec.company})`);
               hasBounceMatch = true;
-              spawnSync('gws', [
-                'sheets', 'spreadsheets', 'values', 'update',
-                '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdContacts, range: `CONTACTS!L${contactsRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-                '--json', `"${JSON.stringify({ values: [["Visszadobva / Hibás email"]] }).replace(/"/g, '\\"')}"`
-              ], { encoding: 'utf-8', shell: true });
+              contactsUpdates.set(`CONTACTS!L${contactsRec._rowNum}`, [["Visszadobva / Hibás email"]]);
             }
 
             if (hasBounceMatch) {
@@ -443,21 +421,13 @@ async function main() {
           if (masterRec) {
             console.log(`  ✉ OOO észlelve (Master CRM): ${fromEmail} (${masterRec['Cégnév']})`);
             hasOooMatch = true;
-            spawnSync('gws', [
-              'sheets', 'spreadsheets', 'values', 'update',
-              '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdMaster, range: `Master_Vevőlista!N${masterRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-              '--json', `"${JSON.stringify({ values: [["Távollét / Elérhető később"]] }).replace(/"/g, '\\"')}"`
-            ], { encoding: 'utf-8', shell: true });
+            masterUpdates.set(`Master_Vevőlista!N${masterRec._rowNum}`, [["Távollét / Elérhető később"]]);
           }
 
           if (contactsRec) {
             console.log(`  ✉ OOO észlelve (Contacts): ${fromEmail} (${contactsRec.company})`);
             hasOooMatch = true;
-            spawnSync('gws', [
-              'sheets', 'spreadsheets', 'values', 'update',
-              '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdContacts, range: `CONTACTS!L${contactsRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-              '--json', `"${JSON.stringify({ values: [["Távollét / Elérhető később"]] }).replace(/"/g, '\\"')}"`
-            ], { encoding: 'utf-8', shell: true });
+            contactsUpdates.set(`CONTACTS!L${contactsRec._rowNum}`, [["Távollét / Elérhető később"]]);
           }
 
           if (hasOooMatch) {
@@ -523,11 +493,7 @@ async function main() {
             if (masterRec) {
               console.log(`  ⚠ SPAM BOUNCE észlelve (Master CRM): ${email} (${masterRec['Cégnév']})`);
               hasBounceMatch = true;
-              spawnSync('gws', [
-                'sheets', 'spreadsheets', 'values', 'update',
-                '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdMaster, range: `Master_Vevőlista!N${masterRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-                '--json', `"${JSON.stringify({ values: [["Visszadobva / Hibás email"]] }).replace(/"/g, '\\"')}"`
-              ], { encoding: 'utf-8', shell: true });
+              masterUpdates.set(`Master_Vevőlista!N${masterRec._rowNum}`, [["Visszadobva / Hibás email"]]);
             }
 
             // Contacts frissítés
@@ -535,11 +501,7 @@ async function main() {
             if (contactsRec) {
               console.log(`  ⚠ SPAM BOUNCE észlelve (Contacts): ${email} (${contactsRec.company})`);
               hasBounceMatch = true;
-              spawnSync('gws', [
-                'sheets', 'spreadsheets', 'values', 'update',
-                '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdContacts, range: `CONTACTS!L${contactsRec._rowNum}`, valueInputOption: 'USER_ENTERED' }).replace(/"/g, '\\"')}"`,
-                '--json', `"${JSON.stringify({ values: [["Visszadobva / Hibás email"]] }).replace(/"/g, '\\"')}"`
-              ], { encoding: 'utf-8', shell: true });
+              contactsUpdates.set(`CONTACTS!L${contactsRec._rowNum}`, [["Visszadobva / Hibás email"]]);
             }
 
             if (hasBounceMatch) {
@@ -553,6 +515,51 @@ async function main() {
       }
     } catch (e) {
       // Hiba
+    }
+  }
+
+  // 7. Módosítások mentése batchUpdate használatával
+  if (masterUpdates.size > 0) {
+    const data = [];
+    for (const [range, values] of masterUpdates.entries()) {
+      data.push({ range, values });
+    }
+    console.log(`\nMaster CRM frissítések kiírása (${data.length} tartomány)...`);
+    try {
+      const res = spawnSync('gws', [
+        'sheets', 'spreadsheets', 'values', 'batchUpdate',
+        '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdMaster }).replace(/"/g, '\\"')}"`,
+        '--json', `"${JSON.stringify({ valueInputOption: 'USER_ENTERED', data }).replace(/"/g, '\\"')}"`
+      ], { encoding: 'utf-8', shell: true });
+      if (res.status === 0) {
+        console.log('✓ Master CRM sikeresen frissítve batchUpdate-el.');
+      } else {
+        console.error('❌ Hiba a Master CRM batchUpdate futtatásakor:', res.stderr || res.stdout);
+      }
+    } catch (err) {
+      console.error('❌ Kivétel a Master CRM batchUpdate futtatásakor:', err.message);
+    }
+  }
+
+  if (contactsUpdates.size > 0) {
+    const data = [];
+    for (const [range, values] of contactsUpdates.entries()) {
+      data.push({ range, values });
+    }
+    console.log(`Contacts CRM frissítések kiírása (${data.length} tartomány)...`);
+    try {
+      const res = spawnSync('gws', [
+        'sheets', 'spreadsheets', 'values', 'batchUpdate',
+        '--params', `"${JSON.stringify({ spreadsheetId: spreadsheetIdContacts }).replace(/"/g, '\\"')}"`,
+        '--json', `"${JSON.stringify({ valueInputOption: 'USER_ENTERED', data }).replace(/"/g, '\\"')}"`
+      ], { encoding: 'utf-8', shell: true });
+      if (res.status === 0) {
+        console.log('✓ Contacts CRM sikeresen frissítve batchUpdate-el.');
+      } else {
+        console.error('❌ Hiba a Contacts CRM batchUpdate futtatásakor:', res.stderr || res.stdout);
+      }
+    } catch (err) {
+      console.error('❌ Kivétel a Contacts CRM batchUpdate futtatásakor:', err.message);
     }
   }
 
