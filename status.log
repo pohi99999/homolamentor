@@ -25,3 +25,5 @@ Log: Merged and deployed MobileHome page to production
 2026-07-15T11:14:00+02:00 | Kész | Feat: GWS alapú Gmail piszkozatok auditálása és batch CRM szinkronizáció lefutott (76 piszkozat ellenőrizve, 51 db Nagycenk, 4 db frissített státusz).
 2026-07-15T11:18:00+02:00 | Kész | Feat: Megterveztük a célzott LinkedIn outreach manifestet a Nagycenk, Afrika és a Bounce mentő kampányokhoz, és inicializáltuk a CRM LinkedIn követő mezőit.
 2026-07-16T12:58:00+02:00 | Kész | Feat: Újabb kiküldési hullám utáni postafiók- és SPAM-szinkronizáció lefutott, a CRM státuszok frissítve.
+2026-07-17T10:22:00+02:00 | Kész | Feat: Újabb reggeli kiküldési hullám utáni postafiók- és SPAM-szinkronizáció lefutott, a CRM státuszok frissítve (2026-07-17).
+

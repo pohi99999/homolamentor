@@ -225,7 +225,7 @@ async function main() {
 
   console.log(`✓ Monitored e-mailek száma: ${monitoredEmails.size}`);
 
-  const today = '2026-07-16';
+  const today = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split('T')[0];
   let sentCount = 0;
   let bounceCount = 0;
   let oooCount = 0;
