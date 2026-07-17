@@ -57,6 +57,8 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-16 | Feat: Újabb kiküldési hullám utáni postafiók- és SPAM-szinkronizáció lefutott, a CRM státuszok frissítve. | Kész |
 | 2026-07-17 | Feat: Újabb reggeli kiküldési hullám utáni postafiók- és SPAM-szinkronizáció lefutott, a CRM státuszok frissítve (2026-07-17). | Kész |
 | 2026-07-17 | Feat: Legeneráltuk a 26 fős LinkedIn Bounce Mentő akciólistát a manuális outreach-hez. | Kész |
+| 2026-07-17 | Feat: Generated and populated the first batch of 15 targeted African Infrastructure & Energy funds into the CRM. | Kész |
+
 
 
 
