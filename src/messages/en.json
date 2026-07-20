@@ -85,15 +85,126 @@
     "successMsg": "Thank you! Our team will contact you shortly."
   },
   "PropertyTeaserGrid": {
-    "title": "Featured Offers",
-    "subtitle": "Browse our public listings. To view the complete private portfolio, request VIP access.",
-    "card1Title": "Industrial Development Area - Győr & region",
-    "card1Spec": "Area: 45,000 m² | Utilities: Fully connected",
-    "card2Title": "Logistics Hall - Mosonmagyaróvár region",
-    "card2Spec": "Coverage: 60% | Direct highway connection",
-    "card3Title": "Commercial Development Plot - Sopron",
-    "card3Spec": "Zoning: Gksz | Location near the border",
-    "blurNotice": "To view the exact location and price, please log in via the VIP gateway."
+    "title": "Featured Off-Market Portfolio",
+    "subtitle": "Explore our authentic, discreet real estate portfolio. Enter the VIP gateway to unlock full private details.",
+    "allSectors": "All Sectors",
+    "blurNotice": "To view exact location and price information, please enter via the VIP gateway.",
+    "unlockedNotice": "VIP Access Active — full data sheet and pricing unlocked.",
+    "items": {
+      "prop1": {
+        "title": "Győrszentiván Industrial & Agricultural Land",
+        "location": "Győrszentiván (1 km from M1 highway)",
+        "price": "6,000,000 EUR",
+        "category": "Industrial & Logistics",
+        "features": [
+          "1 km from M1 highway",
+          "10,300 m² industrial facility",
+          "107 ha arable land",
+          "46 ha licensed gravel pit with rail siding"
+        ],
+        "description": "Strategically located industrial and agricultural land in Győrszentiván, just 1 km from the M1 highway. The complex includes a 10,300 m² developed industrial facility, 107 hectares of high-quality arable land, and a 46-hectare licensed gravel quarry with a direct railway connection."
+      },
+      "prop2": {
+        "title": "Nagycenk Senior Living & Healthcare Center",
+        "location": "Nagycenk (Sopron region)",
+        "price": "9,000,000 EUR",
+        "category": "Healthcare & Senior Living",
+        "features": [
+          "75% completion rate",
+          "8-month finalization",
+          "1.7 ha land",
+          "6,284 m² floor area",
+          "56+18 residential units with wellness"
+        ],
+        "description": "Premium senior living and healthcare complex in Nagycenk at 75% completion. Set in a 1.7-hectare mature tree park, the 6,284 m² building can be completed turnkey in approximately 8 months. Features 56 senior care units, 18 upgraded apartments, private wellness section, and healthcare block."
+      },
+      "prop3": {
+        "title": "Szentendre Pap Island Thermal Resort",
+        "location": "Szentendre, Pap Island (20 km from Budapest)",
+        "price": "On Request (Off-Market)",
+        "category": "Tourism & Hospitality",
+        "features": [
+          "3.5 ha Danube waterfront private land",
+          "private 1,850 m deep thermal well (50°C, 1,500 L/min yield)",
+          "20 km from Budapest"
+        ],
+        "description": "Unique Danube waterfront tourism and wellness development opportunity on Pap Island in Szentendre. The 3.5-hectare private estate features its own 1,850m deep thermal well yielding 50°C water at 1,500 liters/minute. Located just 20 km from Budapest."
+      },
+      "prop4": {
+        "title": "Keszthely Balaton Residential Park Project",
+        "location": "Keszthely (Balaton shore)",
+        "price": "8,000,000 USD",
+        "category": "Tourism & Hospitality / Residential",
+        "features": [
+          "Nearly 1 ha Lake Balaton waterfront plot",
+          "structural-ready 42-apartment building frame",
+          "complete underground garage and elevator shafts"
+        ],
+        "description": "Prime development plot of nearly 1 hectare directly near Lake Balaton in Keszthely. Features a structurally completed 42-apartment luxury condominium frame with underground parking, elevator shafts, and approved architectural plans."
+      },
+      "prop5": {
+        "title": "Truck Park & Logistics Terminal (M5)",
+        "location": "Hungarian-Serbian border zone (M5 highway)",
+        "price": "5,000,000,000 HUF",
+        "category": "Industrial & Logistics",
+        "features": [
+          "Hungarian-Serbian border zone",
+          "next to M5 highway",
+          "6.66 ha industrial area",
+          "370 truck capacity",
+          "TIR service, motel and 200-seat restaurant"
+        ],
+        "description": "International truck park and logistics terminal adjacent to the M5 highway in the Hungarian-Serbian border region. The 6.66-hectare fenced industrial plot accommodates up to 370 trucks simultaneously, complete with TIR service bay, driver motel, and a 200-seat restaurant."
+      },
+      "prop6": {
+        "title": "Keszthely Vt-8 Commercial Development Plot",
+        "location": "Keszthely (South entrance)",
+        "price": "1,050,000 EUR",
+        "category": "Commercial / Retail",
+        "features": [
+          "17,943 m² contiguous area at southern access road",
+          "Vt-8 zoning (50-75% buildability)",
+          "100% clean SPV (Share Deal) with penalty coverage guarantee"
+        ],
+        "description": "17,943 m² contiguous commercial development plot located along Keszthely's southern access road. Vt-8 zoning with 50-75% buildability, ideal for hypermarkets or retail parks. Offered via 100% clean SPV Share Deal with contractual penalty coverage."
+      },
+      "prop7": {
+        "title": "Hotel die Traube (Admont, Austria)",
+        "location": "Admont, Styria (Austria)",
+        "price": "1,950,000 EUR",
+        "category": "Tourism & Hospitality",
+        "features": [
+          "Operational Styrian hotel property",
+          "debt-free with 100% Austrian GmbH",
+          "immediate leaseback and operation offer"
+        ],
+        "description": "Operational traditional hotel and hospitality complex in Admont, Styria (Austria). Unencumbered property offered together with a 100% Austrian GmbH. Seller offers an immediate long-term leaseback and management guarantee upon request."
+      },
+      "prop8": {
+        "title": "Balaton Wellness Park & Resort (Gyenesdiás)",
+        "location": "Gyenesdiás (Lake Balaton)",
+        "price": "2,150,000,000 HUF",
+        "category": "Tourism & Hospitality",
+        "features": [
+          "49,000 m² contiguous land",
+          "2,300 m² built structure (10 apartments, restaurant, wellness)",
+          "100-pitch premium RV park"
+        ],
+        "description": "49,000 m² wellness park and resort complex located in Gyenesdiás. Features 2,300 m² of high-end structures (10 equipped apartments, restaurant, wellness area), accompanied by a fully serviced 100-pitch premium RV/camper park."
+      },
+      "prop9": {
+        "title": "Balatongyörök Golf Course & Waterfront Property",
+        "location": "Balatongyörök (Direct Lake Balaton shore)",
+        "price": "6,000,000 EUR",
+        "category": "Tourism & Hospitality / Luxury",
+        "features": [
+          "72 ha direct Lake Balaton waterfront plot",
+          "operational 18-hole championship golf course with beach & clubhouse",
+          "marina development option"
+        ],
+        "description": "Rare 72-hectare direct Lake Balaton waterfront property in Balatongyörök. Includes an operational 18-hole championship golf course built to international standards, private beach, clubhouse, and panoramic restaurant, with marina and apartment park expansion potential."
+      }
+    }
   },
   "VIPAccessGateway": {
     "title": "VIP Exclusive Entry",

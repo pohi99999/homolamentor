@@ -32,7 +32,7 @@ Log: Merged and deployed MobileHome page to production
 2026-07-20T10:40:00+02:00 | Kész | Fix: Újabb kiküldések utáni szinkronizáció lefutott. A fókusz 100%-ban az e-mail csatornára és a nyílt internetes lead-generálásra lett átállítva.
 2026-07-20T10:46:00+02:00 | Kész | Feat: Automatikusan legeneráltuk a 15 új afrikai projekt-finanszírozási e-mail piszkozatot a Gmail fiókba, a CRM státuszok frissítve.
 2026-07-20T10:59:00+02:00 | Kész | Fix: Piszkozatkészítési hiba javítva, Spam mappa ellenőrizve, 15 új piszkozat generálva pontos aláírással és feladóval.
-2026-07-20T11:10:00+02:00 | Kész | Fix: Az afrikai finanszírozási kampány kiküldése utáni postafiók- és SPAM-audit lefutott, a hibaüzenetek alapján a CRM frissítve.
+2026-07-20T12:00:00+02:00 | Kész | Feat: Feltöltöttük a valós 9 ingatlan off-market adatait és leírásait az Ingatlan-Portálra, a tesztadatok eltávolítva.
 
 
 

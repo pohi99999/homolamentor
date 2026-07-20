@@ -85,15 +85,126 @@
     "successMsg": "Vielen Dank! Unser Team wird sich in Kürze mit Ihnen in Verbindung setzen."
   },
   "PropertyTeaserGrid": {
-    "title": "Ausgewählte Angebote",
-    "subtitle": "Durchsuchen Sie unsere öffentlichen Angebote. Um das vollständige private Portal zu sehen, fordern Sie VIP-Zugang an.",
-    "card1Title": "Industrieentwicklungsgebiet - Győr & Region",
-    "card1Spec": "Fläche: 45.000 m² | Erschließung: Voll erschlossen",
-    "card2Title": "Logistikhalle - Region Mosonmagyaróvár",
-    "card2Spec": "Bebauung: 60% | Direkter Autobahnanschluss",
-    "card3Title": "Gewerbeentwicklungsfläche - Sopron",
-    "card3Spec": "Klassifizierung: Gksz | Grenznahe Lage",
-    "blurNotice": "Um den genauen Standort und Preis zu sehen, melden Sie sich bitte über das VIP-Gateway an."
+    "title": "Exklusives Off-Market-Portfolio",
+    "subtitle": "Entdecken Sie unser reales, diskretes Immobilienportfolio. Melden Sie sich über das VIP-Gateway an, um alle Details freizuschalten.",
+    "allSectors": "Alle Sektoren",
+    "blurNotice": "Um den genauen Standort und Preis zu sehen, melden Sie sich bitte über das VIP-Gateway an.",
+    "unlockedNotice": "VIP-Zugang aktiv — Vollständiges Datenblatt und Preise freigeschaltet.",
+    "items": {
+      "prop1": {
+        "title": "Industrie- und Agrarfläche Győrszentiván",
+        "location": "Győrszentiván (1 km zur Autobahn M1)",
+        "price": "6.000.000 EUR",
+        "category": "Industrie & Logistik",
+        "features": [
+          "1 km zur Autobahn M1",
+          "10.300 m² Industriegelände",
+          "107 ha Ackerland",
+          "46 ha genehmigte Kiesgrube mit Gleisanschluss"
+        ],
+        "description": "Strategisch gelegene Industrie- und Landwirtschaftsfläche in Győrszentiván, nur 1 km von der Autobahn M1 entfernt. Der Komplex umfasst ein 10.300 m² erschlossenes Betriebsgelände, 107 Hektar hochwertiges Ackerland sowie eine 46 Hektar große genehmigte Kiesgrube mit direktem Eisenbahnanschluss."
+      },
+      "prop2": {
+        "title": "Nagycenk Senior Living & Gesundheitszentrum",
+        "location": "Nagycenk (Region Sopron)",
+        "price": "9.000.000 EUR",
+        "category": "Gesundheit & Senior Living",
+        "features": [
+          "75% Fertigstellungsgrad",
+          "8 Monate Restbauzeit",
+          "1,7 ha Grundstück",
+          "6.284 m² Nutzfläche",
+          "56+18 Wohneinheiten mit Wellness"
+        ],
+        "description": "Premium Senior Living- und Gesundheitskomplex in Nagycenk mit 75% Fertigstellungsgrad. Auf einem 1,7 Hektar großen Parkgrundstück mit altem Baumbestand kann das 6.284 m² Gebäude in ca. 8 Monaten schlüsselfertig fertiggestellt werden. Umfasst 56 Pflegeplätze, 18 betreute Apartments, Wellnessbereich und Gesundheitstrakt."
+      },
+      "prop3": {
+        "title": "Szentendre Pap-Insel Thermal Resort",
+        "location": "Szentendre, Pap-Insel (20 km von Budapest)",
+        "price": "Auf Anfrage (Off-Market)",
+        "category": "Tourismus & Gastgewerbe",
+        "features": [
+          "3,5 ha Donau-Ufergrundstück",
+          "eigene 1.850 m tiefe Thermalquelle (50°C, 1.500 L/Min Ertrag)",
+          "20 km von Budapest"
+        ],
+        "description": "Einzigartige Gelegenheit für Tourismus- und Wellnessentwicklung an der Donau auf der Pap-Insel in Szentendre. Das 3,5 Hektar große Privatgrundstück verfügt über eine eigene, 1.850 Meter tiefe Thermalquelle mit 50°C heißem Wasser (1.500 Liter/Min. Schüttung). Nur 20 km von Budapest entfernt."
+      },
+      "prop4": {
+        "title": "Keszthely Balaton Wohnpark-Projekt",
+        "location": "Keszthely (Balaton-Ufer)",
+        "price": "8.000.000 USD",
+        "category": "Tourismus & Gastgewerbe / Wohnen",
+        "features": [
+          "Nahezu 1 ha Grundstück am Balaton",
+          "Rohbau mit 42 Eigentumswohnungen",
+          "Tiefgarage und Aufzugsschächte"
+        ],
+        "description": "Erstklassiges Entwicklungsgrundstück von fast 1 Hektar in unmittelbarer Nähe des Plattensees in Keszthely. Enthält einen fertigen Rohbau für 42 Luxus-Wohnungen mit Tiefgarage, Aufzugsschächten und genehmigten Bauplänen."
+      },
+      "prop5": {
+        "title": "LKW-Park & Logistikterminal (M5)",
+        "location": "Ungarisch-serbische Grenzregion (Autobahn M5)",
+        "price": "5.000.000.000 HUF",
+        "category": "Industrie & Logistik",
+        "features": [
+          "Ungarisch-serbische Grenzregion",
+          "an der Autobahn M5",
+          "6,66 ha Industrieareal",
+          "370 LKW-Stellplätze",
+          "TIR-Service, Motel und Restaurant für 200 Personen"
+        ],
+        "description": "Internationaler LKW-Park und Logistikterminal direkt an der Autobahn M5 im ungarisch-serbischen Grenzgebiet. Das 6,66 Hektar eingezäunte Industriegelände bietet Platz für 370 LKWs gleichzeitig, mit TIR-Werkstatt, Fahrermotel und 200-Sitzplätze-Restaurant."
+      },
+      "prop6": {
+        "title": "Keszthely Vt-8 Gewerbeentwicklungsgrundstück",
+        "location": "Keszthely (Südeinfahrt)",
+        "price": "1.050.000 EUR",
+        "category": "Gewerbe / Retail",
+        "features": [
+          "17.943 m² zusammenhängendes Areal an der Südeinfahrt",
+          "Vt-8 Zone (50-75% Bebauung)",
+          "100% saubere Projektgesellschaft (Share Deal) mit Pönale-Deckung"
+        ],
+        "description": "17.943 m² zusammenhängendes Gewerbegrundstück an der südlichen Einfahrtsstraße von Keszthely. Vt-8 Widmung mit 50-75% Bebauungsdichte, ideal für Fachmarktzentren. Verkauf über 100% saubere SPV (Share Deal) inkl. Pönale-Garantie."
+      },
+      "prop7": {
+        "title": "Hotel die Traube (Admont, Österreich)",
+        "location": "Admont, Steiermark (Österreich)",
+        "price": "1.950.000 EUR",
+        "category": "Tourismus & Gastgewerbe",
+        "features": [
+          "Betreibende steirische Hotelimmobilie",
+          "schuldenfrei inkl. 100% österreichischer GmbH",
+          "sofortiges Rückanpachtungs- und Betreiberangebot"
+        ],
+        "description": "Betreibender, traditionsreicher Hotel- und Gastronomiekomplex in Admont (Steiermark). Die lastenfreie Immobilie wird zusammen mit einer 100% österreichischen GmbH verkauft. Der Verkäufer bietet auf Wunsch eine sofortige langfristige Rückanpachtung und Betreibergarantie."
+      },
+      "prop8": {
+        "title": "Balaton Wellness Park & Resort (Gyenesdiás)",
+        "location": "Gyenesdiás (Plattensee)",
+        "price": "2.150.000.000 HUF",
+        "category": "Tourismus & Gastgewerbe",
+        "features": [
+          "49.000 m² zusammenhängendes Areal",
+          "2.300 m² Gebäudefläche (10 Apartments, Restaurant, Wellness)",
+          "100 Stellplätze für Premium-Wohnmobile"
+        ],
+        "description": "49.000 m² Wellnesspark und Ferienkomplex in Gyenesdiás. Umfasst 2.300 m² hochwertige Bausubstanz (10 ausgestattete Apartments, Restaurant, Wellnessbereich) sowie einen voll erschlossenen Premium-Campingplatz für 100 Wohnmobile."
+      },
+      "prop9": {
+        "title": "Balatongyörök Golfplatz & Ufergrundstück",
+        "location": "Balatongyörök (Direktes Balaton-Ufer)",
+        "price": "6.000.000 EUR",
+        "category": "Tourismus & Gastgewerbe / Luxus",
+        "features": [
+          "72 ha direktes Ufergrundstück am Balaton",
+          "funktionierender 18-Loch Meisterschaftsgolfplatz mit Strand & Clubhaus",
+          "Option für Yachthafenentwicklung"
+        ],
+        "description": "Außergewöhnlicher, 72 Hektar großer Immobilienkomplex direkt am Plattensee in Balatongyörök. Beinhaltet einen betriebsbereiten 18-Loch-Golfplatz nach internationalem Standard, eigenen Badestrand, Clubhaus und Panoramarestaurant mit Entwicklungspotenzial für Yachthafen und Apartmentpark."
+      }
+    }
   },
   "VIPAccessGateway": {
     "title": "Exklusiver VIP-Zugang",
