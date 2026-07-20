@@ -61,6 +61,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-20 | Feat: Létrehoztuk a Master Investor Portfolio dokumentumokat (HTML/MD) az azonnali B2B kiküldések támogatására. | Kész |
 | 2026-07-20 | Fix: Újabb kiküldések utáni szinkronizáció lefutott. A fókusz 100%-ban az e-mail csatornára és a nyílt internetes lead-generálásra lett átállítva. | Kész |
 | 2026-07-20 | Feat: Automatikusan legeneráltuk a 15 új afrikai projekt-finanszírozási e-mail piszkozatot a Gmail fiókba, a CRM státuszok frissítve. | Kész |
+| 2026-07-20 | Fix: Piszkozatkészítési hiba javítva, Spam mappa ellenőrizve, 15 új piszkozat generálva pontos aláírással és feladóval. | Kész |
 
 
 

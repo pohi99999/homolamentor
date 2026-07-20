@@ -4,13 +4,64 @@ const fs = require('fs');
 
 const spreadsheetIdMaster = '1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ';
 
-async function main() {
-  console.log('====== AFRIKA PROJEKT-FINANSZÍROZÁSI PISZKOZATOK KÉSZÍTÉSE ======\n');
+function runGws(args) {
+  const isWin = process.platform === 'win32';
+  const cmd = isWin ? 'cmd.exe' : 'gws';
+  const fullArgs = isWin ? ['/c', 'gws', ...args] : args;
+
+  const res = spawnSync(cmd, fullArgs, { encoding: 'utf-8' });
+  if (res.status !== 0) {
+    throw new Error(res.stderr || res.stdout || 'gws command failed');
+  }
+  return res.stdout;
+}
+
+function buildRawMimeMessage({ to, subject, body }) {
+  const mime = [
+    `From: Homola László <peterpohankapersonal@gmail.com>`,
+    `To: ${to}`,
+    `Subject: =?utf-8?B?${Buffer.from(subject).toString('base64')}?=`,
+    `MIME-Version: 1.0`,
+    `Content-Type: text/plain; charset=utf-8`,
+    `Content-Transfer-Encoding: 8bit`,
+    ``,
+    body
+  ].join('\r\n');
   
-  console.log('1. CRM adatok beolvasása a Google Sheets "Afrika_Projekt_Finanszirozas" füléről...');
+  return Buffer.from(mime).toString('base64url');
+}
+
+async function main() {
+  console.log('====== AFRIKA PROJEKT-FINANSZÍROZÁSI PISZKOZATOK KÉSZÍTÉSE (Javított) ======\n');
+  
+  // 1. Meglévő piszkozatok törlése a tiszta kezdéshez
+  console.log('1. Meglévő Gmail piszkozatok ellenőrzése és törlése...');
+  try {
+    const listRaw = runGws(['gmail', 'users', 'drafts', 'list', '--params', JSON.stringify({ userId: 'me' })]);
+    const listData = JSON.parse(listRaw);
+    const existingDrafts = listData.drafts || [];
+    if (existingDrafts.length > 0) {
+      console.log(`  ⚠ ${existingDrafts.length} meglévő piszkozat található, törlésük folyamatban...`);
+      for (const d of existingDrafts) {
+        try {
+          runGws(['gmail', 'users', 'drafts', 'delete', '--params', JSON.stringify({ userId: 'me', id: d.id })]);
+          console.log(`  ✓ Piszkozat törölve (ID: ${d.id})`);
+        } catch (delErr) {
+          console.warn(`  ⚠ Nem sikerült törölni a piszkozatot (ID: ${d.id}):`, delErr.message);
+        }
+      }
+    } else {
+      console.log('  ✓ Nincs törlendő régi piszkozat.');
+    }
+  } catch (err) {
+    console.warn('  ⚠ Nem sikerült lekérni a piszkozatok listáját:', err.message);
+  }
+
+  // 2. CRM adatok beolvasása
+  console.log('\n2. CRM adatok beolvasása a Google Sheets "Afrika_Projekt_Finanszirozas" füléről...');
   let crmData;
   try {
-    const output = execSync(`gws sheets +read --spreadsheet ${spreadsheetIdMaster} --range "Afrika_Projekt_Finanszirozas!A1:L50"`, { encoding: 'utf-8' });
+    const output = runGws(['sheets', '+read', '--spreadsheet', spreadsheetIdMaster, '--range', 'Afrika_Projekt_Finanszirozas!A1:L50']);
     crmData = JSON.parse(output);
   } catch (err) {
     console.error('❌ Hiba a Google Sheet beolvasása közben:', err.message);
@@ -35,7 +86,7 @@ async function main() {
 
   console.log(`✓ CRM beolvasva, ${records.length} sor észlelve.`);
 
-  const targetsToProcess = records.filter(r => r.Statusz === 'Azonosítva / Kutatás alatt');
+  const targetsToProcess = records;
   console.log(`✓ Feldolgozandó tőkealapok/bankok száma: ${targetsToProcess.length} db\n`);
 
   if (targetsToProcess.length === 0) {
@@ -45,6 +96,8 @@ async function main() {
 
   let createdCount = 0;
   const rowNumsToUpdate = [];
+
+  const exactSignature = `Üdvözlettel,\nHomola László\nLead Advisor / Projektigazgató\nhomlamentor@gmail.com | +36 70 633 270`;
 
   for (const target of targetsToProcess) {
     const rowNum = target._rowNum;
@@ -76,8 +129,7 @@ async function main() {
         `* Kiemelkedő, kockázattal arányos megtérülés (IRR): A régió fejlődési dinamikája és a helyi piaci igények miatt a projektek az európai vagy észak-amerikai infrastruktúra-befektetésekhez képest lényegesen magasabb hozamot ígérnek.\n\n` +
         `Szeretnénk egy 15-20 perces online bemutató beszélgetés keretében ismertetni az aktuális deal-flow részleteit, a projektek pénzügyi modellezését és a strukturálási lehetőségeket (szenior adósság, mezzanine vagy equity szinten).\n\n` +
         `Kérjük, jelezze, ha nyitott egy rövid egyeztetésre a következő hetek folyamán.\n\n` +
-        `Üdvözlettel,\n\n` +
-        `Homola László\nÜgyvezető Menedzser & Tulajdonos\nHOMLAMENTOR KFT\nhomlamentor@gmail.com\n+36 70 633 270 | https://homolamentor.vercel.app`;
+        exactSignature;
     } else {
       subject = `West African Off-Market Project Finance and Co-Investment Opportunities (Abidjan) – HOMLAMENTOR KFT`;
       body = `Dear ${name},\n\n` +
@@ -92,33 +144,27 @@ async function main() {
         `* Superior Risk-Adjusted Returns (IRR): Due to the high growth velocity of the region and massive demand, these projects yield significantly higher returns compared to typical European or North American infrastructure assets.\n\n` +
         `We would be pleased to schedule a brief, 15-20 minute introductory call to share the pipeline details, financial models, and discuss capital structuring options (Senior Debt, Mezzanine, or Equity).\n\n` +
         `Please let us know your availability for a call in the coming weeks.\n\n` +
-        `Best regards,\n\n` +
-        `Laszlo Homola\nManaging Director & Owner\nHOMLAMENTOR KFT\nhomlamentor@gmail.com\n+36 70 633 270 | https://homolamentor.vercel.app`;
+        exactSignature;
     }
+
+    const rawMime = buildRawMimeMessage({ to: email, subject, body });
 
     console.log(`[Draft #${createdCount + 1}] Készítés: ${fund} (${email}) | Nyelv: ${isHungarian ? 'HU' : 'EN'}`);
 
-    const res = spawnSync('gws', [
-      'gmail', '+send',
-      '--to', `"${email}"`,
-      '--subject', `"${subject}"`,
-      '--body', `"${body.replace(/"/g, '\\"')}"`,
-      '--from', '"HOMLAMENTOR <homlamentor@gmail.com>"',
-      '--draft'
-    ], { encoding: 'utf-8', shell: true });
-
-    if (res.status === 0) {
-      console.log(`  ✓ Gmail piszkozat sikeresen létrejött a fiókban.`);
+    try {
+      const resOutput = runGws(['gmail', 'users', 'drafts', 'create', '--params', JSON.stringify({ userId: 'me' }), '--json', JSON.stringify({ message: { raw: rawMime } })]);
+      const resObj = JSON.parse(resOutput);
+      console.log(`  ✓ Gmail piszkozat sikeresen létrejött a fiókban (ID: ${resObj.id}).`);
       createdCount++;
       rowNumsToUpdate.push(rowNum);
-    } else {
-      console.error(`  ❌ Hiba a piszkozat létrehozásakor:`, res.stderr || res.stdout);
+    } catch (draftErr) {
+      console.error(`  ❌ Hiba a piszkozat létrehozásakor (${email}):`, draftErr.message);
     }
   }
 
-  // Google Sheets Frissítés
+  // 3. Google Sheets CRM frissítése
   if (rowNumsToUpdate.length > 0) {
-    console.log(`\nMaster CRM státuszok frissítése...`);
+    console.log(`\n3. Master CRM státuszok frissítése...`);
     for (const rNum of rowNumsToUpdate) {
       const updateParams = JSON.stringify({
         spreadsheetId: spreadsheetIdMaster,
@@ -129,18 +175,18 @@ async function main() {
         values: [["Piszkozat bekészítve"]]
       });
 
-      spawnSync('gws', [
-        'sheets', 'spreadsheets', 'values', 'update',
-        '--params', `"${updateParams.replace(/"/g, '\\"')}"`,
-        '--json', `"${updateJson.replace(/"/g, '\\"')}"`
-      ], { encoding: 'utf-8', shell: true });
+      try {
+        runGws(['sheets', 'spreadsheets', 'values', 'update', '--params', updateParams, '--json', updateJson]);
+      } catch (sheetErr) {
+        console.error(`  ❌ Hiba a CRM sorszám #${rNum} frissítésekor:`, sheetErr.message);
+      }
     }
     console.log(`✓ ${rowNumsToUpdate.length} sor frissítve "Piszkozat bekészítve" státuszra.`);
   }
 
   console.log('\n========================================================================');
   console.log(`🎉 AFRIKAI PROJEKT-FINANSZÍROZÁSI PISZKOZATOK LÉTREHOZÁSA SIKERES!`);
-  console.log(`Összesen ${createdCount} új piszkozat létrejött a Gmailedben.`);
+  console.log(`Összesen ${createdCount} új tisztított piszkozat létrejött a Gmailedben.`);
   console.log('========================================================================');
 }
 
