@@ -34,7 +34,7 @@ Log: Merged and deployed MobileHome page to production
 2026-07-20T10:59:00+02:00 | Kész | Fix: Piszkozatkészítési hiba javítva, Spam mappa ellenőrizve, 15 új piszkozat generálva pontos aláírással és feladóval.
 2026-07-20T12:00:00+02:00 | Kész | Feat: Feltöltöttük a valós 9 ingatlan off-market adatait és leírásait az Ingatlan-Portálra, a tesztadatok eltávolítva.
 2026-07-20T12:05:00+02:00 | Kész | Feat: Integráltuk a francia (FR) nyelvi támogatást a teljes portfólióra és az ingatlanportálra, az útvonalválasztó frissítve.
-
+2026-07-20T12:15:00+02:00 | Kész | Fix: Francia (FR) nyelvváltási és middleware hiba javítva.
 
 
 
