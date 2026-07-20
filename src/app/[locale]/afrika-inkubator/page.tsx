@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import AfricaHero from '@/components/AfricaHero';
-import ThreeStepProcess from '@/components/ThreeStepProcess';
-import SelabPromo from '@/components/SelabPromo';
-import LeadCaptureForm from '@/components/LeadCaptureForm';
+
+const ThreeStepProcess = dynamic(() => import('@/components/ThreeStepProcess'));
+const SelabPromo = dynamic(() => import('@/components/SelabPromo'));
+const LeadCaptureForm = dynamic(() => import('@/components/LeadCaptureForm'));
 
 export async function generateMetadata({
   params,

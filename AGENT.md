@@ -65,6 +65,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-20 | Feat: Feltöltöttük a valós 9 ingatlan off-market adatait és leírásait az Ingatlan-Portálra, a tesztadatok eltávolítva. | Kész |
 | 2026-07-20 | Feat: Integráltuk a francia (FR) nyelvi támogatást a teljes portfólióra és az ingatlanportálra, az útvonalválasztó frissítve. | Kész |
 | 2026-07-20 | Fix: Francia (FR) nyelvváltási és middleware hiba javítva. | Kész |
+| 2026-07-20 | Perf: Chrome AI teljesítmény-audit alapján LCP javítása (Hero image priority), és a főszál tehermentesítése dynamic imports használatával. | Kész |
 
 
 

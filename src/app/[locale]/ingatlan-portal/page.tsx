@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import RealEstateHero from '@/components/RealEstateHero';
-import PropertyTeaserGrid from '@/components/PropertyTeaserGrid';
-import VIPAccessGateway from '@/components/VIPAccessGateway';
-import PropertyRequestForm from '@/components/PropertyRequestForm';
+
+const PropertyTeaserGrid = dynamic(() => import('@/components/PropertyTeaserGrid'));
+const VIPAccessGateway = dynamic(() => import('@/components/VIPAccessGateway'));
+const PropertyRequestForm = dynamic(() => import('@/components/PropertyRequestForm'));
 
 export async function generateMetadata({
   params,

@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import ServiceSplit from '@/components/ServiceSplit';
+
+const ServiceSplit = dynamic(() => import('@/components/ServiceSplit'));
 
 export async function generateMetadata({
   params,

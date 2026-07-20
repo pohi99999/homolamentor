@@ -5,18 +5,23 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import AIChatAssistant from '@/components/AIChatAssistant';
+import dynamic from 'next/dynamic';
 
+const AIChatAssistant = dynamic(() => import('@/components/AIChatAssistant'));
 
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
   weight: ["300", "400", "500", "700", "900"],
+  display: "swap",
+  preload: true,
 });
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {

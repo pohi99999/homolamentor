@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import { useTranslations } from 'next-intl';
 import { Home as HomeIcon, Award, Shield, CheckCircle, ArrowRight, Zap, Truck, DollarSign } from 'lucide-react';
-import MobileHomeContactForm from '@/components/MobileHomeContactForm';
+
+const MobileHomeContactForm = dynamic(() => import('@/components/MobileHomeContactForm'));
 
 export async function generateMetadata({
   params,

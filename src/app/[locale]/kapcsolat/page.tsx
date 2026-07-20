@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import ContactHero from '@/components/ContactHero';
-import ContactInfoCards from '@/components/ContactInfoCards';
+
+const ContactInfoCards = dynamic(() => import('@/components/ContactInfoCards'));
 
 export async function generateMetadata({
   params,
