@@ -14,18 +14,21 @@ export async function generateMetadata({
     hu: 'HOMLAMENTOR KFT | Prémium Üzletfejlesztés & Ingatlan Portál',
     en: 'HOMLAMENTOR KFT | Premium Business Development & Real Estate',
     de: 'HOMLAMENTOR KFT | Premium Business Development & Immobilien',
+    fr: 'HOMLAMENTOR KFT | Développement d\'Entreprises & Portail Immobilier',
   };
 
   const descriptions: Record<string, string> = {
     hu: 'HOMLAMENTOR KFT - Nemzetközi piacra lépés (Afrika-Inkubátor) és exkluzív off-market ipari ingatlanok közvetítése a nyugat-magyarországi és osztrák határ mentén.',
     en: 'HOMLAMENTOR KFT - International business expansion (Africa-Incubator) and premium off-market industrial real estate brokerage near the Austrian border.',
     de: 'HOMLAMENTOR KFT - Internationale Geschäftsexpansion (Afrika-Inkubator) und Vermittlung von Premium-Off-Market-Industrieimmobilien an der österreichischen Grenze.',
+    fr: 'HOMLAMENTOR KFT - Expansion internationale (Incubateur Afrique) et courtage immobilier industriel off-market de premier ordre près de la frontière autrichienne.',
   };
 
   const keywordsList: Record<string, string[]> = {
     hu: ['HOMLAMENTOR', 'üzletfejlesztés', 'piacra lépés', 'Afrika-Inkubátor', 'ipari ingatlan', 'logisztikai csarnok', 'exkluzív ingatlan', 'off-market'],
     en: ['HOMLAMENTOR', 'business development', 'market entry', 'Africa-Incubator', 'industrial property', 'logistics park', 'exclusive property', 'off-market'],
     de: ['HOMLAMENTOR', 'geschäftsentwicklung', 'markteintritt', 'Afrika-Inkubator', 'industrieimmobilien', 'logistikpark', 'exklusive immobilien', 'off-market'],
+    fr: ['HOMLAMENTOR', 'développement d affaires', 'entrée sur le marché', 'Incubateur Afrique', 'immobilier industriel', 'parc logistique', 'off-market'],
   };
 
   return {

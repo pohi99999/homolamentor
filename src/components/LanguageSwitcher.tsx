@@ -34,6 +34,7 @@ export default function LanguageSwitcher() {
         <option value="hu" className="bg-slate-950 text-slate-200">HU</option>
         <option value="en" className="bg-slate-950 text-slate-200">EN</option>
         <option value="de" className="bg-slate-950 text-slate-200">DE</option>
+        <option value="fr" className="bg-slate-950 text-slate-200">FR</option>
       </select>
     </div>
   );

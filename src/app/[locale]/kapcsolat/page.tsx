@@ -14,18 +14,21 @@ export async function generateMetadata({
     hu: 'Kapcsolat | HOMLAMENTOR KFT - Prémium Üzletfejlesztés',
     en: 'Contact | HOMLAMENTOR KFT - Premium Business Advisory',
     de: 'Kontakt | HOMLAMENTOR KFT - Premium Business Advisory',
+    fr: 'Contact | HOMLAMENTOR KFT - Conseil en Affaires Haut de Gamme',
   };
 
   const descriptions: Record<string, string> = {
     hu: 'Vegye fel a kapcsolatot a HOMLAMENTOR KFT vezetőségével és fejlesztői csapatával. Globális üzletfejlesztés és prémium ingatlanok.',
     en: 'Get in touch with the management and development team of HOMLAMENTOR KFT. Global business development and premium real estate.',
     de: 'Kontaktieren Sie das Management und Entwicklungsteam von HOMLAMENTOR KFT. Globale Geschäftsentwicklung und Premium-Immobilien.',
+    fr: 'Prenez contact avec la direction et l\'équipe de développement de HOMLAMENTOR KFT. Développement commercial global et immobilier haut de gamme.',
   };
 
   const keywordsList: Record<string, string[]> = {
     hu: ['kapcsolat', 'HOMLAMENTOR', 'Homola László', 'Pohánka József Péter', 'üzletfejlesztés', 'ipari ingatlanok'],
     en: ['contact', 'HOMLAMENTOR', 'Laszlo Homola', 'Peter Pohanka', 'business expansion', 'industrial real estate'],
     de: ['kontakt', 'HOMLAMENTOR', 'Laszlo Homola', 'Peter Pohanka', 'geschäftsexpansion', 'industrieimmobilien'],
+    fr: ['contact', 'HOMLAMENTOR', 'Laszlo Homola', 'Peter Pohanka', 'expansion commerciale', 'immobilier industriel'],
   };
 
   return {

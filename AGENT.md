@@ -63,6 +63,8 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-20 | Feat: Automatikusan legeneráltuk a 15 új afrikai projekt-finanszírozási e-mail piszkozatot a Gmail fiókba, a CRM státuszok frissítve. | Kész |
 | 2026-07-20 | Fix: Piszkozatkészítési hiba javítva, Spam mappa ellenőrizve, 15 új piszkozat generálva pontos aláírással és feladóval. | Kész |
 | 2026-07-20 | Feat: Feltöltöttük a valós 9 ingatlan off-market adatait és leírásait az Ingatlan-Portálra, a tesztadatok eltávolítva. | Kész |
+| 2026-07-20 | Feat: Integráltuk a francia (FR) nyelvi támogatást a teljes portfólióra és az ingatlanportálra, az útvonalválasztó frissítve. | Kész |
+
 
 
 

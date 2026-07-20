@@ -13,18 +13,21 @@ export async function generateMetadata({
     hu: 'Nemzetközi Divízió | HOMLAMENTOR KFT',
     en: 'International Division | HOMLAMENTOR KFT',
     de: 'Internationale Division | HOMLAMENTOR KFT',
+    fr: 'Division Internationale | HOMLAMENTOR KFT',
   };
 
   const descriptions: Record<string, string> = {
     hu: 'Nyugat-afrikai infrastruktúra- és projektfinanszírozási kampány Elefántcsontparton (Abidjan). Zöldenergia, távközlés és mezőgazdaság.',
     en: 'West African infrastructure and project finance campaign in Ivory Coast (Abidjan). Green energy, telecom and agriculture investments.',
     de: 'Infrastruktur- und Projektfinanzierungskampagne in Westafrika (Elfenbeinküste, Abidjan). Investitionen in Ökoenergie, Telekom und Agrar.',
+    fr: 'Financement d\'infrastructures et de projets en Afrique de l\'Ouest en Côte d\'Ivoire (Abidjan). Énergie verte, télécoms et agriculture.',
   };
 
   const keywordsList: Record<string, string[]> = {
     hu: ['Nemzetközi Divízió', 'Projektfinanszírozás', 'Elefántcsontpart', 'Abidjan', 'Zöldenergia', 'Távközlés towerco', 'Magántőkealap', 'Befektetés'],
     en: ['International Division', 'Project Finance', 'Ivory Coast', 'Abidjan', 'Green Energy', 'Telecom towerco', 'Private Equity', 'Investment'],
     de: ['Internationale Division', 'Projektfinanzierung', 'Elfenbeinküste', 'Abidjan', 'Ökoenergie', 'Telekom towerco', 'Private Equity', 'Investition'],
+    fr: ['Division Internationale', 'Financement de projets', 'Côte d Ivoire', 'Abidjan', 'Énergie verte', 'Télécoms towerco', 'Private Equity', 'Investissement'],
   };
 
   return {

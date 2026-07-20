@@ -15,12 +15,14 @@ export async function generateMetadata({
     hu: 'Moduláris Mobilház Projekt | HOMLAMENTOR KFT',
     en: 'Modular Mobile Home Project | HOMLAMENTOR KFT',
     de: 'Modulares Mobilheim-Projekt | HOMLAMENTOR KFT',
+    fr: 'Projet de Maisons Modulaires | HOMLAMENTOR KFT',
   };
 
   const descriptions: Record<string, string> = {
     hu: 'HOMLAMENTOR KFT - Konténerben szállítható, önellátó napelemes rendszerrel felszerelt prémium mobilházak európai exportra és afrikai összeszerelésre.',
     en: 'HOMLAMENTOR KFT - Premium container-transportable modular living spaces with self-sustaining solar systems for European export and African assembly.',
     de: 'HOMLAMENTOR KFT - Transportable, autarke modulare Wohnräume mit Solarsystemen für den europäischen Export und die afrikanische Montage.',
+    fr: 'HOMLAMENTOR KFT - Maisons modulaires haut de gamme transportables par conteneurs avec systèmes solaires autonomes pour l\'exportation européenne et l\'assemblage en Afrique.',
   };
 
   return {

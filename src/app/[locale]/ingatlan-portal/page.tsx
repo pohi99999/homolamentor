@@ -16,18 +16,21 @@ export async function generateMetadata({
     hu: 'Ingatlan & Iparterület Portál | HOMLAMENTOR KFT',
     en: 'Real Estate & Industrial Portal | HOMLAMENTOR KFT',
     de: 'Immobilien- & Industrieportal | HOMLAMENTOR KFT',
+    fr: 'Portail Immobilier & Zones Industrielles | HOMLAMENTOR KFT',
   };
 
   const descriptions: Record<string, string> = {
     hu: 'Zártkörű hozzáférés prémium logisztikai parkokhoz, ipari csarnokokhoz, off-market területekhez Magyarország és Ausztria határán.',
     en: 'Exclusive off-market access to premium logistics parks, factories, and development plots near the Hungarian-Austrian border.',
     de: 'Exklusiver Off-Market-Zugang zu Premium-Logistikparks, Produktionshallen und Entwicklungsflächen an der ungarisch-österreichischen Grenze.',
+    fr: 'Accès exclusif off-market à des parcs logistiques haut de gamme, des usines et des terrains près de la frontière austro-hongroise.',
   };
 
   const keywordsList: Record<string, string[]> = {
     hu: ['ipari ingatlan', 'logisztikai csarnok', 'off-market ingatlanok', 'Sopron', 'Győr', 'Mosonmagyaróvár', 'VIP ingatlanok', 'HOMLAMENTOR'],
     en: ['industrial real estate', 'logistics hall', 'off-market property', 'Sopron', 'Gyor', 'Mosonmagyarovar', 'VIP gateway', 'HOMLAMENTOR'],
     de: ['industrieimmobilien', 'logistikhalle', 'off-market immobilien', 'Sopron', 'Gyor', 'Mosonmagyarovar', 'VIP zugang', 'HOMLAMENTOR'],
+    fr: ['immobilier industriel', 'entrepôt logistique', 'immobilier off-market', 'Sopron', 'Gyor', 'Mosonmagyarovar', 'portail VIP', 'HOMLAMENTOR'],
   };
 
   return {

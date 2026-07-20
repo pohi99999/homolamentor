@@ -1,0 +1,325 @@
+{
+  "Navbar": {
+    "home": "Accueil",
+    "incubator": "Incubateur Afrique",
+    "mobilehome": "Projet Maison Modulaire",
+    "portal": "Portail Immobilier",
+    "international": "Division Internationale",
+    "contact": "Contact"
+  },
+
+  "Hero": {
+    "badge": "CONSEIL EN AFFAIRES GLOBALES & IMMOBILIER",
+    "title": "Développement d'Entreprise Haut de Gamme & Expansion Internationale",
+    "subtitle": "Nous accompagnons votre entreprise dans son expansion internationale tout en vous offrant un accès exclusif à des investissements immobiliers industriels et commerciaux.",
+    "ctaPortal": "Portail Immobilier Privé",
+    "ctaIncubator": "Incubateur Afrique"
+  },
+  "ServiceSplit": {
+    "incubatorTitle": "Incubateur Afrique",
+    "incubatorDesc": "Programme complet d'implantation et de mentorat sur les marchés émergents d'Afrique de l'Ouest. Nous vous aidons à appréhender les réglementations locales, à développer votre réseau et à réussir le lancement de votre activité.",
+    "incubatorCta": "Découvrir le programme",
+    "portalTitle": "Portail Immobilier & Zones Industrielles",
+    "portalDesc": "Accès privé à des parcs logistiques haut de gamme, des usines, des terrains de développement et des offres d'investissement immobilier exclusives pour nos partenaires.",
+    "portalCta": "Accéder au portail"
+  },
+  "LanguageSwitcher": {
+    "label": "Choisir la langue",
+    "hu": "Hongrois",
+    "en": "Anglais",
+    "de": "Allemand",
+    "fr": "Français"
+  },
+  "AfricaHero": {
+    "badge": "PROGRAMME D'IMPLANTATION SUR LES MARCHÉS",
+    "title": "Incubateur Afrique",
+    "subtitle": "Créez une nouvelle trajectoire de croissance pour votre entreprise sur les marchés dynamiques d'Afrique de l'Ouest grâce à notre accompagnement d'experts."
+  },
+  "ThreeStepProcess": {
+    "title": "Les étapes du processus d'incubation",
+    "subtitle": "Grâce à notre méthodologie structurée, sécurisée et éprouvée, nous minimisons les risques d'implantation.",
+    "step1Title": "1. Étude de Marché et Validation",
+    "step1Desc": "Nous réalisons une analyse détaillée du marché cible, évaluons les concurrents et validons votre produit ou service en fonction des besoins locaux.",
+    "step2Title": "2. Recherche de Partenaires et Réseautage",
+    "step2Desc": "Nous établissons des connexions directes avec les décideurs locaux, des distributeurs fiables et des partenaires potentiels.",
+    "step3Title": "3. Mise en Œuvre et Déplacement",
+    "step3Desc": "Nous vous accompagnons dans la création du cadre juridique et de la société, et organisons votre voyage d'affaires avec un accompagnement sur place."
+  },
+  "SelabPromo": {
+    "badge": "ÉVÉNEMENT PHARE & RÉSEAUTAGE",
+    "title": "SELAB Livestock Show",
+    "subtitle": "Participez au plus grand salon professionnel agricole et d'élevage d'Afrique de l'Ouest ! Une opportunité exclusive pour les PME d'établir des relations commerciales directes et d'effectuer des transferts technologiques.",
+    "cta": "Contact pour l'Exposition",
+    "downloadPdf": "Télécharger le PDF",
+    "partnerNotice": "HOMLAMENTOR KFT est le partenaire européen privilégié et officiel du SELAB."
+  },
+  "LeadCaptureForm": {
+    "title": "Demandez une Consultation Gratuite",
+    "subtitle": "Nos experts vous aident à évaluer les opportunités de votre entreprise sur les marchés d'Afrique de l'Ouest.",
+    "nameLabel": "Nom complet",
+    "emailLabel": "Adresse e-mail",
+    "companySizeLabel": "Taille de l'entreprise",
+    "companySize1": "1 - 9 employés (TPE)",
+    "companySize2": "10 - 49 employés (Petite entreprise)",
+    "companySize3": "50 - 249 employés (Moyenne entreprise)",
+    "companySize4": "250+ employés (Grande entreprise)",
+    "industryLabel": "Secteur d'activité",
+    "industryPlaceholder": "ex: Agriculture, IT, BTP, Industrie...",
+    "submitButton": "Demander une consultation",
+    "successMsg": "Merci pour votre demande ! Nous vous contacterons sous peu."
+  },
+  "RealEstateHero": {
+    "badge": "INVESTISSEMENTS HAUT DE GAMME",
+    "title": "Portail Immobilier & Zones Industrielles",
+    "subtitle": "Vente et courtage international de zones industrielles de premier ordre, parcs logistiques et biens commerciaux hors marché (off-market)."
+  },
+  "PropertyRequestForm": {
+    "title": "Soumettre vos besoins spécifiques",
+    "subtitle": "Vous n'avez pas trouvé votre bonheur ? Précisez vos critères et nous rechercherons le terrain industriel idéal pour vos objectifs.",
+    "nameLabel": "Nom complet",
+    "emailLabel": "Adresse e-mail",
+    "typeLabel": "Type de bien recherché",
+    "typePlaceholder": "ex: Entrepôt logistique, Terrain industriel, Parcelle à développer...",
+    "locationLabel": "Localisation préférée",
+    "locationPlaceholder": "ex: Ouest de la Hongrie, frontière autrichienne...",
+    "submitButton": "Envoyer ma recherche",
+    "successMsg": "Merci pour votre soumission ! Notre équipe vous recontactera rapidement."
+  },
+  "PropertyTeaserGrid": {
+    "title": "Portefeuille Off-Market Exclusif",
+    "subtitle": "Découvrez notre portefeuille immobilier réel et discret. Connectez-vous via le portail VIP pour débloquer l'ensemble des détails.",
+    "allSectors": "Tous les secteurs",
+    "blurNotice": "Pour consulter la localisation exacte et le prix, veuillez vous connecter via le portail VIP.",
+    "unlockedNotice": "Accès VIP Actif — Fiche complète et prix débloqués.",
+    "items": {
+      "prop1": {
+        "title": "Terrain Industriel & Agricole de Győrszentiván",
+        "location": "Győrszentiván (à 1 km de l'autoroute M1)",
+        "price": "6 000 000 EUR",
+        "category": "Industrie & Logistique",
+        "features": [
+          "Autoroute M1 à 1 km",
+          "Site industriel de 10 300 m²",
+          "107 ha de terres arables",
+          "Carrière de gravier autorisée de 46 ha avec voie ferrée"
+        ],
+        "description": "Terrain industriel et agricole stratégiquement situé à Győrszentiván, à seulement 1 km de l'autoroute M1. Le complexe comprend un site industriel développé de 10 300 m², 107 hectares de terres arables de haute qualité et une carrière de gravier autorisée de 46 hectares avec raccordement ferroviaire direct."
+      },
+      "prop2": {
+        "title": "Centre de Santé & Senior Living de Nagycenk",
+        "location": "Nagycenk (Région de Sopron)",
+        "price": "9 000 000 EUR",
+        "category": "Santé & Résidence Sénior",
+        "features": [
+          "Taux d'achèvement de 75%",
+          "Finition en 8 mois",
+          "Terrain de 1,7 ha",
+          "Superficie de 6 284 m²",
+          "56+18 unités résidentielles avec espace bien-être"
+        ],
+        "description": "Complexe médical et de résidence pour séniors haut de gamme à Nagycenk achevé à 75%. Situé dans un parc arboré de 1,7 hectare, le bâtiment de 6 284 m² peut être livré clé en main en 8 mois environ. Il comprend 56 unités de soins pour séniors, 18 appartements standing, un espace bien-être privé et un bloc médical."
+      },
+      "prop3": {
+        "title": "Resort Thermal de l'Île Pap (Szentendre)",
+        "location": "Szentendre, Île Pap (à 20 km de Budapest)",
+        "price": "Sur Demande (Off-Market)",
+        "category": "Tourisme & Hôtellerie",
+        "features": [
+          "3,5 ha de terrain privé en bord de Danube",
+          "Puits thermal privé de 1 850 m de profondeur (50°C, 1 500 L/min)",
+          "À 20 km de Budapest"
+        ],
+        "description": "Opportunité unique de développement touristique et thermal au bord du Danube sur l'Île Pap à Szentendre. Le domaine privé de 3,5 hectares dispose de son propre puits thermal de 1 850 mètres de profondeur produisant une eau à 50°C (débit de 1 500 L/min). Idéalement situé à 20 km de Budapest."
+      },
+      "prop4": {
+        "title": "Projet de Parc Résidentiel du Balaton à Keszthely",
+        "location": "Keszthely (Rive du lac Balaton)",
+        "price": "8 000 000 USD",
+        "category": "Tourisme & Hôtellerie / Résidentiel",
+        "features": [
+          "Terrain de près d'1 ha au bord du Balaton",
+          "Gros œuvre achevé pour 42 appartements",
+          "Garage souterrain complet et cages d'ascenseur"
+        ],
+        "description": "Terrain de développement d'exception de près d'un hectare à proximité directe du lac Balaton à Keszthely. Comprend la structure en gros œuvre d'une copropriété de luxe de 42 appartements avec parking souterrain, cages d'ascenseur et plans architecturaux validés."
+      },
+      "prop5": {
+        "title": "Parc Poids Lourds & Terminal Logistique (M5)",
+        "location": "Zone frontalière hongro-serbe (Autoroute M5)",
+        "price": "5 000 000 000 HUF",
+        "category": "Industrie & Logistique",
+        "features": [
+          "Zone frontalière hongro-serbe",
+          "Proche de l'autoroute M5",
+          "Zone industrielle de 6,66 ha",
+          "Capacité de 370 camions",
+          "Service TIR, motel et restaurant de 200 places"
+        ],
+        "description": "Parc poids lourds et terminal logistique international adjacent à l'autoroute M5 dans la zone frontalière hongro-serbe. Le terrain industriel clôturé de 6,66 hectares peut accueillir 370 camions simultanément, avec atelier de service TIR, motel pour chauffeurs et restaurant de 200 places."
+      },
+      "prop6": {
+        "title": "Terrain de Développement Commercial Vt-8 à Keszthely",
+        "location": "Keszthely (Entrée Sud)",
+        "price": "1 050 000 EUR",
+        "category": "Commercial / Retail",
+        "features": [
+          "Zone contiguë de 17 943 m² à l'entrée sud",
+          "Zonage Vt-8 (constructibilité 50-75%)",
+          "Société projet (SPV) 100% saine (Share Deal) avec garantie de pénalité"
+        ],
+        "description": "Terrain de développement commercial d'un seul tenant de 17 943 m² situé le long de l'accès sud de Keszthely. Zonage Vt-8 avec 50 à 75% de constructibilité, idéal pour supermarchés ou parcs d'activités commerciales. Vente d'entreprise 100% saine (Share Deal) avec garantie contractuelle."
+      },
+      "prop7": {
+        "title": "Hôtel die Traube (Admont, Autriche)",
+        "location": "Admont, Styrie (Autriche)",
+        "price": "1 950 000 EUR",
+        "category": "Tourisme & Hôtellerie",
+        "features": [
+          "Propriété hôtelière stytienne opérationnelle",
+          "Sans dette avec GmbH 100% autrichienne",
+          "Offre immédiate de reprise à bail et d'exploitation"
+        ],
+        "description": "Complexe hôtelier et gastronomique traditionnel en activité à Admont (Styrie, Autriche). Propriété libre de toute charge vendue avec une GmbH 100% autrichienne. Le vendeur propose sur demande un bail à long terme et une garantie de gestion immédiate."
+      },
+      "prop8": {
+        "title": "Wellness Park & Resort du Balaton (Gyenesdiás)",
+        "location": "Gyenesdiás (Lac Balaton)",
+        "price": "2 150 000 000 HUF",
+        "category": "Tourisme & Hôtellerie",
+        "features": [
+          "Terrain contigu de 49 000 m²",
+          "Structures de 2 300 m² (10 appartements, restaurant, spa)",
+          "Camping pour 100 camping-cars haut de gamme"
+        ],
+        "description": "Complexe hôtelier et parc wellness de 49 000 m² situé à Gyenesdiás. Il comprend 2 300 m² de structures haut de gamme (10 appartements équipés, restaurant, espace bien-être), accompagnés d'un parc aménagé pour 100 camping-cars."
+      },
+      "prop9": {
+        "title": "Parcours de Golf & Domaine au Bord de l'Eau à Balatongyörök",
+        "location": "Balatongyörök (Accès direct au lac Balaton)",
+        "price": "6 000 000 EUR",
+        "category": "Tourisme & Hôtellerie / Luxe",
+        "features": [
+          "Domaine de 72 ha au bord du lac Balaton",
+          "Golf 18 trous homologué en activité avec plage & clubhouse",
+          "Option de développement de marina"
+        ],
+        "description": "Domaine d'exception de 72 hectares en bordure directe du lac Balaton à Balatongyörök. Comprend un parcours de golf 18 trous de classe internationale en activité, une plage privée, un clubhouse et un restaurant panoramique, avec opportunité d'extension de marina."
+      }
+    }
+  },
+  "VIPAccessGateway": {
+    "title": "Accès Exclusif VIP",
+    "subtitle": "Entrez votre clé d'accès VIP unique pour consulter les offres privées off-market, les prix et les localisations exactes.",
+    "passwordPlaceholder": "Clé d'Accès VIP (homola-vip-2026)",
+    "submitButton": "Entrer dans le Portail Privé",
+    "errorMsg": "Clé d'accès VIP incorrecte. Veuillez contacter la direction.",
+    "vipTitle": "Bienvenue sur le Portail Privé VIP",
+    "vipSubtitle": "Les offres immobilières exclusives off-market suivantes sont actuellement réservées à nos partenaires privilégiés.",
+    "vipCard1Title": "[VIP] Parc Logistique Off-Market - Hegyeshalom",
+    "vipCard1Spec": "Surface : 120 000 m² | Prix : 4,8M EUR",
+    "vipCard2Title": "[VIP] Usine de Production & Entrepôt - Sopron",
+    "vipCard2Spec": "Superficie : 8 500 m² | Prix : 3,2M EUR"
+  },
+  "AIChatAssistant": {
+    "title": "Assistante IA Brunella",
+    "subtitle": "En ligne",
+    "placeholder": "Écrivez un message...",
+    "welcomeMessage": "Bonjour ! Je suis Brunella, l'assistante IA de HOMLAMENTOR KFT. Comment puis-je vous aider aujourd'hui ?",
+    "mockResponse": "Merci pour votre message ! Je répondrai à toutes vos questions concernant l'expansion en Afrique (Incubateur Afrique) et l'immobilier industriel haut de gamme !",
+    "send": "Envoyer"
+  },
+  "ContactHero": {
+    "badge": "ENTREZ EN CONTACT AVEC NOUS",
+    "title": "Coordonnées & Service Client",
+    "subtitle": "Des questions sur l'Incubateur Afrique ou notre portefeuille immobilier ? Notre équipe d'experts est à votre entière disposition."
+  },
+  "ContactInfoCards": {
+    "rolePrimary": "Directeur Général & Propriétaire",
+    "descPrimary": "Fondateur de HOMLAMENTOR KFT, stratège en expansion africaine et courtier en immobilier industriel haut de gamme.",
+    "roleDev": "Intégrateur IA Principal & Développeur",
+    "descDev": "Développeur des systèmes numériques de HOMLAMENTOR KFT, de l'assistante IA (Brunella) et des solutions du portail."
+  },
+  "MobileHome": {
+    "badge": "AVENIR MODULAIRE & EXPORTATION",
+    "title": "Maisons Modulaires en Conteneur & Expansion Régionale",
+    "subtitle": "Espaces de vie modulaires de haute qualité, transportables par conteneurs (30 m², 50 m², 80-100 m²), équipés de systèmes solaires autonomes, optimisés pour l'exportation européenne et l'assemblage en Afrique.",
+    "ctaPrimary": "Demande de devis & Catalogue",
+    "ctaSecondary": "Concept d'Assemblage sur Site",
+    "feature1Title": "Logistique en Conteneur",
+    "feature1Desc": "Installation rapide et simple dans le monde entier grâce à la logistique standard de conteneurs maritimes.",
+    "feature2Title": "50% d'Économie sur la Main-d'Œuvre",
+    "feature2Desc": "Utilisation de la main-d'œuvre locale dans les centres d'assemblage d'Afrique de l'Ouest (Abidjan) et du Sud (Lusaka).",
+    "feature3Title": "100% de Profit de Transport",
+    "feature3Desc": "Grâce à l'efficacité du transport d'unités modulaires en kit assemblées sur place.",
+    "b2bTitle": "Avantages Stratégiques et Économiques pour les Partenaires Fabricants",
+    "b2bSubtitle": "La structure de franchise logistique et d'assemblage de HOMLAMENTOR KFT offre un avantage financier et concurrentiel direct sur le marché international.",
+    "b2bCard1Title": "100% de Marge Logistique",
+    "b2bCard1Desc": "Exporter des maisons finies depuis l'Europe n'est pas compétitif en raison des frais de fret maritime très élevés. En important des systèmes en kit conteneurisés et en les assemblant dans les centres locaux de HOMLAMENTOR KFT, 100% des économies logistiques se traduisent directement en bénéfice net d'exploitation.",
+    "b2bCard2Title": "Optimisation de 50% des Coûts Salariaux",
+    "b2bCard2Desc": "Dans notre centre logistique et de distribution en Afrique de l'Ouest (Abidjan, Côte d'Ivoire), l'emploi d'une main-d'œuvre locale qualifiée réduit drastiquement les coûts salariaux d'assemblage de 50%.",
+    "b2bCard3Title": "Exonérations Fiscales et Douanières",
+    "b2bCard3Desc": "Les entités de fabrication et d'assemblage créées localement en Afrique de l'Ouest bénéficient d'exonérations d'impôt sur les sociétés (tax holidays) et d'une franchise douanière totale dans la zone de libre-échange (CEDEAO)."
+  },
+  "MobileHomeForm": {
+    "companyNameLabel": "Nom de l'entreprise",
+    "companyNamePlaceholder": "ex: WING SA",
+    "roleLabel": "Fonction",
+    "rolePlaceholder": "ex: Directeur des Achats",
+    "contactNameLabel": "Nom du contact",
+    "contactNamePlaceholder": "ex: Jean Dupont",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "ex: partner@entreprise.fr",
+    "phoneLabel": "Numéro de téléphone",
+    "phonePlaceholder": "ex: +33 1 23 45 67 89",
+    "messageLabel": "Message / Demandes particulières (Optionnel)",
+    "messagePlaceholder": "Veuillez détailler vos besoins ou questions...",
+    "interestedModelLabel": "Modèle d'intérêt",
+    "model30": "Compact Minimal - 30 m²",
+    "model50": "Configuration Familiale - 50 m²",
+    "model80-100": "Finition Premium - 80-100 m²",
+    "projectedVolumeLabel": "Volume projeté (B2B)",
+    "volume1-5": "1 - 5 unités (Test)",
+    "volume6-20": "6 - 20 unités (Taille projet)",
+    "volume21+": "21+ unités (Développement régional)",
+    "fundingStatusLabel": "Statut du financement",
+    "fundingEquity": "Fonds propres / Budget réservé",
+    "fundingLoan": "Cofinancement / Crédit projet",
+    "fundingPartner": "Recherche d'un partenaire investisseur",
+    "submitBtn": "Consultation & Devis B2B",
+    "errorCompanyRequired": "Le nom de l'entreprise est obligatoire.",
+    "errorRoleRequired": "La fonction est obligatoire.",
+    "errorNameRequired": "Le nom du contact est obligatoire.",
+    "errorEmailRequired": "L'adresse e-mail est obligatoire.",
+    "errorPhoneRequired": "Le numéro de téléphone est obligatoire.",
+    "successTitle": "Merci pour votre demande de devis !",
+    "successMessage": "Notre équipe de développement vous contactera sous 24 heures et vous enverra le catalogue technique détaillé.",
+    "newSubmission": "Envoyer une nouvelle demande"
+  },
+  "InternationalDivision": {
+    "badge": "DIVISION INTERNATIONALE",
+    "title": "Financement d'Infrastructures et de Projets en Afrique de l'Ouest",
+    "subtitle": "Opportunités d'investissement hors marché et de co-investissement exceptionnelles en Côte d'Ivoire (Abidjan). Pour les fonds de private equity et les banques, avec garanties d'État et des rendements élevés dans la zone de libre-échange CEDEAO.",
+    "energyTitle": "Énergie Renouvelable",
+    "energyDesc": "Développement de centrales solaires et de réseaux de 50+ MW, avec garanties d'achat étatiques à long terme et couverture multilatérale.",
+    "telecomTitle": "Infrastructures de Télécommunication",
+    "telecomDesc": "Construction et exploitation d'un réseau national de tours télécoms (towerco) sur les sites stratégiques de Côte d'Ivoire, avec baux à long terme.",
+    "agriTitle": "Industrie Agroalimentaire",
+    "agriDesc": "Création d'usines modernes de transformation alimentaire et d'aliments du bétail pour répondre à la demande locale croissante, en zone franche.",
+    "formTitle": "Contact pour Investisseurs",
+    "formSubtitle": "Veuillez indiquer les paramètres de votre institution et notre représentant vous contactera pour présenter le deal-flow et les modèles financiers.",
+    "companyNameLabel": "Nom de l'institution / Entreprise",
+    "representativeLabel": "Nom du représentant",
+    "emailLabel": "Adresse e-mail",
+    "phoneLabel": "Numéro de téléphone",
+    "sectorLabel": "Secteur concerné",
+    "sectorPlaceholder": "Choisissez un secteur...",
+    "sectorOption1": "Énergie Renouvelable (50+ MW solaire)",
+    "sectorOption2": "Infrastructures Télécoms",
+    "sectorOption3": "Industrie Agroalimentaire",
+    "sectorOption4": "Tous les secteurs / Portefeuille mixte",
+    "volumeLabel": "Volume d'Investissement Envisagé",
+    "volumePlaceholder": "ex: 1M - 5M EUR",
+    "submitButton": "Soumettre la Demande d'Investissement",
+    "successMsg": "Merci pour votre intérêt ! Notre collaborateur vous contactera sous peu pour transmettre le teaser officiel et les documents d'accord de confidentialité (NDA)."
+  }
+}

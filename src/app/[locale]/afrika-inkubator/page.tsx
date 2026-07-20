@@ -16,18 +16,21 @@ export async function generateMetadata({
     hu: 'Afrika-Inkubátor Program | HOMLAMENTOR KFT',
     en: 'Africa-Incubator Program | HOMLAMENTOR KFT',
     de: 'Afrika-Inkubator Programm | HOMLAMENTOR KFT',
+    fr: 'Programme Incubateur Afrique | HOMLAMENTOR KFT',
   };
 
   const descriptions: Record<string, string> = {
     hu: 'Piacra lépési és mentorálási program Nyugat-Afrikában magyar és európai cégek számára. SELAB Livestock Show szakvásár és üzletfejlesztés.',
     en: 'Market entry and mentoring program in West Africa for European SMEs. SELAB Livestock Show exhibition and business expansion.',
     de: 'Markteintritts- und Mentoringprogramm in Westafrika für europäische KMUs. SELAB Livestock Show Messe und Geschäftsexpansion.',
+    fr: 'Programme d\'implantation et de mentorat en Afrique de l\'Ouest pour les PME européennes. Salon professionnel SELAB Livestock Show et expansion commerciale.',
   };
 
   const keywordsList: Record<string, string[]> = {
     hu: ['Afrika-Inkubátor', 'SELAB Livestock Show', 'Nyugat-Afrika', 'piacra lépés', 'HOMLAMENTOR', 'mentoring', 'export'],
     en: ['Africa-Incubator', 'SELAB Livestock Show', 'West Africa', 'market entry', 'HOMLAMENTOR', 'mentorship', 'business travel'],
     de: ['Afrika-Inkubator', 'SELAB Livestock Show', 'Westafrika', 'Markteintritt', 'HOMLAMENTOR', 'Mentoring', 'Geschäftsreise'],
+    fr: ['Incubateur Afrique', 'SELAB Livestock Show', 'Afrique de l Ouest', 'entrée sur le marché', 'HOMLAMENTOR', 'mentorat', 'exportation'],
   };
 
   return {
