@@ -28,6 +28,4 @@ Log: Merged and deployed MobileHome page to production
 2026-07-17T10:22:00+02:00 | Kész | Feat: Újabb reggeli kiküldési hullám utáni postafiók- és SPAM-szinkronizáció lefutott, a CRM státuszok frissítve (2026-07-17).
 2026-07-17T10:29:00+02:00 | Kész | Feat: Legeneráltuk a 26 fős LinkedIn Bounce Mentő akciólistát a manuális outreach-hez.
 2026-07-17T10:36:00+02:00 | Kész | Feat: Generated and populated the first batch of 15 targeted African Infrastructure & Energy funds into the CRM.
-
-
-
+2026-07-20T10:33:00+02:00 | Kész | Feat: Létrehoztuk a Master Investor Portfolio dokumentumokat (HTML/MD) az azonnali B2B kiküldések támogatására.
