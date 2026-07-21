@@ -39,7 +39,5 @@ Log: Merged and deployed MobileHome page to production
 2026-07-21T09:42:00+02:00 | Kész | Feat: Deep Research M&A leadek (Kutatás I-II) automatikus kinyerése és integrációja a CRM adatbázisokba.
 2026-07-21T10:15:00+02:00 | Kész | Feat: 55 db új C-Level M&A piszkozat automatikus legenerálása a Deep Research leadek alapján.
 2026-07-21T10:35:00+02:00 | Kész | Feat: A 57 db új Deep Research B2B lead kiküldése utáni postafiók- és SPAM-szinkronizáció lefutott, a CRM státuszok aktualizálva.
-2026-07-21T11:00:00+02:00 | Kész | Feat: Magazin minőségű automatizált PDF portfólió generátor létrehozva és lefuttatva (HU/EN).
-
-
-
+2026-07-21T11:00:00+02:00 | Kész | Magazin minőségű automatizált PDF portfólió generátor létrehozva és lefuttatva (HU/EN).
+2026-07-21T11:35:00+02:00 | Kész | Update: A KINGSTONE Real Estate (Philipp Bach) elutasította a Nagycenk projektet (Magyarország nem célpiac). A CRM státusz 'Elutasítva' értékre és a megjegyzés frissítve.
