@@ -67,6 +67,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-20 | Fix: Francia (FR) nyelvváltási és middleware hiba javítva. | Kész |
 | 2026-07-20 | Perf: Chrome AI teljesítmény-audit alapján LCP javítása (Hero image priority), és a főszál tehermentesítése dynamic imports használatával. | Kész |
 | 2026-07-21 | Feat: Deep Research M&A leadek (Kutatás I-II) automatikus kinyerése és integrációja a CRM adatbázisokba. | Kész |
+| 2026-07-21 | Feat: 55 db új C-Level M&A piszkozat automatikus legenerálása a Deep Research leadek alapján. | Kész |
 
 
 
