@@ -66,6 +66,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-20 | Feat: Integráltuk a francia (FR) nyelvi támogatást a teljes portfólióra és az ingatlanportálra, az útvonalválasztó frissítve. | Kész |
 | 2026-07-20 | Fix: Francia (FR) nyelvváltási és middleware hiba javítva. | Kész |
 | 2026-07-20 | Perf: Chrome AI teljesítmény-audit alapján LCP javítása (Hero image priority), és a főszál tehermentesítése dynamic imports használatával. | Kész |
+| 2026-07-21 | Feat: Deep Research M&A leadek (Kutatás I-II) automatikus kinyerése és integrációja a CRM adatbázisokba. | Kész |
 
 
 

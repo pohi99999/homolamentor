@@ -36,6 +36,7 @@ Log: Merged and deployed MobileHome page to production
 2026-07-20T12:05:00+02:00 | Kész | Feat: Integráltuk a francia (FR) nyelvi támogatást a teljes portfólióra és az ingatlanportálra, az útvonalválasztó frissítve.
 2026-07-20T12:15:00+02:00 | Kész | Fix: Francia (FR) nyelvváltási és middleware hiba javítva.
 2026-07-20T12:30:00+02:00 | Kész | Perf: Chrome AI teljesítmény-audit alapján LCP javítása (Hero image priority), és a főszál tehermentesítése dynamic imports használatával.
+2026-07-21T09:42:00+02:00 | Kész | Feat: Deep Research M&A leadek (Kutatás I-II) automatikus kinyerése és integrációja a CRM adatbázisokba.
 
 
 
