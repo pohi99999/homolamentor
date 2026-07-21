@@ -1,198 +1,218 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { spawnSync } = require('child_process');
+const { execSync } = require('child_process');
 const fs = require('fs');
-const path = require('path');
 
-const spreadsheetIdMaster = '1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ';
-const spreadsheetIdContacts = '1UczhxdLwPnD6IG44gIcLk8GgC98usH4SRjEe2GvYrbM';
+const SPREADSHEET_ID_MASTER = '1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ';
+const SPREADSHEET_ID_CONTACTS = '1UczhxdLwPnD6IG44gIcLk8GgC98usH4SRjEe2GvYrbM';
 
-function runGws(args) {
-  const isWin = process.platform === 'win32';
-  const cmd = isWin ? 'cmd.exe' : 'gws';
-  const fullArgs = isWin ? ['/c', 'gws', ...args] : args;
-
-  const res = spawnSync(cmd, fullArgs, { encoding: 'utf-8' });
-  if (res.status !== 0) {
-    throw new Error(res.stderr || res.stdout || 'gws command failed');
-  }
-  return res.stdout;
+function runGwsRead(cmdStr) {
+  return execSync(`gws ${cmdStr}`, { encoding: 'utf-8' });
 }
 
-function parseRecipient(toValue) {
-  if (!toValue) return { name: '', email: '' };
-  const emailMatch = toValue.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
-  const email = emailMatch ? emailMatch[1].toLowerCase().trim() : '';
-  let name = '';
-  const nameMatch = toValue.match(/^"?([^"<]+)"?\s*</);
-  if (nameMatch) {
-    name = nameMatch[1].trim();
-  }
-  return { name, email };
+function runGwsUpdate(spreadsheetId, rangeStr, rowValues) {
+  const paramsObj = {
+    spreadsheetId: spreadsheetId,
+    range: rangeStr,
+    valueInputOption: 'USER_ENTERED'
+  };
+  const bodyObj = {
+    values: rowValues
+  };
+  const pEscaped = JSON.stringify(paramsObj).replace(/"/g, '\\"');
+  const bEscaped = JSON.stringify(bodyObj).replace(/"/g, '\\"');
+  const cmd = `gws sheets spreadsheets values update --params "${pEscaped}" --json "${bEscaped}"`;
+  return execSync(cmd, { encoding: 'utf-8' });
 }
 
 async function main() {
-  console.log('====== POSTAFÍÓK ÉS SPAM MAPPA SZINKRONIZÁCIÓ (ÖSSZES CRM FÜL) ======\n');
+  console.log('====== POSTAFÍÓK ÉS SPAM MAPPA SZINKRONIZÁCIÓ (DEEP RESEARCH LEADEK) ======\n');
   
-  const today = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split('T')[0];
+  const todayStr = new Date().toISOString().split('T')[0];
 
-  // 1. CRM-ek beolvasása
+  // 1. CRM adatok beolvasása
   console.log('1. CRM adatok beolvasása...');
   
-  // Master_Vevőlista
-  let masterRows = [];
-  try {
-    const raw = runGws(['sheets', '+read', '--spreadsheet', spreadsheetIdMaster, '--range', 'Master_Vevőlista!A1:S100']);
-    masterRows = JSON.parse(raw).values || [];
-    console.log(`  ✓ Master_Vevőlista beolvasva: ${masterRows.length} sor`);
-  } catch (err) {
-    console.error('  ❌ Hiba a Master_Vevőlista beolvasásakor:', err.message);
-  }
+  const masterOut = JSON.parse(runGwsRead(`sheets +read --spreadsheet ${SPREADSHEET_ID_MASTER} --range Master_Vevőlista!A1:S500`));
+  const afrikaOut = JSON.parse(runGwsRead(`sheets +read --spreadsheet ${SPREADSHEET_ID_MASTER} --range Afrika_Projekt_Finanszirozas!A1:L500`));
+  const contactsOut = JSON.parse(runGwsRead(`sheets +read --spreadsheet ${SPREADSHEET_ID_CONTACTS} --range CONTACTS!A1:P500`));
 
-  // CONTACTS
-  let contactsRows = [];
-  try {
-    const raw = runGws(['sheets', '+read', '--spreadsheet', spreadsheetIdContacts, '--range', 'CONTACTS!A1:O150']);
-    contactsRows = JSON.parse(raw).values || [];
-    console.log(`  ✓ CONTACTS fül beolvasva: ${contactsRows.length} sor`);
-  } catch (err) {
-    console.error('  ❌ Hiba a CONTACTS fül beolvasásakor:', err.message);
-  }
+  const masterRows = masterOut.values || [];
+  const afrikaRows = afrikaOut.values || [];
+  const contactsRows = contactsOut.values || [];
 
-  // Afrika_Projekt_Finanszirozas
-  let afrikaRows = [];
-  try {
-    const raw = runGws(['sheets', '+read', '--spreadsheet', spreadsheetIdMaster, '--range', 'Afrika_Projekt_Finanszirozas!A1:L50']);
-    afrikaRows = JSON.parse(raw).values || [];
-    console.log(`  ✓ Afrika_Projekt_Finanszirozas fül beolvasva: ${afrikaRows.length} sor`);
-  } catch (err) {
-    console.error('  ❌ Hiba az Afrika_Projekt_Finanszirozas fül beolvasásakor:', err.message);
-  }
-
-  // Map-ek és kollekciók
-  const emailToMaster = {};
-  const emailToContacts = {};
-  const emailToAfrika = {};
   const monitoredEmails = new Set();
-
+  
   if (masterRows.length > 1) {
-    const header = masterRows[0];
-    masterRows.slice(1).forEach((row, idx) => {
-      const rec = {};
-      header.forEach((key, index) => { rec[key] = row[index] ? row[index].trim() : ''; });
-      rec._rowNum = idx + 2;
-      const email = rec['Email'] ? rec['Email'].toLowerCase().trim() : '';
-      if (email && email.includes('@')) {
-        monitoredEmails.add(email);
-        emailToMaster[email] = rec;
-      }
+    masterRows.slice(1).forEach(r => {
+      const email = (r[7] || '').toLowerCase().trim();
+      if (email && email.includes('@')) monitoredEmails.add(email);
     });
   }
 
   if (contactsRows.length > 1) {
-    contactsRows.slice(1).forEach((row, idx) => {
-      const rec = { email: row[6] ? row[6].trim().toLowerCase() : '', company: row[2] ? row[2].trim() : '', _rowNum: idx + 2 };
-      if (rec.email && rec.email.includes('@')) {
-        monitoredEmails.add(rec.email);
-        emailToContacts[rec.email] = rec;
-      }
+    contactsRows.slice(1).forEach(r => {
+      const email = (r[6] || '').toLowerCase().trim();
+      if (email && email.includes('@')) monitoredEmails.add(email);
     });
   }
 
   if (afrikaRows.length > 1) {
-    afrikaRows.slice(1).forEach((row, idx) => {
-      const rec = { fund: row[2] ? row[2].trim() : '', email: row[5] ? row[5].trim().toLowerCase() : '', status: row[7] ? row[7].trim() : '', _rowNum: idx + 2 };
-      if (rec.email && rec.email.includes('@')) {
-        monitoredEmails.add(rec.email);
-        emailToAfrika[rec.email] = rec;
-      }
+    afrikaRows.slice(1).forEach(r => {
+      const email = (r[5] || '').toLowerCase().trim();
+      if (email && email.includes('@')) monitoredEmails.add(email);
     });
   }
 
-  console.log(`✓ Összesített megfigyelt e-mailek száma: ${monitoredEmails.size} db\n`);
+  console.log(`✓ Megfigyelt CRM e-mailek száma: ${monitoredEmails.size} db\n`);
 
-  // 2. SPAM, INBOX és SENT lekérdezése
-  console.log('2. Postaláda mappák lekérdezése (SPAM, INBOX, SENT)...');
+  // 2. SPAM és INBOX mappák fésülése Bounce-okért
+  console.log('2. SPAM, INBOX és SENT mappák átfésülése...');
 
   let spamMsgs = [], inboxMsgs = [], sentMsgs = [];
-  try { spamMsgs = JSON.parse(runGws(['gmail', 'users', 'messages', 'list', '--params', JSON.stringify({ userId: 'me', q: 'in:spam', maxResults: 40 })])).messages || []; } catch (e) {}
-  try { inboxMsgs = JSON.parse(runGws(['gmail', 'users', 'messages', 'list', '--params', JSON.stringify({ userId: 'me', q: 'is:inbox', maxResults: 40 })])).messages || []; } catch (e) {}
-  try { sentMsgs = JSON.parse(runGws(['gmail', 'users', 'messages', 'list', '--params', JSON.stringify({ userId: 'me', q: 'is:sent', maxResults: 40 })])).messages || []; } catch (e) {}
+  try { spamMsgs = JSON.parse(runGwsRead('gmail users messages list --params "{\\"userId\\":\\"me\\",\\"q\\":\\"in:spam\\",\\"maxResults\\":100}"')).messages || []; } catch (e) {}
+  try { inboxMsgs = JSON.parse(runGwsRead('gmail users messages list --params "{\\"userId\\":\\"me\\",\\"q\\":\\"is:inbox\\",\\"maxResults\\":100}"')).messages || []; } catch (e) {}
+  try { sentMsgs = JSON.parse(runGwsRead('gmail users messages list --params "{\\"userId\\":\\"me\\",\\"q\\":\\"is:sent\\",\\"maxResults\\":100}"')).messages || []; } catch (e) {}
 
-  console.log(`  ✓ SPAM: ${spamMsgs.length} db | INBOX: ${inboxMsgs.length} db | SENT: ${sentMsgs.length} db\n`);
+  console.log(`  ✓ SPAM üzenetek: ${spamMsgs.length} db | INBOX: ${inboxMsgs.length} db | SENT: ${sentMsgs.length} db`);
 
-  const afrikaUpdates = new Map();
   const bouncesFound = new Set();
-
   const folderMsgs = [
     ...spamMsgs.map(m => ({ ...m, folder: 'SPAM' })),
     ...inboxMsgs.map(m => ({ ...m, folder: 'INBOX' }))
   ];
 
-  console.log('3. Hibaüzenetek (Bounces) azonosítása...');
+  console.log('\n3. Mailer-Daemon és Bounce hibaüzenetek azonosítása...');
   for (const m of folderMsgs) {
     try {
-      const detail = JSON.parse(runGws(['gmail', 'users', 'messages', 'get', '--params', JSON.stringify({ userId: 'me', id: m.id, format: 'full' })]));
-      const snippet = detail.snippet || '';
+      const detailRaw = runGwsRead(`gmail users messages get --params "{\\"userId\\":\\"me\\",\\"id\\":\\"${m.id}\\",\\"format\\":\\"full\\"}"`);
+      const detail = JSON.parse(detailRaw);
       const headers = detail.payload?.headers || [];
-      const fromHeader = (headers.find(h => h.name.toLowerCase() === 'from')?.value || '').toLowerCase();
-      const subjectHeader = (headers.find(h => h.name.toLowerCase() === 'subject')?.value || '').toLowerCase();
+      const from = (headers.find(h => h.name.toLowerCase() === 'from')?.value || '').toLowerCase();
+      const subject = (headers.find(h => h.name.toLowerCase() === 'subject')?.value || '').toLowerCase();
 
-      const isBounce = fromHeader.includes('mailer-daemon') || fromHeader.includes('postmaster') || fromHeader.includes('mail-delivery') ||
-                       subjectHeader.includes('undelivered') || subjectHeader.includes('failure') || subjectHeader.includes('failed') || subjectHeader.includes('returned') || subjectHeader.includes('delivery status');
+      const isBounce = from.includes('mailer-daemon') || from.includes('postmaster') || from.includes('mail-delivery') ||
+                       subject.includes('undelivered') || subject.includes('failure') || subject.includes('failed') || subject.includes('returned') || subject.includes('delivery status');
 
       if (isBounce) {
-        for (const email of monitoredEmails) {
-          if (snippet.toLowerCase().includes(email) || JSON.stringify(detail).toLowerCase().includes(email)) {
-            bouncesFound.add(email);
-            if (emailToAfrika[email]) {
-              const rec = emailToAfrika[email];
-              console.log(`  ❌ Afrikai Bounce: ${email} (${rec.fund})`);
-              afrikaUpdates.set(`Afrika_Projekt_Finanszirozas!H${rec._rowNum}`, [["Visszadobva / Hibás email"]]);
-            }
+        const snippet = detail.snippet || '';
+        const snippetMatches = snippet.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || [];
+        for (const eMatch of snippetMatches) {
+          const clean = eMatch.toLowerCase().trim();
+          if (monitoredEmails.has(clean)) {
+            console.log(`  ❌ Azonosított Bounce (${m.folder}): ${clean}`);
+            bouncesFound.add(clean);
           }
         }
       }
     } catch (e) {}
   }
 
-  // Sikeres kiküldések beállítása az Afrikai fülre
-  for (const [email, rec] of Object.entries(emailToAfrika)) {
-    if (!bouncesFound.has(email)) {
-      console.log(`  ✓ Sikeres Kiküldve: ${email} (${rec.fund})`);
-      afrikaUpdates.set(`Afrika_Projekt_Finanszirozas!H${rec._rowNum}`, [["Kiküldve"]]);
+  console.log(`\n✓ Összesen ${bouncesFound.size} igazoltan visszadobott e-mail cím került azonosításra.\n`);
+
+  // 4. CRM Státuszok Frissítése
+  console.log('4. CRM Státuszok oszlop-szintű frissítése...');
+
+  let sentCount = 0;
+  let bounceCount = 0;
+
+  // A) Master_Vevőlista
+  if (masterRows.length > 1) {
+    const masterStatuses = [];
+    const masterDates = [];
+    masterRows.slice(1).forEach(r => {
+      const email = (r[7] || '').toLowerCase().trim();
+      const currentStatus = r[13] || '';
+      let newStatus = currentStatus;
+      let newDate = r[11] || '';
+
+      if (currentStatus === 'Piszkozat bekészítve' || currentStatus === 'Új Lead - Deep Research' || (email && monitoredEmails.has(email) && currentStatus !== 'Visszadobva / Hibás email' && currentStatus !== 'Nem megkeresett')) {
+        if (bouncesFound.has(email)) {
+          newStatus = 'Visszadobva / Hibás email';
+          bounceCount++;
+        } else if (currentStatus === 'Piszkozat bekészítve' || currentStatus === 'Új Lead - Deep Research') {
+          newStatus = 'Kiküldve';
+          newDate = todayStr;
+          sentCount++;
+        }
+      }
+      masterStatuses.push([newStatus]);
+      masterDates.push([newDate]);
+    });
+
+    try {
+      runGwsUpdate(SPREADSHEET_ID_MASTER, `Master_Vevőlista!N2:N${1 + masterStatuses.length}`, masterStatuses);
+      runGwsUpdate(SPREADSHEET_ID_MASTER, `Master_Vevőlista!L2:L${1 + masterDates.length}`, masterDates);
+      console.log('  ✓ Master_Vevőlista fül (Státusz és Dátum) frissítve.');
+    } catch (err) {
+      console.error('  ❌ Hiba a Master_Vevőlista frissítésekor:', err.message);
     }
   }
 
-  // 4. Batch update Afrika fülhöz
-  if (afrikaUpdates.size > 0) {
-    console.log(`\n4. Afrika_Projekt_Finanszirozas frissítése (${afrikaUpdates.size} sor)...`);
-    const updatesList = [];
-    for (let r = 2; r <= afrikaRows.length; r++) {
-      const emailCell = afrikaRows[r - 1] ? afrikaRows[r - 1][5] : '';
-      if (emailCell) {
-        const cleanEmail = emailCell.trim().toLowerCase();
-        const statusVal = bouncesFound.has(cleanEmail) ? "Visszadobva / Hibás email" : "Kiküldve";
-        updatesList.push([statusVal]);
+  // B) Afrika_Projekt_Finanszirozas
+  if (afrikaRows.length > 1) {
+    const afrikaStatuses = [];
+    afrikaRows.slice(1).forEach(r => {
+      const email = (r[5] || '').toLowerCase().trim();
+      const currentStatus = r[7] || '';
+      let newStatus = currentStatus;
+
+      if (currentStatus === 'Piszkozat bekészítve' || currentStatus === 'Új Lead - Deep Research') {
+        if (bouncesFound.has(email)) {
+          newStatus = 'Visszadobva / Hibás email';
+        } else {
+          newStatus = 'Kiküldve';
+        }
       }
-    }
+      afrikaStatuses.push([newStatus]);
+    });
 
     try {
-      const updateParams = JSON.stringify({
-        spreadsheetId: spreadsheetIdMaster,
-        range: `Afrika_Projekt_Finanszirozas!H2:H${1 + updatesList.length}`,
-        valueInputOption: "USER_ENTERED"
-      });
-      const updateJson = JSON.stringify({ values: updatesList });
-      runGws(['sheets', 'spreadsheets', 'values', 'update', '--params', updateParams, '--json', updateJson]);
-      console.log('✓ Afrika_Projekt_Finanszirozas sikeresen frissítve!');
+      runGwsUpdate(SPREADSHEET_ID_MASTER, `Afrika_Projekt_Finanszirozas!H2:H${1 + afrikaStatuses.length}`, afrikaStatuses);
+      console.log('  ✓ Afrika_Projekt_Finanszirozas fül frissítve.');
     } catch (err) {
-      console.error('❌ Hiba a CRM frissítéskor:', err.message);
+      console.error('  ❌ Hiba az Afrika_Projekt_Finanszirozas frissítésekor:', err.message);
+    }
+  }
+
+  // C) CONTACTS fül
+  if (contactsRows.length > 1) {
+    const contactsStatuses = [];
+    const contactsLastInteractions = [];
+    contactsRows.slice(1).forEach(r => {
+      const email = (r[6] || '').toLowerCase().trim();
+      const currentStatus = r[11] || '';
+      let newStatus = currentStatus;
+      let newInteraction = r[12] || '';
+
+      if (currentStatus === 'Piszkozat bekészítve' || currentStatus === 'Új Lead - Deep Research') {
+        if (bouncesFound.has(email)) {
+          newStatus = 'Visszadobva / Hibás email';
+        } else {
+          newStatus = 'Kiküldve';
+          newInteraction = todayStr;
+        }
+      }
+      contactsStatuses.push([newStatus]);
+      contactsLastInteractions.push([newInteraction]);
+    });
+
+    try {
+      runGwsUpdate(SPREADSHEET_ID_CONTACTS, `CONTACTS!L2:L${1 + contactsStatuses.length}`, contactsStatuses);
+      runGwsUpdate(SPREADSHEET_ID_CONTACTS, `CONTACTS!M2:M${1 + contactsLastInteractions.length}`, contactsLastInteractions);
+      console.log('  ✓ CONTACTS fül (Státusz és Utolsó Interakció) frissítve.');
+    } catch (err) {
+      console.error('  ❌ Hiba a CONTACTS fül frissítésekor:', err.message);
     }
   }
 
   console.log('\n========================================================================');
-  console.log('🎉 POSTALÁDA ÉS SPAM SZINKRONIZÁCIÓ SIKERESEN BEFEJEZŐDÖTT.');
+  console.log('🎉 POSTALÁDA ÉS SPAM SZINKRONIZÁCIÓ SIKERESEN BEFEJEZŐDÖTT!');
+  console.log(`   - Sikeresen Kiküldve: ${sentCount} db lead`);
+  console.log(`   - Visszadobva / Hibás email: ${bouncesFound.size} db lead`);
   console.log('========================================================================');
 }
 
-main();
+main().catch(err => {
+  console.error('❌ Végzetes hiba a szinkronizáció során:', err);
+  process.exit(1);
+});
