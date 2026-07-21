@@ -71,6 +71,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-21 | Feat: A 57 db új Deep Research B2B lead kiküldése utáni postafiók- és SPAM-szinkronizáció lefutott, a CRM státuszok aktualizálva. | Kész |
 | 2026-07-21 | Feat: Magazin minőségű automatizált PDF portfólió generátor létrehozva és lefuttatva (HU/EN). | Kész |
 | 2026-07-21 | Update: A KINGSTONE Real Estate (Philipp Bach) elutasította a Nagycenk projektet (Magyarország nem célpiac). A CRM státusz 'Elutasítva' értékre és a megjegyzés frissítve. | Kész |
+| 2026-07-21 | Update: CTP Hungary (Tar Péter) aktívan érdeklődik a Győrszentiván és Kamion Park M5 projektek iránt. CRM frissítve, tárgyalási státuszba léptetve. | Kész |
 
 
 
