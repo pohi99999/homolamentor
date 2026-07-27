@@ -18,7 +18,7 @@ function runGws(args) {
 
 function buildRawMimeMessage({ to, subject, body }) {
   const mime = [
-    `From: Homola László <peterpohankapersonal@gmail.com>`,
+    `From: Homola László <office.homlamentor@gmail.com>`,
     `To: ${to}`,
     `Subject: =?utf-8?B?${Buffer.from(subject).toString('base64')}?=`,
     `MIME-Version: 1.0`,
@@ -97,7 +97,7 @@ async function main() {
   let createdCount = 0;
   const rowNumsToUpdate = [];
 
-  const exactSignature = `Üdvözlettel,\nHomola László\nLead Advisor / Projektigazgató\nhomlamentor@gmail.com | +36 70 633 270`;
+  const exactSignature = `Üdvözlettel,\nHomola László\nLead Advisor / Projektigazgató\noffice.homlamentor@gmail.com | +36 70 633 270`;
 
   for (const target of targetsToProcess) {
     const rowNum = target._rowNum;

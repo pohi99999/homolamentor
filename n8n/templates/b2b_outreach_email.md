@@ -34,7 +34,7 @@ Melyik nap lenne alkalmas Önnek a hét folyamán egy rövid egyeztetésre?
 **Homola László**  
 Ügyvezető Menedzser & Tulajdonos  
 HOMLAMENTOR KFT  
-homlamentor@gmail.com  
+office.homlamentor@gmail.com  
 
 ---
 
@@ -63,7 +63,7 @@ Best regards,
 **Laszlo Homola**  
 Managing Director & Owner  
 HOMLAMENTOR KFT  
-homlamentor@gmail.com  
+office.homlamentor@gmail.com  
 
 ---
 
@@ -92,4 +92,4 @@ Mit freundlichen Grüßen
 **Laszlo Homola**  
 Geschäftsführer & Inhaber  
 HOMLAMENTOR KFT  
-homlamentor@gmail.com  
+office.homlamentor@gmail.com  

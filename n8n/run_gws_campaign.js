@@ -170,7 +170,7 @@ for (const record of crmRecords) {
              `* 50%-os bérköltség: A rendkívül versenyképes helyi munkaerő alkalmazásával a bérköltségek az európai szint töredékére (akár 50%-ára) csökkenthetők.\n\n` +
              `Szeretnénk felajánlani egy rövid, 15 perces online konzultációt, ahol bemutatjuk a jelenleg elérhető konkrét afrikai projektlehetőségeket és megbízásokat a(z) ${category || 'ipari'} területén.\n\n` +
              `Melyik nap lenne alkalmas Önnek a hét folyamán egy rövid egyeztetésre?\n\n` +
-             `Üdvözlettel,\n\nHomola László\nÜgyvezető Menedzser & Tulajdonos\nHOMLAMENTOR KFT\nhomlamentor@gmail.com`;
+             `Üdvözlettel,\n\nHomola László\nÜgyvezető Menedzser & Tulajdonos\nHOMLAMENTOR KFT\noffice.homlamentor@gmail.com`;
     } else if (pitchType === 'investment') {
       subject = `Zárt off-market prémium ingatlanportfólió ajánlat – HOMLAMENTOR KFT`;
       body = `Tisztelt ${name}!\n\n` +
@@ -179,7 +179,7 @@ for (const record of crmRecords) {
              `* Balatongyörök Golf Course Projekt: 80 ha, 18-lyukú golfpálya engedélyezett hotellel, 28.000.000 EUR (100% Share Deal).\n` +
              `* Szentendre Pap-sziget Termál Resort wellness létesítmény.\n\n` +
              `Kérésre NDA ellenében részletes teasert küldünk.\n\n` +
-             `Üdvözlettel,\n\nHomola László\nÜgyvezető Menedzser & Tulajdonos\nHOMLAMENTOR KFT\nhomlamentor@gmail.com`;
+             `Üdvözlettel,\n\nHomola László\nÜgyvezető Menedzser & Tulajdonos\nHOMLAMENTOR KFT\noffice.homlamentor@gmail.com`;
     } else {
       subject = `Moduláris konténeres mobilház gyártási és finanszírozási partnerség – HOMLAMENTOR KFT`;
       body = `Tisztelt ${name}!\n\n` +
@@ -187,7 +187,7 @@ for (const record of crmRecords) {
              `* Elefántcsontpart: 15 000 darabos becsült piaci igény.\n` +
              `* Zambia (Lusaka központtal): Komplett konténerfalvak építése kiszolgáló konténerboltokkal, kórházakkal.\n\n` +
              `Keressük az együttműködési lehetőségeket a gyártásban vagy a mintaházak finanszírozásában.\n\n` +
-             `Üdvözlettel,\n\nHomola László\nÜgyvezető Menedzser & Tulajdonos\nHOMLAMENTOR KFT\nhomlamentor@gmail.com`;
+             `Üdvözlettel,\n\nHomola László\nÜgyvezető Menedzser & Tulajdonos\nHOMLAMENTOR KFT\noffice.homlamentor@gmail.com`;
     }
   } else if (lang === 'de') {
     if (pitchType === 'industrial') {
@@ -202,7 +202,7 @@ for (const record of crmRecords) {
              `* 50% geringere Lohnkosten: Durch den Einsatz äußerst wettbewerbsfähiger lokaler Arbeitskräfte können Ihre Personalkosten im Vergleich zum europäischen Niveau um bis zu 50% gesenkt werden.\n\n` +
              `Wir möchten Sie zu einer kurzen, 15-minütigen Online-Konsultation einladen, um Ihnen konkrete Projektmöglichkeiten und Ausschreibungen vorzustellen, die derzeit in Westafrika im Bereich ${category || 'Industrie'} verfügbar sind.\n\n` +
              `Hätten Sie diese Woche Zeit für ein kurzes Gespräch?\n\n` +
-             `Mit freundlichen Grüßen\n\nLaszlo Homola\nGeschäftsführer & Inhaber\nHOMLAMENTOR KFT\nhomlamentor@gmail.com`;
+             `Mit freundlichen Grüßen\n\nLaszlo Homola\nGeschäftsführer & Inhaber\nHOMLAMENTOR KFT\noffice.homlamentor@gmail.com`;
     } else if (pitchType === 'investment') {
       subject = `Exklusives Angebot: Off-Market Premium CEE Immobilienportfolio – HOMLAMENTOR KFT`;
       body = `Sehr geehrte(r) Frau/Herr ${name},\n\n` +
@@ -211,7 +211,7 @@ for (const record of crmRecords) {
              `* Balatongyörök Golf Course Projekt: 80 ha, genehmigter 18-Loch-Golfplatz mit Hotel, 28.000.000 EUR (100% Share Deal).\n` +
              `* Szentendre Pap-Sziget Thermalkurort: Premium-Thermalwellness-Anlage.\n\n` +
              `Gegen Unterzeichnung einer Vertraulichkeitsvereinbarung (NDA) senden wir Ihnen gerne ein detailliertes Investment-Teaser zu.\n\n` +
-             `Mit freundlichen Grüßen\n\nLaszlo Homola\nGeschäftsführer & Inhaber\nHOMLAMENTOR KFT\nhomlamentor@gmail.com`;
+             `Mit freundlichen Grüßen\n\nLaszlo Homola\nGeschäftsführer & Inhaber\nHOMLAMENTOR KFT\noffice.homlamentor@gmail.com`;
     } else {
       subject = `Partnerschaft für modulare Container-Mobilhäuser – HOMLAMENTOR KFT`;
       body = `Sehr geehrte(r) Frau/Herr ${name},\n\n` +
@@ -219,7 +219,7 @@ for (const record of crmRecords) {
              `* Elfenbeinküste: Geschätzter Marktbedarf von 15.000 Einheiten.\n` +
              `* Sambia (Zentrum Lusaka): Bau kompletter Containerdörfer mit Kliniken, Schulen und Geschäften.\n\n` +
              `Wir bieten etablierte Vertriebskanäle, Montage-Hubs und Grundstücke und suchen nach einer Kooperation in der Produktion oder bei der Finanzierung von Musterhäusern.\n\n` +
-             `Mit freundlichen Grüßen\n\nLaszlo Homola\nGeschäftsführer & Inhaber\nHOMLAMENTOR KFT\nhomlamentor@gmail.com`;
+             `Mit freundlichen Grüßen\n\nLaszlo Homola\nGeschäftsführer & Inhaber\nHOMLAMENTOR KFT\noffice.homlamentor@gmail.com`;
     }
   } else {
     // Angol verzió
@@ -235,7 +235,7 @@ for (const record of crmRecords) {
              `* 50% Lower Labor Costs: By employing highly competitive local talent, your labor expenses can be reduced by up to 50% compared to European baselines.\n\n` +
              `We would like to invite you to a brief, 15-minute online consultation to present concrete project opportunities and tenders currently available in West Africa within the ${category || 'industrial'} field.\n\n` +
              `Would you have availability for a brief call sometime this week?\n\n` +
-             `Best regards,\n\nLaszlo Homola\nManaging Director & Owner\nHOMLAMENTOR KFT\nhomlamentor@gmail.com`;
+             `Best regards,\n\nLaszlo Homola\nManaging Director & Owner\nHOMLAMENTOR KFT\noffice.homlamentor@gmail.com`;
     } else if (pitchType === 'investment') {
       subject = `Exclusive Off-Market CEE Property Portfolio – HOMLAMENTOR KFT`;
       body = `Dear ${name},\n\n` +
@@ -244,7 +244,7 @@ for (const record of crmRecords) {
              `* Balatongyörök Golf Course & Resort: 80 ha, approved hotel and 18-hole golf course, €28M.\n` +
              `* Keszthely SPV Vt-8 residential land.\n\n` +
              `Upon signing an NDA, we can provide the full investment teasers.\n\n` +
-             `Best regards,\n\nLaszlo Homola\nManaging Director & Owner\nHOMLAMENTOR KFT\nhomlamentor@gmail.com`;
+             `Best regards,\n\nLaszlo Homola\nManaging Director & Owner\nHOMLAMENTOR KFT\noffice.homlamentor@gmail.com`;
     } else {
       subject = `Modular Container Mobile Houses Manufacturing & Financing Partnership – HOMLAMENTOR KFT`;
       body = `Dear ${name},\n\n` +
@@ -252,7 +252,7 @@ for (const record of crmRecords) {
              `* Ivory Coast: Targeted distribution of 15,000 units.\n` +
              `* Zambia (Lusaka hub): Development of modular villages (container clinics, schools, offices).\n\n` +
              `We provide distribution channels, assembly hubs, and land. We are looking for manufacturing syndications or initial financing for demo houses.\n\n` +
-             `Best regards,\n\nLaszlo Homola\nManaging Director & Owner\nHOMLAMENTOR KFT\nhomlamentor@gmail.com`;
+             `Best regards,\n\nLaszlo Homola\nManaging Director & Owner\nHOMLAMENTOR KFT\noffice.homlamentor@gmail.com`;
     }
   }
 

@@ -71,21 +71,21 @@
         "subject": "=Afrikai piacnyitás és megbízások felkutatása a(z) {{ $json[\"Ceg\"] || $json[\"Cégnév\"] }} részére – HOMLAMENTOR KFT",
         "html": "={{ $json[\"htmlBody\"] }}",
         "options": {
-          "sender": "peterpohankapersonal@gmail.com"
+          "sender": "office.homlamentor@gmail.com"
         }
       },
-      "id": "gmail-create-draft-id",
-      "name": "Gmail - Create Draft",
+      "id": "e4f5a6b7-8c9d-0e1f-2a3b-4c5d6e7f8a9b",
+      "name": "Gmail Drafts",
       "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2,
+      "typeVersion": 2.1,
       "position": [
-        660,
-        320
+        680,
+        240
       ],
       "credentials": {
         "gmailOAuth2": {
-          "id": "gmail-oauth2-credential-id",
-          "name": "Gmail Account (peterpohankapersonal@gmail.com)"
+          "id": "2",
+          "name": "Gmail Account (office.homlamentor@gmail.com)"
         }
       }
     }

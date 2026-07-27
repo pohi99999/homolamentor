@@ -163,7 +163,7 @@ async function main() {
           node.credentials = {
             "gmailOAuth2": {
               "id": gmailCredId,
-              "name": "Gmail Account (peterpohankapersonal@gmail.com)"
+              "name": "Gmail Account (office.homlamentor@gmail.com)"
             }
           };
         }

@@ -3,7 +3,7 @@
 **Kiadás dátuma:** 2026-07-20  
 **Kiadó:** HOMLAMENTOR KFT. (Abidjan & Budapest)  
 **Kapcsolattartó:** Homola László (CEO & Founder)  
-**E-mail:** homlamentor@gmail.com | **Telefon:** +36 70 633 270  
+**E-mail:** office.homlamentor@gmail.com | **Telefon:** +36 70 633 270  
 **Weboldal:** [https://homolamentor.vercel.app](https://homolamentor.vercel.app)  
 
 ---
@@ -109,7 +109,7 @@ A HOMLAMENTOR KFT. nyugat-afrikai operatív központja (Abidjan) intézményi be
 Amennyiben felkeltette érdeklődését portfóliónk bármely eleme, vagy részletes **Investment Memorandum (Teaser)** és pénzügyi modell igénylése esetén kérjük, lépjen kapcsolatba velünk:
 
 - **Ügyvezető Menedzser:** Homola László (CEO & Founder)
-- **E-mail:** [homlamentor@gmail.com](mailto:homlamentor@gmail.com)
+- **E-mail:** [office.homlamentor@gmail.com](mailto:office.homlamentor@gmail.com)
 - **Telefon / WhatsApp:** +36 70 633 270
 - **Hivatalos Weboldal:** [https://homolamentor.vercel.app](https://homolamentor.vercel.app)
 - **Zárt VIP Ingatlan Portál:** [https://homolamentor.vercel.app/ingatlan-portal](https://homolamentor.vercel.app/ingatlan-portal) *(VIP Kulcs: `homola-vip-2026`)*

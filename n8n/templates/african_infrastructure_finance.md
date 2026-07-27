@@ -38,7 +38,7 @@ Kérjük, jelezze, ha nyitott egy rövid egyeztetésre a következő hetek folya
 **Homola László**  
 Ügyvezető Menedzser & Tulajdonos  
 HOMLAMENTOR KFT  
-homlamentor@gmail.com  
+office.homlamentor@gmail.com  
 
 ---
 
@@ -70,4 +70,4 @@ Best regards,
 **Laszlo Homola**  
 Managing Director & Owner  
 HOMLAMENTOR KFT  
-homlamentor@gmail.com  
+office.homlamentor@gmail.com  

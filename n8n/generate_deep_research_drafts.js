@@ -20,7 +20,7 @@ function runGwsWrite(command, paramsObj, bodyObj) {
 
 function buildRawMimeMessage({ to, subject, body }) {
   const mime = [
-    `From: Homola László <peterpohankapersonal@gmail.com>`,
+    `From: Homola László <office.homlamentor@gmail.com>`,
     `To: ${to}`,
     `Subject: =?utf-8?B?${Buffer.from(subject).toString('base64')}?=`,
     `MIME-Version: 1.0`,
@@ -49,8 +49,8 @@ function getEmailTemplate({ name, company, project, countryFocus }) {
   let subject = '';
   let body = '';
 
-  const signatureDE = `Mit freundlichen Grüßen,\nLászló Homola\nLead Advisor / Project Director\nhomlamentor@gmail.com | +36 70 633 270`;
-  const signatureEN = `Best regards / Mit freundlichen Grüßen,\nLászló Homola\nLead Advisor / Project Director\nhomlamentor@gmail.com | +36 70 633 270`;
+  const signatureDE = `Mit freundlichen Grüßen,\nLászló Homola\nLead Advisor / Project Director\noffice.homlamentor@gmail.com | +36 70 633 270`;
+  const signatureEN = `Best regards / Mit freundlichen Grüßen,\nLászló Homola\nLead Advisor / Project Director\noffice.homlamentor@gmail.com | +36 70 633 270`;
 
   if (isSeniorLiving) {
     if (isGerman) {
@@ -89,7 +89,7 @@ function getEmailTemplate({ name, company, project, countryFocus }) {
         `* Industrieller Gleisanschluss: Eigener Bahnanschluss direkt auf dem Gelände für Schwergut und Logistik.\n` +
         `* Hohes Value-Add Potenzial: Entwicklungsfertig für Big-Box Logistik, Gewerbepark oder Multimodal-Terminal.\n\n` +
         `Gerne übersenden wir Ihnen das vertrauliche Teaser-Dossier und besprechen mögliche Synergien.\n\n` +
-        `Mit freundlichen Grüßen,\nLászló Homola\nLead Advisor / Project Director\nhomlamentor@gmail.com | +36 70 633 270`;
+        `Mit freundlichen Grüßen,\nLászló Homola\nLead Advisor / Project Director\noffice.homlamentor@gmail.com | +36 70 633 270`;
     } else {
       subject = `Off-Market Logistics & Industrial Terminal Győrszentiván (€6M) – HOMLAMENTOR KFT`;
       body = `Dear ${name},\n\n` +

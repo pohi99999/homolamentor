@@ -77,13 +77,13 @@ export default function ContactInfoCards() {
 
                 {/* Email */}
                 <a
-                  href="mailto:homlamentor@gmail.com"
+                  href="mailto:office.homlamentor@gmail.com"
                   className="flex items-center gap-3.5 text-slate-300 hover:text-amber-400 transition-colors group/link py-1"
                 >
                   <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center border border-slate-850 group-hover/link:border-amber-500/30">
                     <Mail className="w-4 h-4 text-slate-400 group-hover/link:text-amber-400" />
                   </div>
-                  <span className="text-sm font-medium tracking-wide">homlamentor@gmail.com</span>
+                  <span className="text-sm font-medium tracking-wide">office.homlamentor@gmail.com</span>
                 </a>
               </div>
             </div>
@@ -115,13 +115,13 @@ export default function ContactInfoCards() {
               <div className="space-y-4">
                 {/* Email */}
                 <a
-                  href="mailto:peterpohankapersonal@gmail.com"
+                  href="mailto:office.homlamentor@gmail.com"
                   className="flex items-center gap-3.5 text-slate-300 hover:text-emerald-400 transition-colors group/link py-1"
                 >
                   <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center border border-slate-850 group-hover/link:border-emerald-500/30">
                     <Mail className="w-4 h-4 text-slate-400 group-hover/link:text-emerald-400" />
                   </div>
-                  <span className="text-sm font-medium tracking-wide">peterpohankapersonal@gmail.com</span>
+                  <span className="text-sm font-medium tracking-wide">office.homlamentor@gmail.com</span>
                 </a>
 
                 {/* Github / Web */}

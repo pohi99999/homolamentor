@@ -7,7 +7,7 @@ export const BRUNELLA_MASTER_CONTEXT = `
   1. Afrikai terjeszkedés támogatása, fókuszban Nyugat-Afrika.
   2. Prémium ipari ingatlanok és diszkrét off-market ajánlatok a Magyarország-Ausztria határtérségében és Magyarország kiemelt régióiban.
 - Kapcsolattartó: Homola László
-- E-mail: homlamentor@gmail.com
+- E-mail: office.homlamentor@gmail.com
 
 ## 2) Afrika Inkubátor Szolgáltatás (3 lépcső)
 - Az Afrika-Inkubátor kiemelt logisztikai és operatív központja Elefántcsontpart - Abidjan székhellyel működik.

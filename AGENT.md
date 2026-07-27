@@ -99,6 +99,9 @@ A HomolaMentor KFT weboldalának fejlesztése és éles auditja sikeresen befeje
 * **Animations**: Framer Motion
 * **API-k & Integrációk**: Resend Email API, n8n Webhook, Vercel AI SDK, GitHub Models API
 
+### Legutóbbi frissítés (2026-07-27)
+- **Refactor**: A központi e-mail cím `office.homlamentor@gmail.com`-ra cserélve a weboldalon (UI, i18n) és az n8n kiajánló sablonokban.
+
 ### Jövőbeli fejlesztési javaslatok:
 1. **Brunella AI Master Context integrálása**: Az AI chat asszisztens tudásbázisának kiterjesztése a teljes HomolaMentor KFT és a SELAB hivatalos prospektus tartalmára, hogy a látogatóknak azonnali, releváns szakmai választ adhasson.
 2. **MCP (Model Context Protocol) Architektúra**: Egy egyedi, helyi MCP szerver kiépítése, amely közvetlenül eléri és szinkronizálja a beérkező lead adatokat a belső ERP/CRM rendszerekkel, vagy automatizált e-mail válaszokat generál és küld ki.

@@ -86,7 +86,7 @@ export async function POST(request: Request) {
       tasks.push(
         resend.emails.send({
           from: 'HOMLAMENTOR <onboarding@resend.dev>', // Resend ingyenes tier korlátozás miatt
-          to: ['peterpohankapersonal@gmail.com', 'homlamentor@gmail.com'],
+          to: ['office.homlamentor@gmail.com'],
           subject: subject,
           html: htmlEmail,
         })
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
       );
     } else {
       console.log('--- RESEND EMAIL MOCK ---');
-      console.log(`To: peterpohankapersonal@gmail.com, homlamentor@gmail.com`);
+      console.log(`To: office.homlamentor@gmail.com`);
       console.log(`Subject: ${subject}`);
       console.log('--- END MOCK ---');
     }

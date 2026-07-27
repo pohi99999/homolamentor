@@ -14,7 +14,7 @@ function runGws(args) {
 }
 
 async function main() {
-  console.log('====== SPAM MAPPA ELLENŐRZÉSE (peterpohankapersonal@gmail.com) ======\n');
+  console.log('====== SPAM MAPPA ELLENŐRZÉSE (office.homlamentor@gmail.com) ======\n');
 
   let listRes;
   try {
