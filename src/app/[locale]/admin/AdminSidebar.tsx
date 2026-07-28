@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/routing";
 import { signOut, useSession } from "next-auth/react";
 import {
   LayoutDashboard,
@@ -71,9 +70,17 @@ export function AdminSidebar() {
       {/* Footer / User Session Info */}
       <div className="pt-4 border-t border-slate-800/60">
         <div className="bg-slate-900/80 border border-slate-800 p-3 rounded-xl mb-3 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center font-bold text-amber-400 text-sm">
-            {session?.user?.name ? session.user.name.charAt(0) : "A"}
-          </div>
+          {session?.user?.image ? (
+            <img
+              src={session.user.image}
+              alt={session.user.name || "Avatar"}
+              className="w-9 h-9 rounded-full border border-amber-500/40"
+            />
+          ) : (
+            <div className="w-9 h-9 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center font-bold text-amber-400 text-sm">
+              {session?.user?.name ? session.user.name.charAt(0) : "A"}
+            </div>
+          )}
           <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-slate-200 truncate">
               {session?.user?.name || "Adminisztrátor"}

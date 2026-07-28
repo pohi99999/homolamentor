@@ -14,8 +14,18 @@ const ALLOWED_EMAILS = [
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Protect /admin routes
-  if (pathname.startsWith('/admin')) {
+  // Bypass i18n for API routes
+  if (pathname.startsWith('/api')) {
+    return NextResponse.next();
+  }
+
+  // Check if pathname matches /admin or /[locale]/admin
+  const isAdminRoute = 
+    pathname === '/admin' || 
+    pathname.startsWith('/admin/') || 
+    /^\/(hu|en|de|fr)\/admin(\/.*)?$/.test(pathname);
+
+  if (isAdminRoute) {
     const token = await getToken({ 
       req, 
       secret: process.env.NEXTAUTH_SECRET || "homolamentor-secret-key-change-in-prod" 
@@ -33,12 +43,14 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(signInUrl);
     }
 
-    return NextResponse.next();
+    // Process locale redirection/routing for admin
+    return intlMiddleware(req);
   }
 
+  // For all other routes, run intlMiddleware
   return intlMiddleware(req);
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)', '/admin/:path*']
+  matcher: ['/((?!_next|_vercel|.*\\..*).*)']
 };
