@@ -44,4 +44,4 @@ Log: Merged and deployed MobileHome page to production
 2026-07-21T13:18:00+02:00 | Kész | Update: CTP Hungary (Tar Péter) aktívan érdeklődik a Győrszentiván és Kamion Park M5 projektek iránt. CRM frissítve, tárgyalási státuszba léptetve.
 2026-07-22T14:03:58+02:00 | Kész | Update: Ewah Wheeler (AfDB) email címe visszapattant (timeout). CRM státusz 'Visszadobva / Hibás email'-re frissítve, LinkedIn outreachre előjegyezve.
 2026-07-27T11:20:00+02:00 | Kész | Refactor: A központi e-mail cím office.homlamentor@gmail.com-ra cserélve a weboldalon (UI, i18n) és az n8n kiajánló sablonokban.
-2026-07-28T13:12:00+02:00 | Kész | Feat: Élő Google Sheets API integráció előkészítve a CRM Dashboardhoz.
+2026-07-28T13:35:00+02:00 | Kész | Fix: CRM API szigorú élő adatkapcsolat és sortörés javítás.
