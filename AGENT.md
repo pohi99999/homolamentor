@@ -73,7 +73,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-21 | Update: A KINGSTONE Real Estate (Philipp Bach) elutasította a Nagycenk projektet (Magyarország nem célpiac). A CRM státusz 'Elutasítva' értékre és a megjegyzés frissítve. | Kész |
 | 2026-07-21 | Update: CTP Hungary (Tar Péter) aktívan érdeklődik a Győrszentiván és Kamion Park M5 projektek iránt. CRM frissítve, tárgyalási státuszba léptetve. | Kész |
 | 2026-07-22 | Update: Ewah Wheeler (AfDB) email címe visszapattant (timeout). CRM státusz 'Visszadobva / Hibás email'-re frissítve, LinkedIn outreachre előjegyezve. | Kész |
-| 2026-07-28 | Fix: 404 hiba javítása az admin útvonalon (i18n middleware konfliktus feloldása). | Kész |
+| 2026-07-28 | Feat: Élő Google Sheets API integráció előkészítve a CRM Dashboardhoz. | Kész |
 
 
 
