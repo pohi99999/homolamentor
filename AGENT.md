@@ -76,6 +76,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-28 | Fix: CRM API szigorú élő adatkapcsolat és sortörés javítás. | Kész |
 | 2026-08-04 | Feat: Dashboard CRM táblázat kibővítve részletes tárgyalás- és reakciókövetéssel. | Kész |
 | 2026-08-04 | Feat: Gmail API integráció kész a személyes fiók hitelesítésén keresztül, az office levelezések élőben láthatóak. | Kész |
+| 2026-08-04 | Feat: Automata Portfólió Piszkozat-Generáló Szkript elkészítve (scripts/create_portfolio_drafts.js) és npm script integrálva. | Kész |
 
 
 

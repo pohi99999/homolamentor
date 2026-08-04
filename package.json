@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "create-drafts": "node scripts/create_portfolio_drafts.js"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.8",

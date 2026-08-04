@@ -47,3 +47,4 @@ Log: Merged and deployed MobileHome page to production
 2026-07-28T13:35:00+02:00 | Kész | Fix: CRM API szigorú élő adatkapcsolat és sortörés javítás.
 2026-08-04T09:54:00+02:00 | Kész | Feat: Dashboard CRM táblázat kibővítve részletes tárgyalás- és reakciókövetéssel.
 2026-08-04T10:02:00+02:00 | Kész | Feat: Gmail API integráció kész a személyes fiók hitelesítésén keresztül, az office levelezések élőben láthatóak.
+2026-08-04T10:10:00+02:00 | Kész | Feat: Automata Portfólió Piszkozat-Generáló Szkript elkészítve (scripts/create_portfolio_drafts.js) és npm script integrálva.
