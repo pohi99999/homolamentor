@@ -7,7 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { google } = require('googleapis');
+const { execSync } = require('child_process');
 
 // 1. Környezeti változók (.env) automatikus betöltése
 const envPath = path.join(__dirname, '..', '.env');
@@ -29,126 +29,68 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-// 2. Google OAuth2 / Auth Kliens Inicializálása
-function getGoogleAuthClients() {
-  const tokenPaths = [
-    process.env.GOOGLE_WORKSPACE_TOKEN_FILE,
-    'F:\\mcp-brunella-core\\ops\\credentials\\google-token.json',
-    'Z:\\001_Workspace\\Könyvelés\\config\\google-token.json',
-    path.join(__dirname, '..', 'credentials', 'google-token.json')
-  ].filter(Boolean);
+// 2. Dinamikus CRM Leadek Kiolvasása a Google Sheets API / gws CLI Segítségével
+function fetchCrmLeadsFromGoogleSheets() {
+  const masterSpreadsheetId = process.env.GOOGLE_SPREADSHEET_ID_MASTER || "1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ";
+  const contactsSpreadsheetId = process.env.GOOGLE_SPREADSHEET_ID_CONTACTS || "1UczhxdLwPnD6IG44gIcLk8GgC98usH4SRjEe2GvYrbM";
 
-  let tokenData = null;
-  for (const tPath of tokenPaths) {
-    if (fs.existsSync(tPath)) {
-      try {
-        tokenData = JSON.parse(fs.readFileSync(tPath, 'utf8'));
-        break;
-      } catch (e) {}
-    }
-  }
-
-  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN || tokenData?.refresh_token;
-
-  const opsCredsDir = 'F:\\mcp-brunella-core\\ops\\credentials';
-  const clientSecretFiles = [];
-  if (fs.existsSync(opsCredsDir)) {
-    const files = fs.readdirSync(opsCredsDir);
-    files.filter(f => f.startsWith('client_secret') && f.endsWith('.json')).forEach(f => {
-      clientSecretFiles.push(path.join(opsCredsDir, f));
-    });
-  }
-
-  const clients = [];
-
-  for (const cPath of clientSecretFiles) {
+  const fetchRowsFromSheet = (spreadsheetId) => {
     try {
-      const parsed = JSON.parse(fs.readFileSync(cPath, 'utf8'));
-      const cData = parsed.installed || parsed.web || parsed;
-      if (cData?.client_id && cData?.client_secret) {
-        const oauth2Client = new google.auth.OAuth2(
-          cData.client_id,
-          cData.client_secret,
-          'https://developers.google.com/oauthplayground'
-        );
-        oauth2Client.setCredentials({
-          refresh_token: refreshToken,
-          access_token: tokenData?.access_token
+      const cmd = `gws sheets spreadsheets values get --params "{\\"spreadsheetId\\":\\"${spreadsheetId}\\",\\"range\\":\\"A1:Z200\\"}"`;
+      const stdout = execSync(cmd, { encoding: 'utf8', shell: 'cmd.exe' });
+      const parsed = JSON.parse(stdout);
+      return parsed.values || [];
+    } catch (e) {
+      return [];
+    }
+  };
+
+  let masterRows = fetchRowsFromSheet(masterSpreadsheetId);
+  if (masterRows.length === 0) {
+    masterRows = fetchRowsFromSheet(contactsSpreadsheetId);
+  }
+
+  if (masterRows.length <= 1) return [];
+
+  const firstRowHeader = masterRows[0].map(h => String(h || '').toLowerCase().trim());
+  const findColIndex = (keywords, defaultIdx) => {
+    const idx = firstRowHeader.findIndex(h => keywords.some(kw => h.includes(kw)));
+    return idx !== -1 ? idx : defaultIdx;
+  };
+
+  const nameIdx = findColIndex(["kapcsolattartó", "név", "partner", "ügyfél", "name"], 5);
+  const emailIdx = findColIndex(["email", "e-mail", "mail"], 7);
+  const statusIdx = findColIndex(["státusz", "status", "állapot"], 13);
+
+  const validLeads = [];
+  const dataRows = masterRows.slice(1);
+
+  for (const row of dataRows) {
+    const name = row[nameIdx] || row[0] || "";
+    const email = row[emailIdx] || "";
+    const status = row[statusIdx] || "";
+
+    if (
+      email &&
+      email.includes("@") &&
+      !email.includes("Nincs email") &&
+      !status.toLowerCase().includes("visszadobva") &&
+      !status.toLowerCase().includes("hibás")
+    ) {
+      if (!validLeads.some(l => l.email.toLowerCase() === email.trim().toLowerCase())) {
+        validLeads.push({
+          name: name.trim() || "Döntéshozó Partner",
+          email: email.trim()
         });
-        clients.push({ client: oauth2Client, name: path.basename(cPath) });
       }
-    } catch (e) {}
+    }
+    if (validLeads.length >= 10) break;
   }
 
-  // Meglévő env kliens
-  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-    const oauth2Client = new google.auth.OAuth2(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET,
-      'https://developers.google.com/oauthplayground'
-    );
-    oauth2Client.setCredentials({
-      refresh_token: refreshToken,
-      access_token: tokenData?.access_token
-    });
-    clients.unshift({ client: oauth2Client, name: 'env-default' });
-  }
-
-  return clients;
+  return validLeads;
 }
 
-// 3. MIME Nyers Üzenet Összeállítása (Base64url UTF-8 és PDF Csatolmánnyal)
-function createMimeMessage({ toName, toEmail, subject, htmlBody, attachmentPath }) {
-  const boundary = `----=_Part_${Date.now()}_${Math.random().toString(36).substring(2)}`;
-  const encodedSubject = `=?UTF-8?B?${Buffer.from(subject, 'utf8').toString('base64')}?=`;
-
-  let mimeParts = [
-    `From: Homola Mentor Kft. <office.homlamentor@gmail.com>`,
-    `To: ${toName} <${toEmail}>`,
-    `Subject: ${encodedSubject}`,
-    `MIME-Version: 1.0`,
-    `Content-Type: multipart/mixed; boundary="${boundary}"`,
-    ``,
-    `--${boundary}`,
-    `Content-Type: text/html; charset="UTF-8"`,
-    `Content-Transfer-Encoding: base64`,
-    ``,
-    Buffer.from(htmlBody, 'utf8').toString('base64'),
-    ``
-  ];
-
-  // Csatolmány beolvasása (ha létezik a PDF)
-  if (attachmentPath && fs.existsSync(attachmentPath)) {
-    const filename = path.basename(attachmentPath);
-    const fileBuffer = fs.readFileSync(attachmentPath);
-    const base64File = fileBuffer.toString('base64');
-
-    mimeParts.push(
-      `--${boundary}`,
-      `Content-Type: application/pdf; name="${filename}"`,
-      `Content-Disposition: attachment; filename="${filename}"`,
-      `Content-Transfer-Encoding: base64`,
-      ``,
-      base64File,
-      ``
-    );
-  } else {
-    console.warn(`[Figyelmeztetés] A csatolmány fájl nem található a megadott útvonalon: ${attachmentPath}`);
-  }
-
-  mimeParts.push(`--${boundary}--`);
-
-  const fullMimeString = mimeParts.join('\r\n');
-
-  // RFC 2822 Nyers üzenet Base64URL kódolása a Gmail API részére
-  return Buffer.from(fullMimeString, 'utf8')
-    .toString('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
-}
-
-// 4. Elegáns B2B HTML E-mail Sablon
+// 3. Elegáns B2B HTML E-mail Sablon (Weboldal hivatkozás nélkül)
 function getPortfolioEmailHtml(leadName) {
   return `<!DOCTYPE html>
 <html lang="hu">
@@ -178,7 +120,7 @@ function getPortfolioEmailHtml(leadName) {
       
       <p>Bízom benne, hogy levelem jó egészségben és sikeres üzleti időszakban találja Önöket.</p>
 
-      <p>Engedje meg,hogy a <strong>Homola Mentor Kft.</strong> nevében közvetlenül figyelmébe ajánljam legújabb, kifejezetten zártkörű partnereinknek összeállított <strong>"Prémium Off-Market Ingatlan és Globális Infrastruktúra Portfólió (2026)"</strong> kiadványunkat.</p>
+      <p>Engedje meg, hogy a <strong>Homola Mentor Kft.</strong> nevében közvetlenül figyelmébe ajánljam legújabb, kifejezetten zártkörű partnereinknek összeállított <strong>"Prémium Off-Market Ingatlan és Globális Infrastruktúra Portfólió (2026)"</strong> kiadványunkat.</p>
 
       <div class="highlight">
         <strong style="color: #0f172a;">A mellékelt digitális portfólió kiemelt M&A és ingatlan befektetési lehetőségei:</strong>
@@ -199,7 +141,7 @@ function getPortfolioEmailHtml(leadName) {
       <div class="title">Ügyvezető Igazgató / Founder</div>
       <div style="margin-top: 6px; font-size: 12px; color: #94a3b8;">
         Homola Mentor Kft. • Hivatalos Központi Iroda & B2B Divízió<br>
-        E-mail: office.homlamentor@gmail.com • Web: <a href="https://homolamentor.hu" style="color: #d97706; text-decoration: none;">homolamentor.hu</a>
+        E-mail: office.homlamentor@gmail.com
       </div>
     </div>
   </div>
@@ -207,81 +149,7 @@ function getPortfolioEmailHtml(leadName) {
 </html>`;
 }
 
-const tls = require('tls');
-
-// IMAP over TLS segítségével piszkozat mentése a Drafts mappába (App Password használatával)
-function appendDraftViaImap({ user, pass, mimeRaw }) {
-  return new Promise((resolve, reject) => {
-    let socket;
-    const timeout = setTimeout(() => {
-      if (socket) socket.destroy();
-      reject(new Error("IMAP csatlakozási időtúllépés (10 mp)."));
-    }, 10000);
-
-    socket = tls.connect(993, 'imap.gmail.com', { rejectUnauthorized: false }, () => {
-      let state = 'CONNECTED';
-      let buffer = '';
-      let folderIndex = 0;
-      const folders = ['Drafts', '[Gmail]/Drafts', '[Gmail]/Piszkozatok'];
-
-      const send = (cmd) => {
-        socket.write(cmd + '\r\n');
-      };
-
-      const tryNextFolder = () => {
-        if (folderIndex >= folders.length) {
-          clearTimeout(timeout);
-          socket.end();
-          return reject(new Error("Egyik Piszkozat mappa (Drafts / [Gmail]/Drafts / [Gmail]/Piszkozatok) sem érhető el IMAP-on."));
-        }
-        const folder = folders[folderIndex++];
-        state = 'APPENDING';
-        const mimeBuffer = Buffer.from(mimeRaw, 'utf8');
-        send(`A2 APPEND "${folder}" (\\Draft) {${mimeBuffer.length}}`);
-      };
-
-      socket.on('data', (chunk) => {
-        buffer += chunk.toString();
-        const lines = buffer.split('\r\n');
-        buffer = lines.pop() || '';
-
-        for (const line of lines) {
-          if (!line) continue;
-          if (state === 'CONNECTED' && line.includes('* OK')) {
-            state = 'LOGGING_IN';
-            send(`A1 LOGIN "${user}" "${pass.replace(/"/g, '')}"`);
-          } else if (state === 'LOGGING_IN' && line.includes('A1 OK')) {
-            tryNextFolder();
-          } else if (state === 'APPENDING' && (line.startsWith('+') || line.includes('+ Ready'))) {
-            state = 'SENDING_DATA';
-            socket.write(mimeRaw + '\r\n');
-          } else if (state === 'SENDING_DATA' && line.includes('A2 OK')) {
-            state = 'LOGGING_OUT';
-            send(`A3 LOGOUT`);
-            clearTimeout(timeout);
-            socket.end();
-            resolve({ id: 'imap_draft_' + Date.now() });
-          } else if (state === 'APPENDING' && line.includes('A2 NO')) {
-            tryNextFolder();
-          } else if (line.includes('A1 NO') || line.includes('A1 BAD') || line.includes('A2 BAD')) {
-            clearTimeout(timeout);
-            socket.end();
-            reject(new Error(`IMAP elutasítva: ${line}`));
-          }
-        }
-      });
-
-      socket.on('error', (err) => {
-        clearTimeout(timeout);
-        reject(err);
-      });
-    });
-  });
-}
-
-const { execSync } = require('child_process');
-
-// gws CLI segítségével piszkozat létrehozása --upload kapcsolóval
+// 4. gws CLI segítségével piszkozat létrehozása --upload kapcsolóval
 function createDraftViaGwsUpload(fullMimeRaw) {
   const tmpEmlPath = path.join(__dirname, `tmp_draft_${Date.now()}.eml`);
   fs.writeFileSync(tmpEmlPath, fullMimeRaw, 'utf8');
@@ -298,23 +166,21 @@ function createDraftViaGwsUpload(fullMimeRaw) {
   }
 }
 
-// 5. Címlista Logika és Fő Futási Folyamat
+// 5. Fő Futási Folyamat
 async function main() {
   console.log("==========================================================");
   console.log("   Homola Mentor Kft. – Gmail Piszkozat-Generáló Indítása");
   console.log("==========================================================");
 
-  // A) Első futtatáshoz használt teszt tömb
-  const leads = [
-    { name: "Pohanka Péter", email: "peterpohankapersonal@gmail.com" }
-  ];
+  // A) CRM leadek dinamikus betöltése Google Sheets-ből
+  let leads = fetchCrmLeadsFromGoogleSheets();
 
-  /*
-  // B) Jövőbeli Dinamikus Logika (Master CRM vagy Google API alapján):
-  // const crmRes = await fetch("http://localhost:3000/api/crm-sync");
-  // const crmData = await crmRes.json();
-  // const leads = crmData.activities.map(a => ({ name: a.name, email: a.email }));
-  */
+  if (leads.length === 0) {
+    console.log("[Info] Nem sikerült leadeket kiolvasni a táblázatból, a teszt lead-et használjuk fallback-ként.");
+    leads = [
+      { name: "Pohanka Péter", email: "peterpohankapersonal@gmail.com" }
+    ];
+  }
 
   // Csatolmány PDF kiválasztása
   let pdfPath = path.join(__dirname, '..', 'public', 'Portfolio_HU_v6.pdf');
@@ -324,6 +190,7 @@ async function main() {
 
   console.log(`[Info] Csatolmány PDF útvonala: ${pdfPath}`);
   console.log(`[Info] Feldolgozandó leadek száma: ${leads.length}`);
+  console.log("----------------------------------------------------------");
 
   let createdCount = 0;
   let failedCount = 0;
@@ -374,7 +241,7 @@ async function main() {
     try {
       const gwsRes = createDraftViaGwsUpload(fullMimeRaw);
       createdCount++;
-      console.log(`[Siker] Piszkozat sikeresen elkészült a Gmailben (gws CLI): ${lead.name} (${lead.email}) -> Draft ID: ${gwsRes.id || gwsRes.message?.id || 'OK'}`);
+      console.log(`[Siker] Piszkozat sikeresen elkészült: ${lead.name} (${lead.email}) -> Draft ID: ${gwsRes.id || gwsRes.message?.id || 'OK'}`);
       continue;
     } catch (gwsErr) {
       console.error(`[gws CLI Hiba]:`, gwsErr.stderr || gwsErr.message);
@@ -393,4 +260,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { main, createMimeMessage, getPortfolioEmailHtml };
+module.exports = { main, getPortfolioEmailHtml, fetchCrmLeadsFromGoogleSheets };
