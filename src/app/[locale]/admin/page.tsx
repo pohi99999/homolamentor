@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo, Fragment } from "react";
 import {
   Users,
   Send,
@@ -8,16 +8,25 @@ import {
   XCircle,
   Clock,
   ArrowUpRight,
-  Plus,
   Filter,
   Search,
   ExternalLink,
   FileSpreadsheet,
   RefreshCw,
   Loader2,
-  AlertTriangle,
   CheckCircle2,
   ShieldAlert,
+  ChevronDown,
+  ChevronUp,
+  Phone,
+  Mail,
+  Calendar,
+  MessageSquare,
+  Tag,
+  X,
+  Building2,
+  Eye,
+  FileText,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -40,11 +49,14 @@ interface CrmActivity {
   id: string;
   name: string;
   company: string;
+  phone: string;
   email: string;
   status: string;
   statusColor: string;
   value: string;
   date: string;
+  topic: string;
+  lastReaction: string;
   type: string;
 }
 
@@ -67,6 +79,11 @@ const defaultChartData: ChartItem[] = [
 
 export default function AdminDashboardPage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [topicFilter, setTopicFilter] = useState("all");
+  const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
+  const [selectedPartner, setSelectedPartner] = useState<CrmActivity | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -117,16 +134,60 @@ export default function AdminDashboardPage() {
     fetchCrmData();
   }, [fetchCrmData]);
 
-  const filteredActivities = activities.filter(
-    (act) =>
-      act.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      act.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      act.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      act.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const toggleRowExpand = (id: string) => {
+    setExpandedRowId((prev) => (prev === id ? null : id));
+  };
+
+  // Dinamikus téma és státusz opciók kinyerése a betöltött adatokból
+  const availableTopics = useMemo(() => {
+    const topics = new Set<string>();
+    activities.forEach((a) => {
+      if (a.topic && a.topic !== "Nincs adat") topics.add(a.topic);
+    });
+    return Array.from(topics);
+  }, [activities]);
+
+  const availableStatuses = useMemo(() => {
+    const statuses = new Set<string>();
+    activities.forEach((a) => {
+      if (a.status && a.status !== "Nincs adat") statuses.add(a.status);
+    });
+    return Array.from(statuses);
+  }, [activities]);
+
+  const filteredActivities = useMemo(() => {
+    return activities.filter((act) => {
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch =
+        searchTerm === "" ||
+        act.name.toLowerCase().includes(searchLower) ||
+        act.company.toLowerCase().includes(searchLower) ||
+        act.email.toLowerCase().includes(searchLower) ||
+        act.phone.toLowerCase().includes(searchLower) ||
+        act.topic.toLowerCase().includes(searchLower) ||
+        act.lastReaction.toLowerCase().includes(searchLower) ||
+        act.status.toLowerCase().includes(searchLower);
+
+      const matchesStatus =
+        statusFilter === "all" ||
+        act.status.toLowerCase().includes(statusFilter.toLowerCase());
+
+      const matchesTopic =
+        topicFilter === "all" ||
+        act.topic.toLowerCase().includes(topicFilter.toLowerCase());
+
+      return matchesSearch && matchesStatus && matchesTopic;
+    });
+  }, [activities, searchTerm, statusFilter, topicFilter]);
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setStatusFilter("all");
+    setTopicFilter("all");
+  };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto pb-12">
       {/* Page Title Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -182,7 +243,7 @@ export default function AdminDashboardPage() {
               {error}
             </p>
             <p className="text-[11px] text-slate-400 mt-2">
-              Ellenőrizd a Vercel környezeti változóit: <code className="text-amber-300">GOOGLE_SERVICE_ACCOUNT_EMAIL</code> és <code className="text-amber-300">GOOGLE_PRIVATE_KEY</code> (ne felejtsd el megosztani a Google Sheet-et a Service Account e-mail címmel).
+              Ellenőrizd a Vercel környezeti változóit: <code className="text-amber-300">GOOGLE_SERVICE_ACCOUNT_EMAIL</code> és <code className="text-amber-300">GOOGLE_PRIVATE_KEY</code>.
             </p>
           </div>
         </div>
@@ -292,7 +353,7 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* 2. Grafikon Szekció (Recharts) */}
+      {/* 2. Grafikon Szekció */}
       <div className="bg-[#0F1420]/80 border border-slate-800/80 p-6 rounded-2xl backdrop-blur-xl shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
@@ -316,7 +377,7 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <div className="h-72 w-full">
+        <div className="h-64 w-full">
           {loading ? (
             <div className="w-full h-full flex items-center justify-center bg-slate-900/40 rounded-xl">
               <Loader2 className="w-8 h-8 text-amber-400 animate-spin" />
@@ -369,130 +430,335 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* 3. Utolsó CRM Aktivitások Lista / Táblázat */}
+      {/* 3. Utolsó CRM Aktivitások Lista / Kibővített Részletes Táblázat */}
       <div className="bg-[#0F1420]/80 border border-slate-800/80 rounded-2xl backdrop-blur-xl shadow-xl overflow-hidden">
-        {/* Lista Fejléc & Kereső */}
-        <div className="p-6 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-amber-400" />
-              Legutóbbi CRM Adatsorok
-            </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Valós idejű adatsorok a Master CRM munkalapról
-            </p>
-          </div>
+        {/* Lista Fejléc & Kereső & Szűrők */}
+        <div className="p-6 border-b border-slate-800/80 space-y-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+                <Clock className="w-5 h-5 text-amber-400" />
+                Részletes Tárgyaláskövető & Partner Adattár
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Kattints egy partner sorára az eddigi reakciók és a tárgyalási idővonal kibontásához
+              </p>
+            </div>
 
-          <div className="flex items-center gap-3">
-            <div className="relative">
+            {/* Kereső mező */}
+            <div className="relative w-full lg:w-80">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Keresés név, cég vagy típus alapján..."
+                placeholder="Keresés név, cég, email, tel, téma..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 pr-4 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/50 w-64"
+                className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
               />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
-            <button className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200">
-              <Filter className="w-4 h-4" />
-            </button>
+          </div>
+
+          {/* Szűrők sáv (Státusz és Téma szerinti szűrés) */}
+          <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-800/60 text-xs">
+            <div className="flex items-center gap-1.5 text-slate-400 font-semibold mr-1">
+              <Filter className="w-3.5 h-3.5 text-amber-400" />
+              <span>Szűrők:</span>
+            </div>
+
+            {/* Státusz szűrő dropdown */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-slate-500 text-[11px]">Státusz:</span>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="bg-slate-900 border border-slate-800 text-slate-200 py-1.5 px-3 rounded-lg text-xs focus:outline-none focus:border-amber-500/50"
+              >
+                <option value="all">Összes Státusz</option>
+                <option value="tárgyal">Aktív tárgyalás</option>
+                <option value="kiküld">Kiajánló kiküldve / Outreach</option>
+                <option value="elutasít">Visszadobva / Elutasítva</option>
+                <option value="új">Új megkeresés</option>
+                {availableStatuses.map((st) => (
+                  <option key={st} value={st}>{st}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Téma szűrő dropdown */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-slate-500 text-[11px]">Téma / Projekt:</span>
+              <select
+                value={topicFilter}
+                onChange={(e) => setTopicFilter(e.target.value)}
+                className="bg-slate-900 border border-slate-800 text-slate-200 py-1.5 px-3 rounded-lg text-xs focus:outline-none focus:border-amber-500/50"
+              >
+                <option value="all">Összes Téma</option>
+                <option value="Üllő">Üllő csarnok</option>
+                <option value="Czimber">Czimber projekt</option>
+                <option value="Szolár">Szolár park</option>
+                <option value="Afrika">Afrikai projektek</option>
+                <option value="Mentorálás">B2B Mentorálás</option>
+                {availableTopics.map((top) => (
+                  <option key={top} value={top}>{top}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Aktív szűrők törlése */}
+            {(searchTerm || statusFilter !== "all" || topicFilter !== "all") && (
+              <button
+                onClick={clearFilters}
+                className="ml-auto px-2.5 py-1 rounded-lg bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-[11px] font-semibold border border-rose-500/20 flex items-center gap-1 transition-colors"
+              >
+                <X className="w-3 h-3" />
+                Szűrők Törlése
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Aktiviti Táblázat */}
+        {/* CRM Táblázat */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="bg-slate-900/60 border-b border-slate-800/80 text-slate-400 uppercase tracking-wider font-semibold">
-                <th className="py-3.5 px-6">Ügyfél / Cég</th>
-                <th className="py-3.5 px-6">Szolgáltatás</th>
-                <th className="py-3.5 px-6">Státusz</th>
-                <th className="py-3.5 px-6">Projekt Érték</th>
-                <th className="py-3.5 px-6">Utolsó Frissítés</th>
-                <th className="py-3.5 px-6 text-right">Műveletek</th>
+                <th className="py-3.5 px-4 w-10"></th>
+                <th className="py-3.5 px-4">Megkeresett Neve / Cége</th>
+                <th className="py-3.5 px-4">Elérhetőség (Tel / Email)</th>
+                <th className="py-3.5 px-4">Dátum</th>
+                <th className="py-3.5 px-4">Téma / Projekt</th>
+                <th className="py-3.5 px-4">Státusz</th>
+                <th className="py-3.5 px-4">Utolsó Reakció</th>
+                <th className="py-3.5 px-4 text-right">Részletek</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 text-slate-300">
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
-                    <td className="py-4 px-6">
+                    <td className="py-4 px-4"><div className="h-4 w-4 bg-slate-800 rounded"></div></td>
+                    <td className="py-4 px-4">
                       <div className="h-4 w-32 bg-slate-800 rounded mb-1"></div>
-                      <div className="h-3 w-48 bg-slate-800/60 rounded"></div>
+                      <div className="h-3 w-24 bg-slate-800/60 rounded"></div>
                     </td>
-                    <td className="py-4 px-6"><div className="h-5 w-24 bg-slate-800 rounded"></div></td>
-                    <td className="py-4 px-6"><div className="h-5 w-28 bg-slate-800 rounded-full"></div></td>
-                    <td className="py-4 px-6"><div className="h-4 w-20 bg-slate-800 rounded"></div></td>
-                    <td className="py-4 px-6"><div className="h-4 w-16 bg-slate-800 rounded"></div></td>
-                    <td className="py-4 px-6 text-right"><div className="h-6 w-6 bg-slate-800 rounded ml-auto"></div></td>
+                    <td className="py-4 px-4"><div className="h-4 w-28 bg-slate-800 rounded"></div></td>
+                    <td className="py-4 px-4"><div className="h-4 w-20 bg-slate-800 rounded"></div></td>
+                    <td className="py-4 px-4"><div className="h-5 w-24 bg-slate-800 rounded-lg"></div></td>
+                    <td className="py-4 px-4"><div className="h-5 w-24 bg-slate-800 rounded-full"></div></td>
+                    <td className="py-4 px-4"><div className="h-4 w-36 bg-slate-800 rounded"></div></td>
+                    <td className="py-4 px-4 text-right"><div className="h-6 w-6 bg-slate-800 rounded ml-auto"></div></td>
                   </tr>
                 ))
               ) : filteredActivities.length > 0 ? (
-                filteredActivities.map((act) => (
-                  <tr
-                    key={act.id}
-                    className="hover:bg-slate-800/30 transition-colors duration-150"
-                  >
-                    <td className="py-4 px-6">
-                      <div className="font-bold text-slate-100 text-sm">
-                        {act.name}
-                      </div>
-                      <div className="text-slate-400 text-[11px] mt-0.5">
-                        {act.company} {act.email ? `• ${act.email}` : ""}
-                      </div>
-                    </td>
-                    <td className="py-4 px-6">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                        {act.type}
-                      </span>
-                    </td>
-                    <td className="py-4 px-6">
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
-                          act.statusColor === "emerald"
-                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                            : act.statusColor === "amber"
-                            ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
-                            : act.statusColor === "blue"
-                            ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
-                            : "bg-rose-500/10 text-rose-400 border-rose-500/20"
+                filteredActivities.map((act) => {
+                  const isExpanded = expandedRowId === act.id;
+                  return (
+                    <React.Fragment key={act.id}>
+                      {/* Fő sor */}
+                      <tr
+                        onClick={() => toggleRowExpand(act.id)}
+                        className={`cursor-pointer transition-colors duration-150 ${
+                          isExpanded
+                            ? "bg-slate-800/50 border-l-4 border-l-amber-400"
+                            : "hover:bg-slate-800/30"
                         }`}
                       >
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            act.statusColor === "emerald"
-                              ? "bg-emerald-400"
-                              : act.statusColor === "amber"
-                              ? "bg-amber-400"
-                              : act.statusColor === "blue"
-                              ? "bg-blue-400"
-                              : "bg-rose-400"
-                          }`}
-                        ></span>
-                        {act.status}
-                      </span>
-                    </td>
-                    <td className="py-4 px-6 font-bold text-slate-200">
-                      {act.value}
-                    </td>
-                    <td className="py-4 px-6 text-slate-400">{act.date}</td>
-                    <td className="py-4 px-6 text-right">
-                      <a
-                        href="https://docs.google.com/spreadsheets/d/1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block p-1.5 rounded-lg bg-slate-800/80 hover:bg-amber-500/20 text-slate-400 hover:text-amber-300 transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </td>
-                  </tr>
-                ))
+                        {/* Expand nyíl ikon */}
+                        <td className="py-4 px-4 text-slate-500">
+                          {isExpanded ? (
+                            <ChevronUp className="w-4 h-4 text-amber-400" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4" />
+                          )}
+                        </td>
+
+                        {/* 1. Megkeresett Neve / Cége */}
+                        <td className="py-4 px-4">
+                          <div className="font-bold text-slate-100 text-sm flex items-center gap-2">
+                            {act.name}
+                          </div>
+                          <div className="text-slate-400 text-[11px] mt-0.5 flex items-center gap-1.5">
+                            <Building2 className="w-3 h-3 text-slate-500" />
+                            {act.company}
+                          </div>
+                        </td>
+
+                        {/* 2. Elérhetőség (Tel / Email) */}
+                        <td className="py-4 px-4">
+                          <div className="space-y-1">
+                            {act.phone && act.phone !== "Nincs megadva" && (
+                              <a
+                                href={`tel:${act.phone}`}
+                                onClick={(e) => e.stopPropagation()}
+                                className="flex items-center gap-1.5 text-amber-300/90 hover:text-amber-200 text-[11px] font-mono"
+                              >
+                                <Phone className="w-3 h-3 text-amber-400" />
+                                {act.phone}
+                              </a>
+                            )}
+                            {act.email && act.email !== "Nincs email" && (
+                              <a
+                                href={`mailto:${act.email}`}
+                                onClick={(e) => e.stopPropagation()}
+                                className="flex items-center gap-1.5 text-slate-300 hover:text-white text-[11px] font-mono"
+                              >
+                                <Mail className="w-3 h-3 text-slate-400" />
+                                {act.email}
+                              </a>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* 3. Dátum */}
+                        <td className="py-4 px-4 text-slate-400 font-mono text-[11px]">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3 text-slate-500" />
+                            {act.date}
+                          </div>
+                        </td>
+
+                        {/* 4. Téma / Projekt */}
+                        <td className="py-4 px-4">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-800 text-amber-300 border border-slate-700">
+                            <Tag className="w-3 h-3 text-amber-400" />
+                            {act.topic}
+                          </span>
+                        </td>
+
+                        {/* 5. Státusz */}
+                        <td className="py-4 px-4">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
+                              act.statusColor === "emerald"
+                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                : act.statusColor === "amber"
+                                ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
+                                : act.statusColor === "blue"
+                                ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                                : "bg-rose-500/10 text-rose-400 border-rose-500/20"
+                            }`}
+                          >
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full ${
+                                act.statusColor === "emerald"
+                                  ? "bg-emerald-400"
+                                  : act.statusColor === "amber"
+                                  ? "bg-amber-400"
+                                  : act.statusColor === "blue"
+                                  ? "bg-blue-400"
+                                  : "bg-rose-400"
+                              }`}
+                            ></span>
+                            {act.status}
+                          </span>
+                        </td>
+
+                        {/* 6. Utolsó Reakció */}
+                        <td className="py-4 px-4 max-w-xs">
+                          <div className="text-slate-300 truncate text-[11px] flex items-center gap-1.5">
+                            <MessageSquare className="w-3 h-3 text-slate-400 shrink-0" />
+                            <span className="truncate">{act.lastReaction}</span>
+                          </div>
+                        </td>
+
+                        {/* 7. Műveletek / Slide-over Modal indító */}
+                        <td className="py-4 px-4 text-right">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedPartner(act);
+                            }}
+                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 transition-colors inline-flex items-center gap-1 text-[11px] font-semibold px-2.5"
+                            title="Részletes tárgyalási idővonal megnyitása"
+                          >
+                            <Eye className="w-3.5 h-3.5 text-amber-400" />
+                            Részletek
+                          </button>
+                        </td>
+                      </tr>
+
+                      {/* Lenyitható Accordion Sor */}
+                      {isExpanded && (
+                        <tr className="bg-slate-950/60 border-b border-slate-800/80">
+                          <td colSpan={8} className="p-6">
+                            <div className="bg-[#0B0F17] border border-slate-800 rounded-xl p-5 space-y-4">
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                                <div>
+                                  <h3 className="text-sm font-bold text-amber-300 flex items-center gap-2">
+                                    <FileText className="w-4 h-4 text-amber-400" />
+                                    Tárgyalás Részletei: {act.name} ({act.company})
+                                  </h3>
+                                  <p className="text-xs text-slate-400 mt-0.5">
+                                    Érték: <span className="text-slate-200 font-bold">{act.value}</span> • Bejegyzés dátuma: <span className="text-slate-300 font-mono">{act.date}</span>
+                                  </p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    onClick={() => setSelectedPartner(act)}
+                                    className="px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 border border-amber-500/30 text-xs font-semibold flex items-center gap-1.5"
+                                  >
+                                    <Eye className="w-3.5 h-3.5" />
+                                    Teljes Idővonal Modal
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Idővonal-szerű nézet az Accordionban */}
+                              <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+                                {/* Idővonal 1. lépés: Megkeresés */}
+                                <div className="relative">
+                                  <div className="absolute -left-6 top-1 w-3 h-3 rounded-full bg-blue-500 border-2 border-slate-900"></div>
+                                  <div className="text-xs font-bold text-slate-200">
+                                    1. Kapcsolatfelvétel Rögzítve
+                                  </div>
+                                  <div className="text-[11px] text-slate-400 mt-0.5">
+                                    Dátum: <span className="font-mono text-slate-300">{act.date}</span> • Téma: <span className="text-amber-300">{act.topic}</span>
+                                  </div>
+                                </div>
+
+                                {/* Idővonal 2. lépés: Tárgyalás Státusza */}
+                                <div className="relative">
+                                  <div className="absolute -left-6 top-1 w-3 h-3 rounded-full bg-amber-500 border-2 border-slate-900"></div>
+                                  <div className="text-xs font-bold text-slate-200">
+                                    2. Jelenlegi Tárgyalási Státusz
+                                  </div>
+                                  <div className="text-[11px] text-slate-300 mt-0.5">
+                                    <span className="font-semibold">{act.status}</span> (Projekt érték: {act.value})
+                                  </div>
+                                </div>
+
+                                {/* Idővonal 3. lépés: Utolsó Reakció / Visszajelzés */}
+                                <div className="relative">
+                                  <div className="absolute -left-6 top-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-slate-900"></div>
+                                  <div className="text-xs font-bold text-slate-200">
+                                    3. Utolsó Reakció & Jegyzet
+                                  </div>
+                                  <div className="mt-1 p-3 rounded-lg bg-slate-900/80 border border-slate-800 text-xs text-slate-200 leading-relaxed font-sans">
+                                    {act.lastReaction}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-slate-500">
-                    {error ? "Nem sikerült betölteni az adatsorokat." : "Nincs a keresésnek megfelelő CRM aktivitás."}
+                  <td colSpan={8} className="py-12 text-center text-slate-500">
+                    {error
+                      ? "Nem sikerült betölteni az adatsorokat."
+                      : "Nincs a megadott szűrőknek megfelelő partner a rendszerben."}
                   </td>
                 </tr>
               )}
@@ -500,6 +766,148 @@ export default function AdminDashboardPage() {
           </table>
         </div>
       </div>
+
+      {/* Slide-over Modal a Részletes Partner nézethez */}
+      {selectedPartner && (
+        <div className="fixed inset-0 z-50 overflow-hidden flex justify-end bg-slate-950/70 backdrop-blur-sm transition-opacity animate-in fade-in duration-200">
+          <div className="w-full max-w-xl bg-[#0B0F17] border-l border-slate-800 h-full overflow-y-auto shadow-2xl p-6 space-y-6 flex flex-col justify-between">
+            <div>
+              {/* Modal Fejléc */}
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
+                    Partner Részletes Tárgyaláskövetés
+                  </span>
+                  <h2 className="text-xl font-extrabold text-slate-100 mt-0.5">
+                    {selectedPartner.name}
+                  </h2>
+                  <p className="text-xs text-slate-400">{selectedPartner.company}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedPartner(null)}
+                  className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Elérhetőségek Kártya */}
+              <div className="grid grid-cols-2 gap-3 mt-6">
+                <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">Telefon</span>
+                  <a
+                    href={`tel:${selectedPartner.phone}`}
+                    className="text-xs font-mono font-bold text-amber-300 hover:underline flex items-center gap-1.5"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-amber-400" />
+                    {selectedPartner.phone}
+                  </a>
+                </div>
+                <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">E-mail</span>
+                  <a
+                    href={`mailto:${selectedPartner.email}`}
+                    className="text-xs font-mono font-bold text-slate-200 hover:underline flex items-center gap-1.5 truncate"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span className="truncate">{selectedPartner.email}</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Tárgyalás Áttekintés Kártya */}
+              <div className="mt-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-semibold">Tárgyalás Témája:</span>
+                  <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                    {selectedPartner.topic}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-semibold">Tárgyalási Státusz:</span>
+                  <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    {selectedPartner.status}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-semibold">Becsült Projekt Érték:</span>
+                  <span className="text-xs font-bold text-slate-100">{selectedPartner.value}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-semibold">Kapcsolatfelvétel Dátuma:</span>
+                  <span className="text-xs font-mono text-slate-300">{selectedPartner.date}</span>
+                </div>
+              </div>
+
+              {/* Idővonal Szekció */}
+              <div className="mt-6">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-amber-400" />
+                  Esemény- és Reakció Idővonal
+                </h4>
+
+                <div className="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+                  {/* Node 1 */}
+                  <div className="relative">
+                    <div className="absolute -left-6 top-1 w-3 h-3 rounded-full bg-blue-500 border-2 border-slate-900"></div>
+                    <div className="text-xs font-bold text-slate-200">
+                      Első Kapcsolatfelvétel Megtörtént
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">
+                      Rögzítve: <span className="font-mono text-slate-300">{selectedPartner.date}</span>
+                    </div>
+                    <div className="text-xs text-slate-300 mt-1">
+                      Kiküldött megkeresés a(z) <span className="text-amber-300">{selectedPartner.topic}</span> témában.
+                    </div>
+                  </div>
+
+                  {/* Node 2 */}
+                  <div className="relative">
+                    <div className="absolute -left-6 top-1 w-3 h-3 rounded-full bg-amber-500 border-2 border-slate-900"></div>
+                    <div className="text-xs font-bold text-slate-200">
+                      Tárgyalási Státusz Frissítés
+                    </div>
+                    <div className="text-xs text-emerald-400 font-semibold mt-0.5">
+                      Jelenlegi állapot: {selectedPartner.status}
+                    </div>
+                  </div>
+
+                  {/* Node 3 */}
+                  <div className="relative">
+                    <div className="absolute -left-6 top-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-slate-900"></div>
+                    <div className="text-xs font-bold text-slate-200">
+                      Utolsó Reakció & Visszajelzés
+                    </div>
+                    <div className="mt-2 p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-200 leading-relaxed font-sans">
+                      {selectedPartner.lastReaction}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Lábléc Gombok */}
+            <div className="border-t border-slate-800 pt-4 flex items-center justify-between gap-3">
+              <a
+                href="https://docs.google.com/spreadsheets/d/1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold flex items-center gap-2 border border-slate-800"
+              >
+                <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+                Google Sheet Szerkesztése
+              </a>
+              <button
+                onClick={() => setSelectedPartner(null)}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20"
+              >
+                Bezárás
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

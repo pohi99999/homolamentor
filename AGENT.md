@@ -74,6 +74,7 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-07-21 | Update: CTP Hungary (Tar Péter) aktívan érdeklődik a Győrszentiván és Kamion Park M5 projektek iránt. CRM frissítve, tárgyalási státuszba léptetve. | Kész |
 | 2026-07-22 | Update: Ewah Wheeler (AfDB) email címe visszapattant (timeout). CRM státusz 'Visszadobva / Hibás email'-re frissítve, LinkedIn outreachre előjegyezve. | Kész |
 | 2026-07-28 | Fix: CRM API szigorú élő adatkapcsolat és sortörés javítás. | Kész |
+| 2026-08-04 | Feat: Dashboard CRM táblázat kibővítve részletes tárgyalás- és reakciókövetéssel. | Kész |
 
 
 

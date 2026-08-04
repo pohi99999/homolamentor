@@ -48,7 +48,7 @@ export async function GET() {
     // 2. Fetch Master CRM data dynamically
     const masterRes = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID_MASTER,
-      range: `'${firstMasterSheetName}'!A1:S500`,
+      range: `'${firstMasterSheetName}'!A1:Z500`,
     });
 
     // 3. Get Contacts CRM metadata & data (if available)
@@ -64,7 +64,7 @@ export async function GET() {
 
       const contactsRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID_CONTACTS,
-        range: `'${firstContactsSheetName}'!A1:P500`,
+        range: `'${firstContactsSheetName}'!A1:Z500`,
       });
       contactsRows = contactsRes.data.values || [];
     } catch (contactsErr) {
@@ -72,10 +72,30 @@ export async function GET() {
     }
 
     const masterRows = masterRes.data.values || [];
+    const firstRowHeader = masterRows.length > 0 ? masterRows[0].map((h) => String(h || "").toLowerCase().trim()) : [];
+    
+    // Helper to find column index by matching header keywords, with default index fallback
+    const findColIndex = (keywords: string[], defaultIdx: number) => {
+      const idx = firstRowHeader.findIndex((h) => keywords.some((kw) => h.includes(kw)));
+      return idx !== -1 ? idx : defaultIdx;
+    };
 
-    const dataRows = masterRows.length > 1 ? masterRows.slice(1) : [];
-    const contactDataRows =
-      contactsRows.length > 1 ? contactsRows.slice(1) : [];
+    const nameIdx = findColIndex(["kapcsolattartó", "név", "partner", "ügyfél", "name"], 0);
+    const companyIdx = findColIndex(["cég", "company", "vállalkozás", "szervezet"], 2);
+    const phoneIdx = findColIndex(["telefon", "phone", "tel", "mobil"], 4);
+    const emailIdx = findColIndex(["email", "e-mail", "mail"], 5);
+    const statusIdx = findColIndex(["státusz", "status", "állapot"], 6);
+    const valueIdx = findColIndex(["érték", "value", "összeg", "keret"], 8);
+    const dateIdx = findColIndex(["dátum", "date", "kapcsolatfelvétel", "időpont"], 9);
+    const topicIdx = findColIndex(["témá", "téma", "érdeklődés", "projekt", "topic", "ingatlan"], 10);
+    const lastReactionIdx = findColIndex(["reakció", "visszajelzés", "jegyzet", "feedback", "reaction", "megjegyzés"], 11);
+
+    const hasHeader = masterRows.length > 0 && firstRowHeader.some((h) => 
+      h.includes("név") || h.includes("cég") || h.includes("státusz") || h.includes("email") || h.includes("dátum")
+    );
+
+    const dataRows = hasHeader && masterRows.length > 1 ? masterRows.slice(1) : masterRows;
+    const contactDataRows = contactsRows.length > 1 ? contactsRows.slice(1) : [];
 
     let totalLeads = dataRows.length + contactDataRows.length;
     let sentOutreach = 0;
@@ -86,22 +106,42 @@ export async function GET() {
       id: string;
       name: string;
       company: string;
+      phone: string;
       email: string;
       status: string;
       statusColor: string;
       value: string;
       date: string;
+      topic: string;
+      lastReaction: string;
       type: string;
     }> = [];
 
     dataRows.forEach((row, idx) => {
-      const name = row[0] || row[1] || `Lead #${idx + 1}`;
-      const company = row[2] || row[3] || "Magánszemély / Partner";
-      const emailStr = row[4] || row[5] || "";
-      const statusRaw = row[6] || row[7] || "Folyamatban";
+      // Helper for safe extraction with fallback
+      const getVal = (colIdx: number, altIdxes: number[], fallback: string) => {
+        if (colIdx >= 0 && row[colIdx] && String(row[colIdx]).trim() !== "") {
+          return String(row[colIdx]).trim();
+        }
+        for (const alt of altIdxes) {
+          if (alt >= 0 && row[alt] && String(row[alt]).trim() !== "") {
+            return String(row[alt]).trim();
+          }
+        }
+        return fallback;
+      };
+
+      const name = getVal(nameIdx, [0, 1], `Partner #${idx + 1}`);
+      const company = getVal(companyIdx, [2, 3], "Magánszemély / Partner");
+      const phone = getVal(phoneIdx, [4], "Nincs megadva");
+      const emailStr = getVal(emailIdx, [5, 4], "Nincs email");
+      const statusRaw = getVal(statusIdx, [6, 7], "Folyamatban");
       const statusStr = String(statusRaw).toLowerCase();
-      const valueStr = row[8] || "N/A";
-      const typeStr = row[10] || "B2B Mentorálás";
+      const valueStr = getVal(valueIdx, [8], "N/A");
+      const dateStr = getVal(dateIdx, [9], "Nincs adat");
+      const topicStr = getVal(topicIdx, [10, 8], "Általános érdeklődés");
+      const lastReactionStr = getVal(lastReactionIdx, [11, 12, 13], "Még nincs regisztrált visszajelzés");
+      const typeStr = topicStr !== "Általános érdeklődés" ? topicStr : "B2B Mentorálás";
 
       if (
         statusStr.includes("tárgyal") ||
@@ -112,47 +152,51 @@ export async function GET() {
       } else if (
         statusStr.includes("kiküld") ||
         statusStr.includes("piszkozat") ||
-        statusStr.includes("sent")
+        statusStr.includes("sent") ||
+        statusStr.includes("outreach")
       ) {
         sentOutreach++;
       } else if (
         statusStr.includes("elutasít") ||
         statusStr.includes("bounce") ||
-        statusStr.includes("hibás")
+        statusStr.includes("hibás") ||
+        statusStr.includes("visszadobva")
       ) {
         rejected++;
       }
 
-      if (idx < 10) {
-        let statusColor = "amber";
-        if (
-          statusStr.includes("tárgyal") ||
-          statusStr.includes("aktív") ||
-          statusStr.includes("érdeklődik")
-        ) {
-          statusColor = "emerald";
-        } else if (
-          statusStr.includes("elutasít") ||
-          statusStr.includes("bounce") ||
-          statusStr.includes("hibás")
-        ) {
-          statusColor = "rose";
-        } else if (statusStr.includes("új") || statusStr.includes("kapcsolat")) {
-          statusColor = "blue";
-        }
-
-        activities.push({
-          id: String(idx + 1),
-          name: String(name),
-          company: String(company),
-          email: String(emailStr),
-          status: String(statusRaw),
-          statusColor,
-          value: String(valueStr),
-          date: row[9] || "Új bejegyzés",
-          type: String(typeStr),
-        });
+      let statusColor = "amber";
+      if (
+        statusStr.includes("tárgyal") ||
+        statusStr.includes("aktív") ||
+        statusStr.includes("érdeklődik")
+      ) {
+        statusColor = "emerald";
+      } else if (
+        statusStr.includes("elutasít") ||
+        statusStr.includes("bounce") ||
+        statusStr.includes("hibás") ||
+        statusStr.includes("visszadobva")
+      ) {
+        statusColor = "rose";
+      } else if (statusStr.includes("új") || statusStr.includes("kapcsolat")) {
+        statusColor = "blue";
       }
+
+      activities.push({
+        id: String(idx + 1),
+        name,
+        company,
+        phone,
+        email: emailStr,
+        status: statusRaw,
+        statusColor,
+        value: valueStr,
+        date: dateStr,
+        topic: topicStr,
+        lastReaction: lastReactionStr,
+        type: typeStr,
+      });
     });
 
     return NextResponse.json({
