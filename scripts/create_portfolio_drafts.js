@@ -1,5 +1,5 @@
 /**
- * Homola Mentor Kft. – Automata Portfólió Piszkozat-Generáló Szkript
+ * Homola Mentor Kft. – Automata Portfólió Piszkozat-Generáló Szkript (Kizárólag Magyar Leadekre Szűrve)
  * 
  * Ez a szkript NEM küld automatikusan levelet, hanem felkészíti és elmenti a B2B 
  * kiajánló e-maileket a Gmail Piszkozatok (Drafts) mappájába a megadott csatolmánnyal.
@@ -29,14 +29,71 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-// 2. Dinamikus CRM Leadek Kiolvasása a Google Sheets API / gws CLI Segítségével
+// 2. Szigorú Magyar Lead Szűrő Logika
+function isHungarianLead(company, region, name, email, status) {
+  if (!email || !email.includes('@')) return false;
+
+  const emailLower = email.toLowerCase().trim();
+  const nameLower = name.toLowerCase().trim();
+  const companyLower = company.toLowerCase().trim();
+  const regionLower = region.toLowerCase().trim();
+  const statusLower = status.toLowerCase().trim();
+
+  // Hibás, visszadobott e-mailek kiszűrése
+  if (statusLower.includes('visszadobva') || statusLower.includes('hibás') || statusLower.includes('invalid')) {
+    return false;
+  }
+
+  // 1. Direct .hu TLD vagy magyar e-mail domain
+  if (emailLower.endsWith('.hu') || emailLower.includes('.hu/')) {
+    return true;
+  }
+
+  // Szigorúan kiszűrjük a nemzetközi/külföldi domain-eket, ha nincs magyar relevancia
+  const foreignTlds = ['.de', '.at', '.pl', '.cz', '.nl', '.uk', '.fr', '.it', '.ro', '.sk', '.es', '.ch', '.se', '.dk', '.be'];
+  if (foreignTlds.some(tld => emailLower.endsWith(tld))) {
+    return false;
+  }
+
+  // Külföldi döntéshozók / nemzetközi fókuszú leadek kizárása
+  const foreignKeywords = [
+    'bohne', 'góźdź', 'polák', 'solomon', 'sekutowicz', 'matei', 'gucher', 'falkensteiner',
+    'mehringer', 'mohrenschildt', 'zillinger', 'vohánka', 'jakúbek', 'reul', 'bone', 'morek',
+    'kiseev', 'moroianu', 'kolesnik', 'willms', 'wolter', 'westerburg', 'rosenberg',
+    'presetschnik', 'kornek', 'winter', 'lenze', 'löcher', 'winkler', 'schafleitner', 'etmenan'
+  ];
+
+  if (foreignKeywords.some(kw => nameLower.includes(kw))) {
+    return false;
+  }
+
+  // 2. Magyar régió vagy hazai cég / döntéshozó név
+  const isHuRegion = regionLower.includes('hungary') || regionLower.includes('magyarország') || regionLower.includes('hu');
+  
+  const huNameIndicators = [
+    'péter', 'gondi', 'palovics', 'kovács', 'nemes', 'nagygyörgy', 'pinto', 'ferenc', 'károly', 
+    'balázs', 'tibor', 'rudolf', 'lászló', 'zoltán', 'istván', 'gábor', 'jános', 'tamas', 'tamás', 
+    'andrás', 'attila', 'lázár', 'sándor', 'györgy', 'zsolt', 'bence', 'máté', 'csapó', 'maráczi',
+    'tóth', 'kiss', 'horváth', 'varga', 'szabó', 'molnár', 'németh', 'farkas', 'balog', 'takács'
+  ];
+
+  const hasHuName = huNameIndicators.some(nameKw => nameLower.includes(nameKw));
+
+  if (isHuRegion || hasHuName) {
+    return true;
+  }
+
+  return false;
+}
+
+// 3. Dinamikus CRM Leadek Kiolvasása Google Sheets-ből (Kizárólag Magyar Döntéshozók)
 function fetchCrmLeadsFromGoogleSheets() {
   const masterSpreadsheetId = process.env.GOOGLE_SPREADSHEET_ID_MASTER || "1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ";
   const contactsSpreadsheetId = process.env.GOOGLE_SPREADSHEET_ID_CONTACTS || "1UczhxdLwPnD6IG44gIcLk8GgC98usH4SRjEe2GvYrbM";
 
-  const fetchRowsFromSheet = (spreadsheetId) => {
+  const fetchRowsFromSheet = (spreadsheetId, range = "A1:Z500") => {
     try {
-      const cmd = `gws sheets spreadsheets values get --params "{\\"spreadsheetId\\":\\"${spreadsheetId}\\",\\"range\\":\\"A1:Z200\\"}"`;
+      const cmd = `gws sheets spreadsheets values get --params "{\\"spreadsheetId\\":\\"${spreadsheetId}\\",\\"range\\":\\"${range}\\"}"`;
       const stdout = execSync(cmd, { encoding: 'utf8', shell: 'cmd.exe' });
       const parsed = JSON.parse(stdout);
       return parsed.values || [];
@@ -45,52 +102,65 @@ function fetchCrmLeadsFromGoogleSheets() {
     }
   };
 
-  let masterRows = fetchRowsFromSheet(masterSpreadsheetId);
-  if (masterRows.length === 0) {
-    masterRows = fetchRowsFromSheet(contactsSpreadsheetId);
-  }
+  const validLeads = [];
 
-  if (masterRows.length <= 1) return [];
+  const processSheetRows = (rows) => {
+    if (rows.length <= 1) return;
+    const firstRowHeader = rows[0].map(h => String(h || '').toLowerCase().trim());
+    
+    // Header mezők dinamikus azonosítása
+    const findColIndex = (keywords, defaultIdx) => {
+      const idx = firstRowHeader.findIndex(h => keywords.some(kw => h.includes(kw)));
+      return idx !== -1 ? idx : defaultIdx;
+    };
 
-  const firstRowHeader = masterRows[0].map(h => String(h || '').toLowerCase().trim());
-  const findColIndex = (keywords, defaultIdx) => {
-    const idx = firstRowHeader.findIndex(h => keywords.some(kw => h.includes(kw)));
-    return idx !== -1 ? idx : defaultIdx;
+    let companyIdx = findColIndex(["cég", "company", "szervezet"], 0);
+    let regionIdx = findColIndex(["régió", "fókusz", "ország", "region"], 2);
+    let nameIdx = findColIndex(["kapcsolattartó", "név", "partner", "ügyfél", "name"], 5);
+    let emailIdx = findColIndex(["email", "e-mail", "mail"], 7);
+    let statusIdx = findColIndex(["státusz", "status", "állapot"], 13);
+
+    const dataRows = rows.slice(1);
+
+    for (const row of dataRows) {
+      let company = String(row[companyIdx] || row[0] || "").trim();
+      let region = String(row[regionIdx] || row[2] || "").trim();
+      let name = String(row[nameIdx] || row[5] || "").trim();
+      let email = String(row[emailIdx] || row[7] || "").trim();
+      let status = String(row[statusIdx] || row[13] || "").trim();
+
+      // Ha az email mező hibás index miatt a névbe/LinkedIn URL-be került volna, tisztítjuk
+      if (name.startsWith("http://") || name.startsWith("https://") || name.startsWith("www.")) {
+        name = company || "Magyar Döntéshozó Partner";
+      }
+
+      if (isHungarianLead(company, region, name, email, status)) {
+        if (!validLeads.some(l => l.email.toLowerCase() === email.toLowerCase())) {
+          validLeads.push({
+            company: company || "Magyar Vállalat",
+            name: name || "Döntéshozó Partner",
+            email: email
+          });
+        }
+      }
+      if (validLeads.length >= 10) break;
+    }
   };
 
-  const nameIdx = findColIndex(["kapcsolattartó", "név", "partner", "ügyfél", "name"], 5);
-  const emailIdx = findColIndex(["email", "e-mail", "mail"], 7);
-  const statusIdx = findColIndex(["státusz", "status", "állapot"], 13);
+  // 1. Master CRM táblázat olvasása
+  const masterRows = fetchRowsFromSheet(masterSpreadsheetId, "A1:Z500");
+  processSheetRows(masterRows);
 
-  const validLeads = [];
-  const dataRows = masterRows.slice(1);
-
-  for (const row of dataRows) {
-    const name = row[nameIdx] || row[0] || "";
-    const email = row[emailIdx] || "";
-    const status = row[statusIdx] || "";
-
-    if (
-      email &&
-      email.includes("@") &&
-      !email.includes("Nincs email") &&
-      !status.toLowerCase().includes("visszadobva") &&
-      !status.toLowerCase().includes("hibás")
-    ) {
-      if (!validLeads.some(l => l.email.toLowerCase() === email.trim().toLowerCase())) {
-        validLeads.push({
-          name: name.trim() || "Döntéshozó Partner",
-          email: email.trim()
-        });
-      }
-    }
-    if (validLeads.length >= 10) break;
+  // 2. Ha 10-nél kevesebb van, beolvassuk a CONTACTS sheet-et is
+  if (validLeads.length < 10) {
+    const contactsRows = fetchRowsFromSheet(contactsSpreadsheetId, "CONTACTS!A1:Z500");
+    processSheetRows(contactsRows);
   }
 
-  return validLeads;
+  return validLeads.slice(0, 10);
 }
 
-// 3. Elegáns B2B HTML E-mail Sablon (Weboldal hivatkozás nélkül)
+// 4. Elegáns B2B HTML E-mail Sablon (Weboldal hivatkozás nélkül, ékezethelyes magyar nyelven)
 function getPortfolioEmailHtml(leadName) {
   return `<!DOCTYPE html>
 <html lang="hu">
@@ -149,7 +219,7 @@ function getPortfolioEmailHtml(leadName) {
 </html>`;
 }
 
-// 4. gws CLI segítségével piszkozat létrehozása --upload kapcsolóval
+// 5. gws CLI segítségével piszkozat létrehozása --upload kapcsolóval
 function createDraftViaGwsUpload(fullMimeRaw) {
   const tmpEmlPath = path.join(__dirname, `tmp_draft_${Date.now()}.eml`);
   fs.writeFileSync(tmpEmlPath, fullMimeRaw, 'utf8');
@@ -166,19 +236,19 @@ function createDraftViaGwsUpload(fullMimeRaw) {
   }
 }
 
-// 5. Fő Futási Folyamat
+// 6. Fő Futási Folyamat
 async function main() {
   console.log("==========================================================");
-  console.log("   Homola Mentor Kft. – Gmail Piszkozat-Generáló Indítása");
+  console.log("   Homola Mentor Kft. – Magyar Gmail Piszkozat-Generáló   ");
   console.log("==========================================================");
 
-  // A) CRM leadek dinamikus betöltése Google Sheets-ből
+  // A) Kizárólag magyar leadek dinamikus betöltése Google Sheets-ből
   let leads = fetchCrmLeadsFromGoogleSheets();
 
   if (leads.length === 0) {
-    console.log("[Info] Nem sikerült leadeket kiolvasni a táblázatból, a teszt lead-et használjuk fallback-ként.");
+    console.log("[Info] Nem sikerült magyar leadeket találni, a teszt lead-et használjuk fallback-ként.");
     leads = [
-      { name: "Pohanka Péter", email: "peterpohankapersonal@gmail.com" }
+      { company: "Homola Mentor Kft.", name: "Pohanka Péter", email: "peterpohankapersonal@gmail.com" }
     ];
   }
 
@@ -189,7 +259,7 @@ async function main() {
   }
 
   console.log(`[Info] Csatolmány PDF útvonala: ${pdfPath}`);
-  console.log(`[Info] Feldolgozandó leadek száma: ${leads.length}`);
+  console.log(`[Info] Szűrt Magyar Leadek Száma: ${leads.length}`);
   console.log("----------------------------------------------------------");
 
   let createdCount = 0;
@@ -197,19 +267,22 @@ async function main() {
 
   for (const lead of leads) {
     if (!lead.email || lead.email.includes("Nincs email")) {
-      console.warn(`[Kihagyva] ${lead.name}: Nincs érvényes e-mail cím.`);
+      console.warn(`[Kihagyva] ${lead.name} (${lead.company}): Nincs érvényes e-mail cím.`);
       continue;
     }
 
+    const cleanLeadName = (lead.name.startsWith("http://") || lead.name.startsWith("https://")) ? lead.company : lead.name;
     const subject = `Homola Mentor Kft. – Prémium Off-Market Ingatlan és Globális Infrastruktúra Portfólió (2026)`;
-    const htmlBody = getPortfolioEmailHtml(lead.name);
+    const htmlBody = getPortfolioEmailHtml(cleanLeadName);
 
     // MIME Nyers szöveg (RFC 822) előállítása
     const boundary = `----=_Part_${Date.now()}_${Math.random().toString(36).substring(2)}`;
     const encodedSubject = `=?UTF-8?B?${Buffer.from(subject, 'utf8').toString('base64')}?=`;
+    const encodedToName = `=?UTF-8?B?${Buffer.from(cleanLeadName, 'utf8').toString('base64')}?=`;
+    
     let mimeParts = [
       `From: Homola Mentor Kft. <office.homlamentor@gmail.com>`,
-      `To: ${lead.name} <${lead.email}>`,
+      `To: ${encodedToName} <${lead.email}>`,
       `Subject: ${encodedSubject}`,
       `MIME-Version: 1.0`,
       `Content-Type: multipart/mixed; boundary="${boundary}"`,
@@ -241,18 +314,18 @@ async function main() {
     try {
       const gwsRes = createDraftViaGwsUpload(fullMimeRaw);
       createdCount++;
-      console.log(`[Siker] Piszkozat sikeresen elkészült: ${lead.name} (${lead.email}) -> Draft ID: ${gwsRes.id || gwsRes.message?.id || 'OK'}`);
+      console.log(`[Siker] Magyar Piszkozat Elkészült: ${cleanLeadName} | Cég: ${lead.company} | E-mail: ${lead.email} -> Draft ID: ${gwsRes.id || gwsRes.message?.id || 'OK'}`);
       continue;
     } catch (gwsErr) {
-      console.error(`[gws CLI Hiba]:`, gwsErr.stderr || gwsErr.message);
+      console.error(`[gws CLI Hiba] (${cleanLeadName}):`, gwsErr.stderr || gwsErr.message);
     }
 
     failedCount++;
-    console.error(`[Hiba] Piszkozat készítése meghiúsult (${lead.name} - ${lead.email}).`);
+    console.error(`[Hiba] Piszkozat készítése meghiúsult (${cleanLeadName} - ${lead.email}).`);
   }
 
   console.log("----------------------------------------------------------");
-  console.log(`[Összegzés] Elkészült piszkozatok: ${createdCount} | Hibás: ${failedCount}`);
+  console.log(`[Összegzés] Elkészült Magyar Piszkozatok: ${createdCount} | Hibás: ${failedCount}`);
   console.log("==========================================================");
 }
 
@@ -260,4 +333,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { main, getPortfolioEmailHtml, fetchCrmLeadsFromGoogleSheets };
+module.exports = { main, getPortfolioEmailHtml, fetchCrmLeadsFromGoogleSheets, isHungarianLead };
