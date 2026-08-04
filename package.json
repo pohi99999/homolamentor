@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "create-drafts": "node scripts/create_portfolio_drafts.js"
+    "create-drafts": "node scripts/create_portfolio_drafts.js",
+    "sync-campaign": "node scripts/sync_campaign_delivery.js"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.8",
