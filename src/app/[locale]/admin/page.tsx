@@ -27,6 +27,7 @@ import {
   Building2,
   Eye,
   FileText,
+  Inbox,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -58,6 +59,16 @@ interface CrmActivity {
   topic: string;
   lastReaction: string;
   type: string;
+}
+
+interface GmailMessage {
+  id: string;
+  subject: string;
+  date: string;
+  snippet: string;
+  direction: string;
+  from?: string;
+  to?: string;
 }
 
 interface ChartItem {
@@ -96,6 +107,57 @@ export default function AdminDashboardPage() {
     rejected: 0,
   });
   const [activities, setActivities] = useState<CrmActivity[]>([]);
+
+  const [gmailMessages, setGmailMessages] = useState<GmailMessage[]>([]);
+  const [loadingGmail, setLoadingGmail] = useState(false);
+  const [gmailError, setGmailError] = useState<string | null>(null);
+
+  const activeEmailForGmail = useMemo(() => {
+    if (selectedPartner?.email && selectedPartner.email !== "Nincs email") {
+      return selectedPartner.email;
+    }
+    if (expandedRowId) {
+      const activePartner = activities.find((a) => a.id === expandedRowId);
+      if (activePartner?.email && activePartner.email !== "Nincs email") {
+        return activePartner.email;
+      }
+    }
+    return null;
+  }, [selectedPartner, expandedRowId, activities]);
+
+  useEffect(() => {
+    if (!activeEmailForGmail) {
+      setGmailMessages([]);
+      return;
+    }
+
+    let isMounted = true;
+    setLoadingGmail(true);
+    setGmailError(null);
+
+    fetch(`/api/gmail-history?email=${encodeURIComponent(activeEmailForGmail)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!isMounted) return;
+        if (data.messages) {
+          setGmailMessages(data.messages);
+        } else {
+          setGmailMessages([]);
+        }
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        console.error("Gmail history fetch error:", err);
+        setGmailError("Nem sikerült betölteni az e-mail előzményeket.");
+      })
+      .finally(() => {
+        if (isMounted) setLoadingGmail(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeEmailForGmail]);
 
   const fetchCrmData = useCallback(async (isManualRefresh = false) => {
     if (isManualRefresh) setSyncing(true);
@@ -746,6 +808,30 @@ export default function AdminDashboardPage() {
                                   </div>
                                 </div>
                               </div>
+
+                              {/* Élő Gmail előzmények az Accordionban */}
+                              {gmailMessages.length > 0 && (
+                                <div className="mt-4 pt-3 border-t border-slate-800">
+                                  <div className="text-[11px] font-bold uppercase tracking-wider text-amber-300 mb-2 flex items-center gap-1.5">
+                                    <Mail className="w-3.5 h-3.5 text-amber-400" />
+                                    Legutóbbi Gmail Üzenetek ({act.email}):
+                                  </div>
+                                  <div className="space-y-2">
+                                    {gmailMessages.slice(0, 3).map((m) => (
+                                      <div key={m.id} className="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 text-xs space-y-1">
+                                        <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                                          <span className={`font-bold ${m.direction === 'Bejövő' ? 'text-emerald-400' : 'text-blue-400'}`}>
+                                            [{m.direction}]
+                                          </span>
+                                          <span>{m.date}</span>
+                                        </div>
+                                        <div className="font-semibold text-slate-200">{m.subject}</div>
+                                        <div className="text-slate-400 text-[11px] truncate">{m.snippet}</div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           </td>
                         </tr>
@@ -883,6 +969,62 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Élő Levelezési Előzmények Blokkszekció (Gmail API) */}
+              <div className="mt-8 border-t border-slate-800/80 pt-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-amber-400" />
+                    Élő Levelezési Előzmények (office.homlamentor@gmail.com)
+                  </h4>
+                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono font-bold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+                    Gmail API
+                  </span>
+                </div>
+
+                {loadingGmail ? (
+                  <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 flex items-center justify-center gap-3 text-xs text-slate-400">
+                    <Loader2 className="w-4 h-4 text-amber-400 animate-spin" />
+                    <span>E-mailek szinkronizálása a Gmail API-n keresztül...</span>
+                  </div>
+                ) : gmailMessages.length > 0 ? (
+                  <div className="space-y-3">
+                    {gmailMessages.map((msg) => (
+                      <div
+                        key={msg.id}
+                        className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2 hover:border-amber-500/30 transition-all duration-200 shadow-md"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                              msg.direction === "Bejövő"
+                                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                : "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                            }`}
+                          >
+                            {msg.direction === "Bejövő" ? (
+                              <Inbox className="w-3 h-3 text-emerald-400" />
+                            ) : (
+                              <Send className="w-3 h-3 text-blue-400" />
+                            )}
+                            {msg.direction}
+                          </span>
+                          <span className="text-[11px] font-mono text-slate-400">{msg.date}</span>
+                        </div>
+                        <div className="text-xs font-bold text-slate-100">{msg.subject}</div>
+                        <div className="text-[11px] text-slate-300 leading-relaxed bg-slate-950/70 p-3 rounded-xl border border-slate-800/80 font-sans">
+                          {msg.snippet}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-5 rounded-2xl bg-slate-900/40 border border-slate-800/80 text-xs text-slate-500 text-center">
+                    {gmailError || "Nincs közvetlen levelezési előzmény ehhez az e-mail címhez az office.homlamentor@gmail.com fiókban."}
+                  </div>
+                )}
               </div>
             </div>
 
