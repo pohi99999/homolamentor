@@ -11,7 +11,7 @@ const ALLOWED_EMAILS = [
   'office.homlamentor@gmail.com'
 ];
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Bypass i18n for API routes
@@ -20,15 +20,15 @@ export async function middleware(req: NextRequest) {
   }
 
   // Check if pathname matches /admin or /[locale]/admin
-  const isAdminRoute = 
-    pathname === '/admin' || 
-    pathname.startsWith('/admin/') || 
+  const isAdminRoute =
+    pathname === '/admin' ||
+    pathname.startsWith('/admin/') ||
     /^\/(hu|en|de|fr)\/admin(\/.*)?$/.test(pathname);
 
   if (isAdminRoute) {
-    const token = await getToken({ 
-      req, 
-      secret: process.env.NEXTAUTH_SECRET || "homolamentor-secret-key-change-in-prod" 
+    const token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET || "homolamentor-secret-key-change-in-prod"
     });
 
     if (!token) {

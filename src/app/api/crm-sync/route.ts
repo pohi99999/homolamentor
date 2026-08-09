@@ -80,15 +80,16 @@ export async function GET() {
       return idx !== -1 ? idx : defaultIdx;
     };
 
-    const nameIdx = findColIndex(["kapcsolattartó", "név", "partner", "ügyfél", "name"], 0);
-    const companyIdx = findColIndex(["cég", "company", "vállalkozás", "szervezet"], 2);
-    const phoneIdx = findColIndex(["telefon", "phone", "tel", "mobil"], 4);
-    const emailIdx = findColIndex(["email", "e-mail", "mail"], 5);
-    const statusIdx = findColIndex(["státusz", "status", "állapot"], 6);
-    const valueIdx = findColIndex(["érték", "value", "összeg", "keret"], 8);
-    const dateIdx = findColIndex(["dátum", "date", "kapcsolatfelvétel", "időpont"], 9);
-    const topicIdx = findColIndex(["témá", "téma", "érdeklődés", "projekt", "topic", "ingatlan"], 10);
-    const lastReactionIdx = findColIndex(["reakció", "visszajelzés", "jegyzet", "feedback", "reaction", "megjegyzés"], 11);
+    const companyIdx = findColIndex(["cégnév", "cég", "company", "vállalkozás", "szervezet"], 0);
+    const nameIdx = findColIndex(["kapcsolattartó_neve", "kapcsolattartó", "kontakt", "partner", "ügyfél", "contact name"], 5);
+    const phoneIdx = findColIndex(["telefon", "phone", "mobil"], 8);
+    const emailIdx = findColIndex(["email", "e-mail", "mail"], 7);
+    const statusIdx = findColIndex(["aktuális_státusz", "státusz", "status", "állapot"], 13);
+    const valueIdx = findColIndex(["ajánlott_ár", "érték", "value", "összeg", "keret"], 17);
+    const dateIdx = findColIndex(["kapcsolatfelvétel_dátuma", "dátum", "date", "időpont"], 11);
+    const topicIdx = findColIndex(["kategória", "témá", "téma", "érdeklődés", "projekt", "topic"], 1);
+    const lastReactionIdx = findColIndex(["megjegyzés", "reakció", "visszajelzés", "jegyzet", "feedback", "reaction"], 18);
+    const websiteIdx = findColIndex(["weboldal", "website", "url"], 10);
 
     const hasHeader = masterRows.length > 0 && firstRowHeader.some((h) => 
       h.includes("név") || h.includes("cég") || h.includes("státusz") || h.includes("email") || h.includes("dátum")
@@ -97,7 +98,7 @@ export async function GET() {
     const dataRows = hasHeader && masterRows.length > 1 ? masterRows.slice(1) : masterRows;
     const contactDataRows = contactsRows.length > 1 ? contactsRows.slice(1) : [];
 
-    let totalLeads = dataRows.length + contactDataRows.length;
+    const totalLeads = dataRows.length + contactDataRows.length;
     let sentOutreach = 0;
     let activeNegotiations = 0;
     let rejected = 0;
@@ -115,6 +116,7 @@ export async function GET() {
       topic: string;
       lastReaction: string;
       type: string;
+      website: string;
     }> = [];
 
     dataRows.forEach((row, idx) => {
@@ -131,16 +133,17 @@ export async function GET() {
         return fallback;
       };
 
-      const name = getVal(nameIdx, [0, 1], `Partner #${idx + 1}`);
-      const company = getVal(companyIdx, [2, 3], "Magánszemély / Partner");
-      const phone = getVal(phoneIdx, [4], "Nincs megadva");
-      const emailStr = getVal(emailIdx, [5, 4], "Nincs email");
-      const statusRaw = getVal(statusIdx, [6, 7], "Folyamatban");
+      const company = getVal(companyIdx, [], `Partner #${idx + 1}`);
+      const name = getVal(nameIdx, [], company);
+      const phone = getVal(phoneIdx, [], "Nincs megadva");
+      const emailStr = getVal(emailIdx, [], "Nincs email");
+      const statusRaw = getVal(statusIdx, [], "Folyamatban");
       const statusStr = String(statusRaw).toLowerCase();
-      const valueStr = getVal(valueIdx, [8], "N/A");
-      const dateStr = getVal(dateIdx, [9], "Nincs adat");
-      const topicStr = getVal(topicIdx, [10, 8], "Általános érdeklődés");
-      const lastReactionStr = getVal(lastReactionIdx, [11, 12, 13], "Még nincs regisztrált visszajelzés");
+      const valueStr = getVal(valueIdx, [4], "N/A");
+      const dateStr = getVal(dateIdx, [15], "Nincs adat");
+      const topicStr = getVal(topicIdx, [2], "Általános érdeklődés");
+      const lastReactionStr = getVal(lastReactionIdx, [16], "Még nincs regisztrált visszajelzés");
+      const website = getVal(websiteIdx, [], "");
       const typeStr = topicStr !== "Általános érdeklődés" ? topicStr : "B2B Mentorálás";
 
       if (
@@ -194,6 +197,7 @@ export async function GET() {
         value: valueStr,
         date: dateStr,
         topic: topicStr,
+        website,
         lastReaction: lastReactionStr,
         type: typeStr,
       });

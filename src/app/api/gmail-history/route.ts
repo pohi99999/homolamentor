@@ -20,7 +20,10 @@ export async function GET(request: Request) {
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
   const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
 
-  let authClient: any = null;
+  let authClient:
+    | InstanceType<typeof google.auth.OAuth2>
+    | InstanceType<typeof google.auth.JWT>
+    | null = null;
 
   try {
     if (clientId && clientSecret && refreshToken) {

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+import { escapeHtml } from '@/lib/escapeHtml';
 
 const execFilePromise = promisify(execFile);
 
@@ -68,40 +69,40 @@ export async function POST(request: Request) {
             <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; width: 150px; font-weight: bold;">Kapcsolattartó:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${finalName}</td>
+                <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(finalName)}</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Cégnév:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${companyName || ''}</td>
+                <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(companyName)}</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Pozíció:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${role || ''}</td>
+                <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(role)}</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">E-mail:</td>
-                <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${email}" style="color: #38bdf8; text-decoration: none;">${email}</a></td>
+                <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${escapeHtml(email)}" style="color: #38bdf8; text-decoration: none;">${escapeHtml(email)}</a></td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Telefon:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${phone || ''}</td>
+                <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(phone)}</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Preferált Méret:</td>
-                <td style="padding: 8px 0; color: #34d399; font-weight: bold;">${preferredSize || ''} m²</td>
+                <td style="padding: 8px 0; color: #34d399; font-weight: bold;">${escapeHtml(preferredSize)} m²</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Tervezett Mennyiség:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${projectedVolume || ''} db</td>
+                <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(projectedVolume)} db</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Finanszírozás:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${fundingStatus || ''}</td>
+                <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(fundingStatus)}</td>
               </tr>
               ${message ? `
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; font-weight: bold; vertical-align: top;">Üzenet:</td>
-                <td style="padding: 8px 0; color: #ffffff; white-space: pre-wrap;">${message}</td>
+                <td style="padding: 8px 0; color: #ffffff; white-space: pre-wrap;">${escapeHtml(message)}</td>
               </tr>
               ` : ''}
             </table>
@@ -127,29 +128,29 @@ export async function POST(request: Request) {
             <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; width: 120px; font-weight: bold;">Név:</td>
-                <td style="padding: 8px 0; color: #ffffff;">${finalName}</td>
+                <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(finalName)}</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">E-mail:</td>
-                <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${email}" style="color: ${isLeadCapture ? '#34d399' : '#38bdf8'}; text-decoration: none;">${email}</a></td>
+                <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${escapeHtml(email)}" style="color: ${isLeadCapture ? '#34d399' : '#38bdf8'}; text-decoration: none;">${escapeHtml(email)}</a></td>
               </tr>
               ${isLeadCapture ? `
                 <tr>
                   <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Cégméret:</td>
-                  <td style="padding: 8px 0; color: #ffffff;">${companySize || ''} fő</td>
+                  <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(companySize)} fő</td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Iparág:</td>
-                  <td style="padding: 8px 0; color: #ffffff;">${industry || ''}</td>
+                  <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(industry)}</td>
                 </tr>
               ` : `
                 <tr>
                   <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Ingatlan típus:</td>
-                  <td style="padding: 8px 0; color: #ffffff;">${propertyType || ''}</td>
+                  <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(propertyType)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Lokáció:</td>
-                  <td style="padding: 8px 0; color: #ffffff;">${location || ''}</td>
+                  <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(location)}</td>
                 </tr>
               `}
             </table>

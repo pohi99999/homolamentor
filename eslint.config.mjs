@@ -13,6 +13,13 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    // Standalone CommonJS automation scripts (run via `node scripts/x.js`), not part of the Next.js app bundle.
+    files: ["scripts/**/*.js", "n8n/**/*.js"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

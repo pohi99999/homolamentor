@@ -77,8 +77,14 @@ Ez a projekt a HomolaMentor KFT hivatalos weboldalának Next.js alapú forrásk�
 | 2026-08-04 | Feat: Dashboard CRM táblázat kibővítve részletes tárgyalás- és reakciókövetéssel. | Kész |
 | 2026-08-04 | Feat: Gmail API integráció kész a személyes fiók hitelesítésén keresztül, az office levelezések élőben láthatóak. | Kész |
 | 2026-08-04 | Feat: Automata Portfólió Piszkozat-Generáló Szkript elkészítve (scripts/create_portfolio_drafts.js) és npm script integrálva. | Kész |
-
-
+| 2026-08-09 | Audit: Teljes körű funkcionális teszt éles Chrome böngészőn (publikus oldalak mind a 4 nyelven, admin bejelentkezés valós Google OAuth-tal, CRM dashboard interakciók, lead-űrlapok). | Kész |
+| 2026-08-09 | Fix: **Kritikus CRM adatleképezési hiba javítva** (`src/app/api/crm-sync/route.ts`) — az oszlop-azonosítás fejléc-kulcsszó ütközés miatt rossz Google Sheets oszlopokat olvasott ki: a kapcsolattartó neve helyett a cégnév duplázódott, a telefon mező helyett a "Share_Deal_Nyitottság" szöveg jelent meg, a téma mező helyett a weboldal URL. Az oszlopindexek most a tényleges Master_Vevőlista fejlécekhez (Cégnév, Kategória, Kapcsolattartó_Neve, Email, Telefon, Weboldal, Első_Kapcsolatfelvétel_Dátuma, Aktuális_Státusz, Ajánlott_Ár_EUR, Megjegyzés stb.) vannak igazítva. Új `website` mező hozzáadva az admin partner-modálhoz. | Kész |
+| 2026-08-09 | Fix: `src/app/api/international-contact/route.ts` — a válasz mindig `gws: 'success'`-t jelentett a Google Sheets CRM rögzítés valós eredményétől függetlenül; most a tényleges GWS CLI hívás eredményét tükrözi. | Kész |
+| 2026-08-09 | Fix: HTML-injection védelem hozzáadva (`src/lib/escapeHtml.ts`) a `/api/contact` és `/api/international-contact` végpontok e-mail sablonjaiban — minden felhasználói beviteli mező escape-elve, mielőtt a kimenő HTML e-mailbe kerülne. | Kész |
+| 2026-08-09 | Fix: Next.js 16 `middleware.ts` → `proxy.ts` migráció (a `middleware` konvenció deprecated, hivatalos Next.js migrációs útmutató alapján), a build-idejű deprecation figyelmeztetés megszűnt, az admin route-védelem viselkedése változatlan (ellenőrizve). | Kész |
+| 2026-08-09 | Fix: `react-hooks/set-state-in-effect`, `prefer-const`, explicit `any` és unused-import lint hibák javítva az admin dashboardban és a CRM/Gmail API route-okban; `eslint.config.mjs` kiegészítve a `scripts/`/`n8n/` CommonJS automatizációs szkriptek helyes kezelésével. `npm run lint` és `npm run build` mostantól hibamentesen fut. | Kész |
+| 2026-08-09 | Incidens: Az admin CRM tesztelés közben (fejléc-oszlopok feltérképezése automatizált böngészőn keresztül) véletlenül két cella felülíródott a Master_Vevőlista Google Sheet-en (A1, A2) — a projekt tulajdonosa azonnal, manuálisan visszaállította a helyes értékeket. Tanulság: élő Google Sheets dokumentumon a jövőben kizárólag a Sheets API-n (nem UI-billentyűzet automatizáción) keresztül szabad írni. | Kész |
+| 2026-08-09 | Talált, de szándékosan nem javított problémák (üzleti döntést igényelnek): (1) a lábléc "Adatkezelés" és "ÁSZF" linkjei jelenleg `#`-re mutatnak, nincs mögöttük valós Adatkezelési Tájékoztató / ÁSZF oldal; (2) a Master_Vevőlista CRM-ben teszt-rekordok (`Test Co 3`, `Test Co 4`, `OcTeste`) szerepelnek éles adatok között. | Nyitott |
 
 
 

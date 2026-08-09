@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo, Fragment } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Users,
   Send,
@@ -59,6 +59,7 @@ interface CrmActivity {
   topic: string;
   lastReaction: string;
   type: string;
+  website: string;
 }
 
 interface GmailMessage {
@@ -127,6 +128,7 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     if (!activeEmailForGmail) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting derived state when the selection clears, not a render-loop
       setGmailMessages([]);
       return;
     }
@@ -193,6 +195,7 @@ export default function AdminDashboardPage() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial fetch-on-mount, no external data source to subscribe to instead
     fetchCrmData();
   }, [fetchCrmData]);
 
@@ -899,6 +902,20 @@ export default function AdminDashboardPage() {
                     <span className="truncate">{selectedPartner.email}</span>
                   </a>
                 </div>
+                {selectedPartner.website && (
+                  <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1 col-span-2">
+                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Weboldal</span>
+                    <a
+                      href={selectedPartner.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-mono font-bold text-slate-200 hover:underline flex items-center gap-1.5 truncate"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span className="truncate">{selectedPartner.website}</span>
+                    </a>
+                  </div>
+                )}
               </div>
 
               {/* Tárgyalás Áttekintés Kártya */}

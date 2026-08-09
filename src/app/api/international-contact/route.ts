@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+import { escapeHtml } from '@/lib/escapeHtml';
 
 const execFilePromise = promisify(execFile);
 
@@ -45,27 +46,27 @@ export async function POST(request: Request) {
           <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
             <tr>
               <td style="padding: 8px 0; color: #94a3b8; width: 160px; font-weight: bold;">Cég / Intézmény:</td>
-              <td style="padding: 8px 0; color: #ffffff; font-weight: bold;">${companyName}</td>
+              <td style="padding: 8px 0; color: #ffffff; font-weight: bold;">${escapeHtml(companyName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Képviselő:</td>
-              <td style="padding: 8px 0; color: #ffffff;">${name}</td>
+              <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(name)}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">E-mail:</td>
-              <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${email}" style="color: #38bdf8; text-decoration: none;">${email}</a></td>
+              <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${escapeHtml(email)}" style="color: #38bdf8; text-decoration: none;">${escapeHtml(email)}</a></td>
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Telefon:</td>
-              <td style="padding: 8px 0; color: #ffffff;">${phone || 'Nincs megadva'}</td>
+              <td style="padding: 8px 0; color: #ffffff;">${escapeHtml(phone) || 'Nincs megadva'}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Célzott Szektor:</td>
-              <td style="padding: 8px 0; color: #fbbf24; font-weight: bold;">${targetedSector}</td>
+              <td style="padding: 8px 0; color: #fbbf24; font-weight: bold;">${escapeHtml(targetedSector)}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #94a3b8; font-weight: bold;">Befektetési Volumen:</td>
-              <td style="padding: 8px 0; color: #34d399; font-weight: bold;">${investmentVolume || 'Nincs megadva'}</td>
+              <td style="padding: 8px 0; color: #34d399; font-weight: bold;">${escapeHtml(investmentVolume) || 'Nincs megadva'}</td>
             </tr>
           </table>
         </div>
@@ -164,13 +165,14 @@ export async function POST(request: Request) {
     // Párhuzamos végrehajtás
     const results = await Promise.all(tasks);
     const errors = results.filter((r) => r && r.error);
+    const gwsResult = results.find((r) => r && r.source === 'GWS');
 
     return NextResponse.json({
       success: true,
       message: 'Investor contact request processed successfully.',
       integrations: {
         resend: resend ? 'active' : 'mocked',
-        gws: 'success'
+        gws: gwsResult && !gwsResult.error ? 'success' : 'failed'
       },
       errors: errors.length > 0 ? errors : undefined
     });
