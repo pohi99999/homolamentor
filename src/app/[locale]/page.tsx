@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import { Link } from '@/i18n/routing';
 
 const ServiceSplit = dynamic(() => import('@/components/ServiceSplit'));
 
@@ -62,9 +63,9 @@ export default function Home() {
             © {new Date().getFullYear()} HOMLAMENTOR KFT. Minden jog fenntartva.
           </div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-slate-300 transition-colors">Adatkezelés</a>
-            <a href="#" className="hover:text-slate-300 transition-colors">ÁSZF</a>
-            <a href="#" className="hover:text-slate-300 transition-colors">Kapcsolat</a>
+            <Link href="/adatkezeles" className="hover:text-slate-300 transition-colors">Adatkezelés</Link>
+            <Link href="/aszf" className="hover:text-slate-300 transition-colors">ÁSZF</Link>
+            <Link href="/kapcsolat" className="hover:text-slate-300 transition-colors">Kapcsolat</Link>
           </div>
         </div>
       </footer>

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import InternationalDivision from '@/components/InternationalDivision';
+import { Link } from '@/i18n/routing';
 
 export async function generateMetadata({
   params,
@@ -56,9 +57,9 @@ export default function InternationalDivisionPage() {
             © {new Date().getFullYear()} HOMLAMENTOR KFT. Minden jog fenntartva.
           </div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-slate-300 transition-colors">Adatkezelés</a>
-            <a href="#" className="hover:text-slate-300 transition-colors">ÁSZF</a>
-            <a href="#" className="hover:text-slate-300 transition-colors">Kapcsolat</a>
+            <Link href="/adatkezeles" className="hover:text-slate-300 transition-colors">Adatkezelés</Link>
+            <Link href="/aszf" className="hover:text-slate-300 transition-colors">ÁSZF</Link>
+            <Link href="/kapcsolat" className="hover:text-slate-300 transition-colors">Kapcsolat</Link>
           </div>
         </div>
       </footer>
