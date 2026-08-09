@@ -22,8 +22,13 @@ Guidelines:
     const systemPrompt = `${baseSystemInstructions}\n\nSTRICT KNOWLEDGE BASE & MASTER CONTEXT:\n${BRUNELLA_MASTER_CONTEXT}`;
 
     // GitHub Models Custom Endpoint beállítása
-    // Az AI_ASSISTANT_API_KEY környezeti változót használjuk, ha nincs, fallback a LEEROOPEDIA_API_KEY-re
-    const apiKey = process.env.AI_ASSISTANT_API_KEY || 'kpsk_9ae1971d_9ae1971d3d2eb9783fd5add6bb975083';
+    const apiKey = process.env.AI_ASSISTANT_API_KEY;
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({ error: 'Az AI asszisztens jelenleg nem elérhető: hiányzó AI_ASSISTANT_API_KEY környezeti változó.' }),
+        { status: 503, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
     const githubModelsOpenAI = createOpenAI({
       baseURL: 'https://models.inference.ai.azure.com',
