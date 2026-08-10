@@ -15,6 +15,8 @@ export interface CrmStats {
   sentOutreach: number;
   activeNegotiations: number;
   rejected: number;
+  /** Se nem megkeresett, se nem tárgyalás, se nem elutasított — nyitott teendő. */
+  pending: number;
 }
 
 export interface CrmActivity {
@@ -82,6 +84,7 @@ const emptyStats: CrmStats = {
   sentOutreach: 0,
   activeNegotiations: 0,
   rejected: 0,
+  pending: 0,
 };
 
 const emptyCounts: CrmCounts = { master: 0, contacts: 0, undated: 0 };

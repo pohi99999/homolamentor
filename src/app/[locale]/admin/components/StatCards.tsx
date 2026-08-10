@@ -67,10 +67,17 @@ export function StatCards() {
   // A táblázat csak a Master munkalap sorait listázza, ezért ha a Contacts
   // munkalapról is számolunk leadeket, azt tételesen kiírjuk — különben a
   // kártya száma és a listázott sorok száma indokolatlanul eltérne.
-  const leadHint =
+  const sourceHint =
     counts.contacts > 0
-      ? `${counts.master} sor a Master CRM Vevőlistából + ${counts.contacts} a Contacts munkalapról (a lista a Master sorokat mutatja)`
-      : "Master CRM Vevőlista adatsorok — kattints a teljes listához";
+      ? `${counts.master} sor a Master CRM Vevőlistából + ${counts.contacts} a Contacts munkalapról`
+      : "Master CRM Vevőlista adatsorok";
+
+  // A négy kategória összege kevesebb, mint az összes lead: a maradék még
+  // egyáltalán nem lett megkeresve. Ez nyitott teendő, ezért kiírjuk.
+  const leadHint =
+    stats.pending > 0
+      ? `${sourceHint} • ebből ${stats.pending} még nincs megkeresve`
+      : `${sourceHint} — kattints a teljes listához`;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

@@ -116,6 +116,10 @@ export async function GET() {
     let sentOutreach = 0;
     let activeNegotiations = 0;
     let rejected = 0;
+    // Se nem megkeresett, se nem tárgyalás, se nem elutasított sorok
+    // (jellemzően "Nem megkeresett" / "Feldolgozás alatt") — enélkül a
+    // statisztikai kártyák összege kevesebb lenne, mint az összes lead.
+    let pending = 0;
 
     const activities: Array<{
       id: string;
@@ -180,6 +184,8 @@ export async function GET() {
         statusStr.includes("visszadobva")
       ) {
         rejected++;
+      } else {
+        pending++;
       }
 
       let statusColor = "amber";
@@ -301,6 +307,7 @@ export async function GET() {
         sentOutreach,
         activeNegotiations,
         rejected,
+        pending,
       },
       chartData,
       activities,
