@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
+import { requireAdmin } from "@/lib/requireAdmin";
 
 export async function GET(request: Request) {
+  // Az office.homlamentor@gmail.com postafiók tartalmát olvassa,
+  // ezért kizárólag bejelentkezett admin fiók kérheti le.
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   const { searchParams } = new URL(request.url);
   const partnerEmail = searchParams.get("email");
 

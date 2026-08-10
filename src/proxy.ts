@@ -3,18 +3,17 @@ import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
+import { isAllowedAdminEmail } from './lib/adminAccess';
 
 const intlMiddleware = createMiddleware(routing);
-
-const ALLOWED_EMAILS = [
-  'peterpohankapersonal@gmail.com',
-  'office.homlamentor@gmail.com'
-];
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Bypass i18n for API routes
+  // Bypass i18n for API routes.
+  // FIGYELEM: ez a bypass a hitelesítést is átengedi, ezért az érzékeny
+  // admin végpontok (/api/crm-sync, /api/gmail-history) saját maguk
+  // ellenőrzik a session-t a `requireAdmin()` helperrel.
   if (pathname.startsWith('/api')) {
     return NextResponse.next();
   }
@@ -37,7 +36,7 @@ export async function proxy(req: NextRequest) {
       return NextResponse.redirect(signInUrl);
     }
 
-    if (token.email && !ALLOWED_EMAILS.includes(token.email.toLowerCase())) {
+    if (token.email && !isAllowedAdminEmail(token.email)) {
       const signInUrl = new URL('/api/auth/signin', req.url);
       signInUrl.searchParams.set('error', 'AccessDenied');
       return NextResponse.redirect(signInUrl);

@@ -33,6 +33,20 @@ export interface CrmActivity {
   website: string;
 }
 
+export interface CrmChartPoint {
+  month: string;
+  leadek: number;
+  megkeresesek: number;
+  konverzio: number;
+  ujLeadek: number;
+}
+
+export interface CrmCounts {
+  master: number;
+  contacts: number;
+  undated: number;
+}
+
 export interface AdminToast {
   id: number;
   tone: "info" | "success" | "error";
@@ -43,6 +57,8 @@ export interface AdminToast {
 interface AdminDataContextValue {
   stats: CrmStats;
   activities: CrmActivity[];
+  chartData: CrmChartPoint[];
+  counts: CrmCounts;
   sheetNames: { master?: string; contacts?: string };
   lastSynced: string;
   lastSyncedAt: string | null;
@@ -68,9 +84,13 @@ const emptyStats: CrmStats = {
   rejected: 0,
 };
 
+const emptyCounts: CrmCounts = { master: 0, contacts: 0, undated: 0 };
+
 export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   const [stats, setStats] = useState<CrmStats>(emptyStats);
   const [activities, setActivities] = useState<CrmActivity[]>([]);
+  const [chartData, setChartData] = useState<CrmChartPoint[]>([]);
+  const [counts, setCounts] = useState<CrmCounts>(emptyCounts);
   const [sheetNames, setSheetNames] = useState<{ master?: string; contacts?: string }>({});
   const [lastSynced, setLastSynced] = useState("");
   const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
@@ -81,6 +101,10 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
 
   const toastId = useRef(0);
   const inFlight = useRef(false);
+  // Van-e már megjelenített adat: ha igen, a további frissítések nem dobják
+  // vissza a felületet skeleton állapotba, csak a spinner jelzi a töltést.
+  const hasDataRef = useRef(false);
+  const lastSyncMsRef = useRef(0);
 
   const dismissToast = useCallback((id: number) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -100,7 +124,7 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       if (inFlight.current) return;
       inFlight.current = true;
 
-      if (manual) setSyncing(true);
+      if (manual || hasDataRef.current) setSyncing(true);
       else setLoading(true);
       setError(null);
 
@@ -113,12 +137,19 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         const data = await res.json();
 
         if (!res.ok || data.error) {
-          const message = data.details || data.error || "Ismeretlen Google API olvasási hiba történt.";
+          const message =
+            res.status === 401 || res.status === 403
+              ? "A munkameneted lejárt. Jelentkezz be újra az adatok eléréséhez."
+              : data.details || data.error || "Ismeretlen Google API olvasási hiba történt.";
           setError(message);
           notify({ tone: "error", title: "Sikertelen szinkronizáció", message });
         } else {
           setStats(data.stats ?? emptyStats);
           setActivities(data.activities || []);
+          setChartData(data.chartData || []);
+          setCounts(data.counts ?? emptyCounts);
+          hasDataRef.current = true;
+          lastSyncMsRef.current = Date.now();
           if (data.sheetNames) setSheetNames(data.sheetNames);
           if (data.lastSyncedAt) {
             setLastSyncedAt(data.lastSyncedAt);
@@ -156,10 +187,32 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     sync(false);
   }, [sync]);
 
+  // Ha a fül visszakerül előtérbe és az adat már elavult, csendben frissítünk.
+  // Így a vezetői műszerfal nem mutat órákkal korábbi állapotot anélkül, hogy
+  // folyamatosan pollozná a Google API-t.
+  useEffect(() => {
+    const STALE_AFTER_MS = 3 * 60 * 1000;
+
+    const refreshIfStale = () => {
+      if (document.visibilityState !== "visible") return;
+      if (Date.now() - lastSyncMsRef.current < STALE_AFTER_MS) return;
+      void sync(false);
+    };
+
+    document.addEventListener("visibilitychange", refreshIfStale);
+    window.addEventListener("focus", refreshIfStale);
+    return () => {
+      document.removeEventListener("visibilitychange", refreshIfStale);
+      window.removeEventListener("focus", refreshIfStale);
+    };
+  }, [sync]);
+
   const value = useMemo<AdminDataContextValue>(
     () => ({
       stats,
       activities,
+      chartData,
+      counts,
       sheetNames,
       lastSynced,
       lastSyncedAt,
@@ -174,6 +227,8 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     [
       stats,
       activities,
+      chartData,
+      counts,
       sheetNames,
       lastSynced,
       lastSyncedAt,

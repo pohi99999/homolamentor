@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
+import { requireAdmin } from "@/lib/requireAdmin";
 
 const SPREADSHEET_ID_MASTER =
   process.env.GOOGLE_SPREADSHEET_ID_MASTER ||
@@ -9,6 +10,11 @@ const SPREADSHEET_ID_CONTACTS =
   "1UczhxdLwPnD6IG44gIcLk8GgC98usH4SRjEe2GvYrbM";
 
 export async function GET() {
+  // A teljes CRM adatbázist (nevek, e-mailek, telefonszámok, árajánlatok)
+  // adja vissza, ezért kizárólag bejelentkezett admin fiók kérheti le.
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   let privateKey = process.env.GOOGLE_PRIVATE_KEY;
 
@@ -98,7 +104,15 @@ export async function GET() {
     const dataRows = hasHeader && masterRows.length > 1 ? masterRows.slice(1) : masterRows;
     const contactDataRows = contactsRows.length > 1 ? contactsRows.slice(1) : [];
 
-    const totalLeads = dataRows.length + contactDataRows.length;
+    // A Contacts táblázat első munkalapja nem feltétlenül partnerlista (pl. a
+    // MASTER_DASHBOARD egy összesítő fül). Csak azokat a sorokat számoljuk
+    // leadnek, amelyekben van tényleges e-mail cím — így a "Összes Lead"
+    // kártya nem duzzad fel dashboard-sorokkal.
+    const contactLeadRows = contactDataRows.filter((row) =>
+      row.some((cell) => typeof cell === "string" && /\S+@\S+\.\S+/.test(cell))
+    );
+
+    const totalLeads = dataRows.length + contactLeadRows.length;
     let sentOutreach = 0;
     let activeNegotiations = 0;
     let rejected = 0;
@@ -203,6 +217,73 @@ export async function GET() {
       });
     });
 
+    // Valós havi trend a rögzített kapcsolatfelvételi dátumokból.
+    // (Korábban a dashboard egy hardcode-olt, kitalált 7 hónapos görbét
+    // rajzolt ki "Google Sheets adatok alapján" felirattal.)
+    const HU_MONTHS = [
+      "jan.", "febr.", "márc.", "ápr.", "máj.", "jún.",
+      "júl.", "aug.", "szept.", "okt.", "nov.", "dec.",
+    ];
+
+    const monthlyBuckets = new Map<
+      string,
+      { leadek: number; megkeresesek: number; konverzio: number }
+    >();
+    let undatedLeads = 0;
+
+    activities.forEach((act) => {
+      const match = /^(\d{4})-(\d{2})/.exec(act.date);
+      if (!match) {
+        undatedLeads++;
+        return;
+      }
+      const key = `${match[1]}-${match[2]}`;
+      const bucket =
+        monthlyBuckets.get(key) || { leadek: 0, megkeresesek: 0, konverzio: 0 };
+
+      bucket.leadek++;
+      const status = act.status.toLowerCase();
+      if (
+        status.includes("kiküld") ||
+        status.includes("piszkozat") ||
+        status.includes("sent") ||
+        status.includes("outreach")
+      ) {
+        bucket.megkeresesek++;
+      }
+      if (
+        status.includes("tárgyal") ||
+        status.includes("aktív") ||
+        status.includes("érdeklődik")
+      ) {
+        bucket.konverzio++;
+      }
+
+      monthlyBuckets.set(key, bucket);
+    });
+
+    // Kumulált görbe: a "Lead Növekedés" a halmozott állományt mutatja.
+    let runningLeads = 0;
+    let runningOutreach = 0;
+    let runningConversion = 0;
+
+    const chartData = Array.from(monthlyBuckets.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, bucket]) => {
+        runningLeads += bucket.leadek;
+        runningOutreach += bucket.megkeresesek;
+        runningConversion += bucket.konverzio;
+
+        const [year, month] = key.split("-");
+        return {
+          month: `${year}. ${HU_MONTHS[Number(month) - 1]}`,
+          leadek: runningLeads,
+          megkeresesek: runningOutreach,
+          konverzio: runningConversion,
+          ujLeadek: bucket.leadek,
+        };
+      });
+
     return NextResponse.json({
       success: true,
       source: "google_sheets_live",
@@ -210,12 +291,18 @@ export async function GET() {
         master: firstMasterSheetName,
         contacts: firstContactsSheetName,
       },
+      counts: {
+        master: dataRows.length,
+        contacts: contactLeadRows.length,
+        undated: undatedLeads,
+      },
       stats: {
         totalLeads,
         sentOutreach,
         activeNegotiations,
         rejected,
       },
+      chartData,
       activities,
       lastSyncedAt: new Date().toISOString(),
     });

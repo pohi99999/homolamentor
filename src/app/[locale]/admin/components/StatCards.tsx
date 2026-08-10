@@ -62,14 +62,22 @@ function StatCard({
 }
 
 export function StatCards() {
-  const { stats, loading } = useAdminData();
+  const { stats, loading, counts } = useAdminData();
+
+  // A táblázat csak a Master munkalap sorait listázza, ezért ha a Contacts
+  // munkalapról is számolunk leadeket, azt tételesen kiírjuk — különben a
+  // kártya száma és a listázott sorok száma indokolatlanul eltérne.
+  const leadHint =
+    counts.contacts > 0
+      ? `${counts.master} sor a Master CRM Vevőlistából + ${counts.contacts} a Contacts munkalapról (a lista a Master sorokat mutatja)`
+      : "Master CRM Vevőlista adatsorok — kattints a teljes listához";
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       <StatCard
         label="Összes Lead"
         value={stats.totalLeads}
-        hint="Master CRM Vevőlista & Contacts adatsorok — kattints a teljes listához"
+        hint={leadHint}
         badge="Élő bejegyzések"
         showArrow
         badgeClass="text-emerald-400 bg-emerald-500/10 border-emerald-500/20"

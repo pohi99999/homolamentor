@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, TrendingUp } from "lucide-react";
+import { Info, Loader2, TrendingUp } from "lucide-react";
 import {
   Area,
   AreaChart,
@@ -12,25 +12,11 @@ import {
 } from "recharts";
 import { useAdminData } from "../AdminDataContext";
 
-interface ChartItem {
-  month: string;
-  leadek: number;
-  megkeresesek: number;
-  konverzio: number;
-}
-
-const defaultChartData: ChartItem[] = [
-  { month: "Jan", leadek: 24, megkeresesek: 18, konverzio: 6 },
-  { month: "Feb", leadek: 35, megkeresesek: 28, konverzio: 10 },
-  { month: "Már", leadek: 48, megkeresesek: 36, konverzio: 14 },
-  { month: "Ápr", leadek: 62, megkeresesek: 45, konverzio: 18 },
-  { month: "Máj", leadek: 85, megkeresesek: 58, konverzio: 22 },
-  { month: "Jún", leadek: 110, megkeresesek: 74, konverzio: 28 },
-  { month: "Júl", leadek: 148, megkeresesek: 92, konverzio: 36 },
-];
-
 export function LeadChart() {
-  const { loading } = useAdminData();
+  const { loading, chartData, counts } = useAdminData();
+
+  // Egyetlen adatpontból nem rajzolható ki értelmes trendvonal.
+  const hasTrend = chartData.length >= 2;
 
   return (
     <div className="bg-[#0F1420]/80 border border-slate-800/80 p-6 rounded-2xl backdrop-blur-xl shadow-xl">
@@ -41,7 +27,7 @@ export function LeadChart() {
             B2B Lead Növekedés és Konverziós Trendek
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            Havi lebontású teljesítmény mutatók a Google Sheets CRM adatok alapján
+            Halmozott állomány a CRM-ben rögzített kapcsolatfelvételi dátumok alapján
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -50,8 +36,12 @@ export function LeadChart() {
             Összes Lead
           </span>
           <span className="inline-flex items-center gap-1 text-xs text-slate-400 ml-3">
+            <span className="w-3 h-3 rounded-full bg-blue-400 inline-block"></span>
+            Megkeresés
+          </span>
+          <span className="inline-flex items-center gap-1 text-xs text-slate-400 ml-3">
             <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
-            Konverzió
+            Tárgyalás
           </span>
         </div>
       </div>
@@ -61,13 +51,17 @@ export function LeadChart() {
           <div className="w-full h-full flex items-center justify-center bg-slate-900/40 rounded-xl">
             <Loader2 className="w-8 h-8 text-amber-400 animate-spin" />
           </div>
-        ) : (
+        ) : hasTrend ? (
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={defaultChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorLeadek" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.4} />
                   <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.0} />
+                </linearGradient>
+                <linearGradient id="colorMegkeresesek" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0} />
                 </linearGradient>
                 <linearGradient id="colorKonverzio" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
@@ -76,7 +70,7 @@ export function LeadChart() {
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" opacity={0.5} />
               <XAxis dataKey="month" stroke="#64748b" fontSize={12} tickLine={false} />
-              <YAxis stroke="#64748b" fontSize={12} tickLine={false} />
+              <YAxis stroke="#64748b" fontSize={12} tickLine={false} allowDecimals={false} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: "#0B0F17",
@@ -88,7 +82,7 @@ export function LeadChart() {
               <Area
                 type="monotone"
                 dataKey="leadek"
-                name="Összes Lead"
+                name="Összes Lead (halmozott)"
                 stroke="#f59e0b"
                 strokeWidth={2.5}
                 fillOpacity={1}
@@ -96,8 +90,17 @@ export function LeadChart() {
               />
               <Area
                 type="monotone"
+                dataKey="megkeresesek"
+                name="Kiküldött Megkeresés"
+                stroke="#3b82f6"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#colorMegkeresesek)"
+              />
+              <Area
+                type="monotone"
                 dataKey="konverzio"
-                name="Konverzió"
+                name="Aktív Tárgyalás"
                 stroke="#10b981"
                 strokeWidth={2.5}
                 fillOpacity={1}
@@ -105,8 +108,25 @@ export function LeadChart() {
               />
             </AreaChart>
           </ResponsiveContainer>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-slate-900/40 rounded-xl text-center px-6">
+            <Info className="w-6 h-6 text-slate-500" />
+            <p className="text-xs text-slate-400 max-w-md">
+              {chartData.length === 1
+                ? "Egyetlen hónapból még nem rajzolható trendvonal — a görbe a második hónap adatainak rögzítése után jelenik meg."
+                : "Nincs értelmezhető kapcsolatfelvételi dátum a CRM-ben, ezért nem rajzolható ki trend."}
+            </p>
+          </div>
         )}
       </div>
+
+      {!loading && counts.undated > 0 && (
+        <p className="text-[11px] text-slate-500 mt-4 flex items-center gap-1.5">
+          <Info className="w-3.5 h-3.5 text-slate-600" />
+          {counts.undated} olyan lead van, amelynél nincs rögzítve kapcsolatfelvételi dátum — ezek nem
+          szerepelnek a grafikonon, de a statisztikai kártyákban igen.
+        </p>
+      )}
     </div>
   );
 }

@@ -38,6 +38,26 @@ export function PartnerDrawer({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
+  // A háttér görgetésének zárolása, amíg a panel nyitva van — különben a
+  // mögötte lévő táblázat elmozdul, és bezárás után elcsúszott nézet marad.
+  // A scrollbar szélességét paddinggal pótoljuk, hogy a layout ne ugorjon.
+  useEffect(() => {
+    const { body } = document;
+    const previousOverflow = body.style.overflow;
+    const previousPaddingRight = body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      body.style.overflow = previousOverflow;
+      body.style.paddingRight = previousPaddingRight;
+    };
+  }, []);
+
   return (
     <div
       className="fixed inset-0 z-50 overflow-hidden flex justify-end bg-slate-950/70 backdrop-blur-sm transition-opacity"
