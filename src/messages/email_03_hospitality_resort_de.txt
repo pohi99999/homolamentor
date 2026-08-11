@@ -2,7 +2,7 @@ Subject: Exklusive Hospitality- & Resort-Investments in Mitteleuropa – Off-Mar
 
 Sehr geehrte(r) {{name}},
 
-im Namen der Homola Mentor Kft. möchte ich Ihnen eine Auswahl exklusiver, off-market verfügbarer Hospitality- und Resort-Investitionsmöglichkeiten in Mitteleuropa vorstellen, die aktuell nur einem eng ausgewählten Kreis institutioneller Partner zugänglich sind.
+im Namen der Homola Mentor Kft. möchte ich {{company}} eine Auswahl exklusiver, off-market verfügbarer Hospitality- und Resort-Investitionsmöglichkeiten in Mitteleuropa vorstellen, die aktuell nur einem eng ausgewählten Kreis institutioneller Partner zugänglich sind.
 
 Aus unserem aktuellen Portfolio dürften folgende Projekte für Sie von besonderem Interesse sein:
 
@@ -13,7 +13,7 @@ Aus unserem aktuellen Portfolio dürften folgende Projekte für Sie von besonder
 
 Im Anhang finden Sie unser vollständiges englischsprachiges Investoren-Portfolio (Master Investor Portfolio Summary) mit allen neun Immobilienprojekten sowie den strategischen Pfeilern unserer westafrikanischen Infrastruktur-Division.
 
-Gerne stehen wir Ihnen für ein kurzes Online-Gespräch in englischer oder deutscher Sprache zur Verfügung, um die für Sie relevanten Projekte im Detail zu besprechen.
+Wir stehen Ihnen gerne für ein kurzes Online-Gespräch in englischer oder deutscher Sprache zur Verfügung, um die Details gemeinsam durchzugehen.
 
 Mit freundlichen Grüßen,
 

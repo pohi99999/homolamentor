@@ -14,7 +14,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 
 // 1. Környezeti változók (.env) automatikus betöltése
 const envPath = path.join(__dirname, '..', '.env');
@@ -51,7 +51,8 @@ const PROJECT_TEMPLATES = {
 
 // 3. Hardcoded teszt lead-tömb (a valós CRM-integráció később kapcsolódik ide)
 const testLeads = [
-  { name: 'Test Lead', email: 'peterpohankapersonal@gmail.com', country: 'DE', project: 'Senior Living' },
+  { name: 'Péter', email: 'peterpohankapersonal@gmail.com', country: 'DE', project: 'Senior Living', company: 'Test GmbH' },
+  { name: 'Péter EN', email: 'peterpohankapersonal@gmail.com', country: 'UK', project: 'Hospitality Resort', company: 'Test Ltd' },
 ];
 
 // 4. Sablon kiválasztása a lead country + project alapján, nyelvi fallback-kel
@@ -72,8 +73,8 @@ function resolveTemplatePath(lead) {
   return path.join(__dirname, '..', 'src', 'messages', fileName);
 }
 
-// 5. Sablonfájl beolvasása, "Subject: ..." fejléc kiemelése, {{name}} placeholder csere
-function loadTemplate(templatePath, leadName) {
+// 5. Sablonfájl beolvasása, "Subject: ..." fejléc kiemelése, {{name}}/{{company}} placeholder csere
+function loadTemplate(templatePath, lead) {
   const raw = fs.readFileSync(templatePath, 'utf8');
   const lines = raw.split('\n');
 
@@ -84,21 +85,58 @@ function loadTemplate(templatePath, leadName) {
   const body = lines
     .slice(bodyStartIdx)
     .join('\n')
-    .replace(/\{\{name\}\}/g, leadName)
+    .replace(/\{\{name\}\}/g, lead.name)
+    .replace(/\{\{company\}\}/g, lead.company || '')
     .trim();
 
   return { subject, body };
 }
 
-// 6. gws CLI segítségével piszkozat létrehozása --upload kapcsolóval (RFC 822 .eml)
+// 6. A gws CLI valódi Node.js belépési pontjának (run.js) felderítése.
+// KRITIKUS: a gws.cmd egy cmd.exe batch shim, amit közvetlenül (execFileSync-cel,
+// shell nélkül) NEM lehet elindítani Windows alatt. Ehelyett a mögötte lévő
+// run.js-t hívjuk meg közvetlenül a node.exe-vel (process.execPath), argv
+// tömbként átadott paraméterekkel – így a JSON --params és a fájlnevek
+// tetszőleges karaktere (pl. `&`) sosem megy át cmd.exe shell-értelmezésen,
+// és nincs szükség kézi escape-elésre.
+let cachedGwsRunJsPath = null;
+function resolveGwsRunJsPath() {
+  if (cachedGwsRunJsPath) return cachedGwsRunJsPath;
+
+  // `where.exe` valódi Windows bináris (nem cmd/bat shim), ezért biztonságosan
+  // hívható execFileSync-cel, shell:true nélkül is.
+  const whereOutput = execFileSync('where', ['gws.cmd'], { encoding: 'utf8' });
+  const gwsCmdPath = whereOutput.split(/\r?\n/).find((line) => line.trim().length > 0).trim();
+  const npmBinDir = path.dirname(gwsCmdPath);
+  const runJsPath = path.join(npmBinDir, 'node_modules', '@googleworkspace', 'cli', 'run.js');
+
+  if (!fs.existsSync(runJsPath)) {
+    throw new Error(`Nem található a gws CLI run.js belépési pontja: ${runJsPath}`);
+  }
+
+  cachedGwsRunJsPath = runJsPath;
+  return runJsPath;
+}
+
+// 7. A gws CLI-vel piszkozat létrehozása --upload kapcsolóval (RFC 822 .eml),
+// execFileSync + közvetlen node.exe hívással (nincs cmd.exe shell, nincs escape-probléma).
 function createDraftViaGwsUpload(fullMimeRaw) {
   const tmpEmlPath = path.join(__dirname, `tmp_intl_draft_${Date.now()}.eml`);
   fs.writeFileSync(tmpEmlPath, fullMimeRaw, 'utf8');
 
   try {
-    const formattedPath = tmpEmlPath.replace(/\\/g, '/');
-    const cmd = `gws gmail users drafts create --params "{\\"userId\\":\\"me\\"}" --upload "${formattedPath}" --upload-content-type "message/rfc822"`;
-    const stdout = execSync(cmd, { encoding: 'utf8', shell: 'cmd.exe' });
+    const runJsPath = resolveGwsRunJsPath();
+    const stdout = execFileSync(
+      process.execPath,
+      [
+        runJsPath,
+        'gmail', 'users', 'drafts', 'create',
+        '--params', JSON.stringify({ userId: 'me' }),
+        '--upload', tmpEmlPath,
+        '--upload-content-type', 'message/rfc822',
+      ],
+      { encoding: 'utf8' },
+    );
     return JSON.parse(stdout);
   } finally {
     if (fs.existsSync(tmpEmlPath)) {
@@ -107,7 +145,7 @@ function createDraftViaGwsUpload(fullMimeRaw) {
   }
 }
 
-// 7. Nyers MIME (RFC 822) üzenet felépítése a sablon szövegtörzsből és a PDF csatolmányból
+// 8. Nyers MIME (RFC 822) üzenet felépítése a sablon szövegtörzsből és a PDF csatolmányból
 function buildMimeMessage(lead, subject, bodyText, pdfPath) {
   const boundary = `----=_Part_${Date.now()}_${Math.random().toString(36).substring(2)}`;
   const encodedSubject = `=?UTF-8?B?${Buffer.from(subject, 'utf8').toString('base64')}?=`;
@@ -153,7 +191,7 @@ function buildMimeMessage(lead, subject, bodyText, pdfPath) {
   return mimeParts.join('\r\n');
 }
 
-// 8. Fő futási folyamat
+// 9. Fő futási folyamat
 async function main() {
   console.log('==========================================================');
   console.log('   Homola Mentor Kft. – Nemzetközi Gmail Piszkozat-Generáló ');
@@ -180,18 +218,19 @@ async function main() {
       continue;
     }
 
-    const { subject, body } = loadTemplate(templatePath, lead.name);
+    const { subject, body } = loadTemplate(templatePath, lead);
     const fullMimeRaw = buildMimeMessage(lead, subject, body, pdfPath);
 
     try {
       const gwsRes = createDraftViaGwsUpload(fullMimeRaw);
       createdCount++;
       console.log(
-        `[Siker] Nemzetközi Piszkozat Elkészült: ${lead.name} | Ország: ${lead.country} | Sablon: ${path.basename(templatePath)} | Draft ID: ${gwsRes.id || gwsRes.message?.id || 'OK'}`,
+        `[Siker] Nemzetközi Piszkozat Elkészült: ${lead.name} (${lead.company || '-'}) | Ország: ${lead.country} | Sablon: ${path.basename(templatePath)} | Draft ID: ${gwsRes.id || gwsRes.message?.id || 'OK'}`,
       );
     } catch (gwsErr) {
       failedCount++;
-      console.error(`[gws CLI Hiba] (${lead.name}):`, gwsErr.stderr || gwsErr.message);
+      const errOutput = gwsErr.stderr ? gwsErr.stderr.toString() : gwsErr.message;
+      console.error(`[gws CLI Hiba] (${lead.name}):`, errOutput);
     }
   }
 

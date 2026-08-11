@@ -2,7 +2,7 @@ Subject: Exclusive Central European Hospitality & Resort Investment Opportunitie
 
 Dear {{name}},
 
-On behalf of Homola Mentor Kft., I would like to introduce a selection of exclusive, off-market hospitality and resort investment opportunities across Central Europe, currently available only to a select circle of institutional partners.
+On behalf of Homola Mentor Kft., I would like to introduce {{company}} to a selection of exclusive, off-market hospitality and resort investment opportunities across Central Europe, currently available only to a select circle of institutional partners.
 
 The following assets from our current portfolio may be of particular interest to you:
 
