@@ -37,52 +37,48 @@ const TODAY = "2026-08-11";
 // ---------------------------------------------------------------------------
 // 1. Nemzetközi lead-lista
 //
-// Forrás: nyilvános céges Impressum / Team oldalak (§5 DDG kötelező adatok),
-// böngészős Google X-ray kutatással azonosítva 2026-08-11-én. Minden e-mail
-// cím a cég saját weboldalán hivatalos elérhetőségként szerepel.
+// Forrás (1. hullám, 2026-08-11): nyilvános céges Impressum / Team oldalak
+// (§5 DDG kötelező adatok), böngészős Google X-ray kutatással azonosítva.
+//
+// Forrás (2. hullám, "Tier 1" DACH intézményi befektetők): a felhasználó
+// által megadott céges (osztály-szintű) kapcsolattartó címek — SeneCura,
+// Falkensteiner (FMTG), Ensana, VAMED, Swiss Life Asset Managers.
 // ---------------------------------------------------------------------------
 const INTL_LEADS = [
   {
-    name: "Harald Schüller",
-    email: "harald.schueller@investorenvermittlung.de",
-    country: "DE",
+    name: "SeneCura Development Team",
+    email: "entwicklung@senecura.at",
+    country: "AT",
     project: "Senior Living",
-    company: "Harald Schüller Investorenvermittlung",
+    company: "SeneCura Gruppe",
   },
   {
-    name: "Martin Kopp",
-    email: "kontakt@kopp-re.de",
-    country: "DE",
+    name: "FMTG Investment Board",
+    email: "investors@falkensteiner.com",
+    country: "AT",
+    project: "Hospitality Resort",
+    company: "Falkensteiner Michaeler Tourism Group",
+  },
+  {
+    name: "Ensana Spa Development",
+    email: "development@ensanahotels.com",
+    country: "AT",
+    project: "Hospitality Resort",
+    company: "Ensana Health Spa Hotels",
+  },
+  {
+    name: "VAMED Real Estate & Development",
+    email: "realestate@vamed.com",
+    country: "AT",
+    project: "Hospitality Resort",
+    company: "VAMED Vitality World",
+  },
+  {
+    name: "Swiss Life AM - Healthcare Real Estate",
+    email: "info@swisslife-am.com",
+    country: "CH",
     project: "Senior Living",
-    company: "Kopp Real Estate GmbH",
-  },
-  {
-    name: "Harald Schmidt",
-    email: "hs@magna-properties.de",
-    country: "DE",
-    project: "Senior Living",
-    company: "Magna Properties",
-  },
-  {
-    name: "Tamás Tóth",
-    email: "tt@magna-properties.de",
-    country: "DE",
-    project: "Hospitality Resort",
-    company: "Magna Properties",
-  },
-  {
-    name: "Holger Ballwanz",
-    email: "dialog@ballwanz.immobilien",
-    country: "DE",
-    project: "Hospitality Resort",
-    company: "Holger Ballwanz Immobilien",
-  },
-  {
-    name: "Horst-Christian Meyer",
-    email: "info@immocenter-ungarn.de",
-    country: "DE",
-    project: "Hospitality Resort",
-    company: "Hotel Consulting Meyer Kft (Immocenter Ungarn)",
+    company: "Swiss Life Asset Managers",
   },
 ];
 
