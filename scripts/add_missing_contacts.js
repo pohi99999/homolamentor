@@ -219,7 +219,10 @@ function main() {
     row[col.category] = c.category;
     row[col.contactName] = c.contactName;
     row[col.email] = c.email;
-    row[col.date] = c.date;
+    // Apostróf-előtag: USER_ENTERED mellett kényszeríti a Sheets-et, hogy sima
+    // szövegként tárolja a dátumot (ne alakítsa dátum-sorszámmá, pl. 46238) —
+    // enélkül az admin dashboard dátumformázása töri a megjelenítést.
+    row[col.date] = `'${c.date}`;
     row[col.channel] = "Email";
     row[col.status] = c.status;
     row[col.note] = NOTE;

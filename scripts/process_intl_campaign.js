@@ -242,7 +242,11 @@ function main() {
       row[col.category] = "Ingatlan & Ipari Portfólió (Nemzetközi)";
       row[col.contactName] = lead.name;
       row[col.email] = lead.email;
-      row[col.date] = TODAY;
+      // Apostróf-előtag: USER_ENTERED mellett ez kényszeríti ki, hogy a Sheets
+      // sima szövegként tárolja a dátumot (ne alakítsa dátum-sorszámmá) —
+      // így egyezik a CRM meglévő soraiban használt "YYYY-MM-DD" szöveges
+      // formátummal, amit az admin dashboard dátumformázása vár.
+      row[col.date] = `'${TODAY}`;
       row[col.channel] = "Email";
       row[col.status] = "Piszkozat bekészítve";
       row[col.note] = CRM_NOTE;
