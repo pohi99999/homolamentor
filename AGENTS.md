@@ -23,6 +23,14 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   "Kiajánló kiküldve". A leadek forrása böngészős Google X-ray kutatás
   (LinkedIn helyett, mert a `gws`/CLI nem tud oda bejelentkezni bot-szűrők
   miatt) + cégek saját, jogilag kötelező Impressum-oldala (§5 DDG).
+- **Nemzetközi (DACH) kampány, 2. hullám — "Tier 1" intézményi befektetők**:
+  5 felhasználó által megadott osztály-szintű cím (SeneCura, Falkensteiner/
+  FMTG, Ensana, VAMED, Swiss Life Asset Managers, AT/CH). Kiküldés után
+  4 sikeres ("Kiajánló kiküldve"), 1 kemény bounce ("Hibás e-mail cím":
+  `investors@falkensteiner.com`, SMTP 550 5.1.1 User unknown — a cím nem
+  létezik, a bounce-értesítés a Spam mappába érkezett). A Master CRM ekkor
+  74 sor, 44 kiküldött megkeresés, 17 elutasítva/archiválva — mind az admin
+  dashboardon (`/hu/admin`), mind a Sheets-ben ellenőrizve, szinkronban.
 
 ### Kritikus tanulságok jövőbeli munkához
 
@@ -71,7 +79,24 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
 5. **Gmail piszkozat HTML törzs**: a teljes, önálló `<!DOCTYPE html><html>
    <head><style>...</style></head><body>...` dokumentum (nem csak egy body
    fragment) **helyesen jelenik meg** a Gmail piszkozat-szerkesztőjében —
-   böngészőben vizuálisan ellenőrizve. Nem kell body-fragmentre редукálni.
+   böngészőben vizuálisan ellenőrizve. Nem kell body-fragmentre redukálni.
+
+6. **Bounce-detektálás `includeSpamTrash: true` nélkül vak folt.** A
+   Mailer Daemon "Delivery Status Notification (Failure)" értesítések
+   gyakran a Spam-be futnak be (nem az Inbox-ba), ezért a
+   `gmail.users.messages.list` bounce-keresésnek MINDIG kell
+   `includeSpamTrash: true` — enélkül a `sync_intl_campaign_delivery.js`
+   hamis "sikeresen kiküldve" eredményt adna egy ténylegesen visszapattant
+   címre. Éles esetben megerősítve: `investors@falkensteiner.com` bounce-a
+   csak a Spam-ben volt látható, a szkript mégis helyesen azonosította.
+
+7. **A felhasználó által megadott, osztály-szintű céges e-mail címek
+   (pl. `investors@...`, `development@...`, `realestate@...`) nem mindig
+   léteznek** — nem a szkript/CRM hibája, ha egy ilyen cím kemény bounce-ot
+   ad (SMTP 550 5.1.1 User unknown), hanem a cím önmagában rossz/elavult.
+   Ilyenkor ne próbáld újraküldeni ugyanarra a címre; jelezd a
+   felhasználónak, és ha kérik, keress alternatív (konkrét személyhez vagy
+   más osztályhoz tartozó) elérhetőséget a cég Impressum/Team oldalán.
 
 ### Releváns szkriptek (`scripts/`, `n8n/`)
 
