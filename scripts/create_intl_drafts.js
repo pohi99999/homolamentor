@@ -89,7 +89,121 @@ function loadTemplate(templatePath, lead) {
     .replace(/\{\{company\}\}/g, lead.company || '')
     .trim();
 
-  return { subject, body };
+  const lang = path.basename(templatePath).endsWith('_de.txt') ? 'de' : 'en';
+
+  return { subject, body, lang };
+}
+
+// 5b. HTML escape segédfüggvény (a lead adatok is átfolyhatnak ide, biztonság kedvéért)
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// 5c. A záró aláírás-blokk (László Homola / beosztás / cég / e-mail) elkülönített, kiemelt stílusa
+function renderSignatureBlock(lines) {
+  const [name, ...rest] = lines;
+  const restHtml = rest.map(escapeHtml).join('<br>');
+  return `<div class="signature">
+      <div style="font-weight:bold;color:#0f172a;">${escapeHtml(name)}</div>
+      <div style="color:#64748b;font-size:13px;margin-top:2px;">${restHtml}</div>
+    </div>`;
+}
+
+// 5d. A teljes .txt levéltörzs HTML-lé alakítása soronkénti állapotgéppel:
+// - `- ` kötőjellel kezdődő sorokból <ul><li> lista lesz (attól függetlenül, hogy az előttük
+//   álló fejlécsorral egy bekezdésben vannak-e, mivel a sablonokban nincs mindig üres sor közöttük),
+// - üres sor bekezdéshatárt jelent (a nem-lista sorok <br>-rel összefűzve egy <p>-be kerülnek),
+// - a "László/Laszlo Homola" névvel kezdődő záró blokk kiemelt aláírás-stílust kap.
+function bodyTextToHtml(bodyText) {
+  const rawLines = bodyText.split('\n');
+  const htmlParts = [];
+  let paragraphBuffer = [];
+  let listBuffer = [];
+
+  const flushParagraph = () => {
+    if (paragraphBuffer.length > 0) {
+      htmlParts.push(`<p style="margin:0 0 16px 0;">${paragraphBuffer.map(escapeHtml).join('<br>')}</p>`);
+      paragraphBuffer = [];
+    }
+  };
+  const flushList = () => {
+    if (listBuffer.length > 0) {
+      const items = listBuffer.map((l) => `<li>${escapeHtml(l)}</li>`).join('');
+      htmlParts.push(`<ul style="margin:8px 0 16px 0;padding-left:20px;color:#475569;">${items}</ul>`);
+      listBuffer = [];
+    }
+  };
+
+  for (let i = 0; i < rawLines.length; i++) {
+    const line = rawLines[i].trim();
+
+    if (/^(László|Laszlo) Homola/.test(line)) {
+      flushParagraph();
+      flushList();
+      const signatureLines = rawLines.slice(i).map((l) => l.trim()).filter(Boolean);
+      htmlParts.push(renderSignatureBlock(signatureLines));
+      break;
+    }
+
+    if (line.startsWith('- ')) {
+      flushParagraph();
+      listBuffer.push(line.slice(2).trim());
+    } else if (line.length === 0) {
+      flushParagraph();
+      flushList();
+    } else {
+      flushList();
+      paragraphBuffer.push(line);
+    }
+  }
+
+  flushParagraph();
+  flushList();
+
+  return htmlParts.join('\n');
+}
+
+// 5f. Prémium, sötét-arany akcentusú B2B HTML email sablon – a create_portfolio_drafts.js
+// getPortfolioEmailHtml dizájnjának mintájára, nemzetközi (DE/EN) tartalommal feltöltve.
+function buildPremiumEmailHtml({ subject, bodyText, lang }) {
+  const badgeText = lang === 'de'
+    ? 'Diskrete B2B-Partnerschaft &amp; Off-Market-Portfolio'
+    : 'Discreet B2B Partnership &amp; Off-Market Portfolio';
+  const bodyHtml = bodyTextToHtml(bodyText);
+
+  return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="UTF-8">
+  <title>${escapeHtml(subject)}</title>
+  <style>
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f4f6f9; color: #1e293b; margin: 0; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 36px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    .header { border-bottom: 2px solid #f59e0b; padding-bottom: 16px; margin-bottom: 24px; }
+    .logo { font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
+    .badge { display: inline-block; background: #fef3c7; color: #b45309; font-weight: 700; font-size: 11px; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; margin-top: 8px; }
+    .content { font-size: 14px; line-height: 1.7; color: #334155; }
+    .content ul { margin: 8px 0 16px 0; }
+    .content li { margin-bottom: 6px; }
+    .signature { border-top: 1px solid #e2e8f0; margin-top: 24px; padding-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">HOMOLA MENTOR KFT.</div>
+      <div class="badge">${badgeText}</div>
+    </div>
+    <div class="content">
+      ${bodyHtml}
+    </div>
+  </div>
+</body>
+</html>`;
 }
 
 // 6. A gws CLI valódi Node.js belépési pontjának (run.js) felderítése.
@@ -145,8 +259,9 @@ function createDraftViaGwsUpload(fullMimeRaw) {
   }
 }
 
-// 8. Nyers MIME (RFC 822) üzenet felépítése a sablon szövegtörzsből és a PDF csatolmányból
-function buildMimeMessage(lead, subject, bodyText, pdfPath) {
+// 8. Nyers MIME (RFC 822) üzenet felépítése a prémium HTML levéltörzsből és a PDF csatolmányból.
+// A tetején multipart/mixed marad (a PDF csatolmány miatt), de a szövegrész text/html.
+function buildMimeMessage(lead, subject, htmlBody, pdfPath) {
   const boundary = `----=_Part_${Date.now()}_${Math.random().toString(36).substring(2)}`;
   const encodedSubject = `=?UTF-8?B?${Buffer.from(subject, 'utf8').toString('base64')}?=`;
   const encodedToName = `=?UTF-8?B?${Buffer.from(lead.name, 'utf8').toString('base64')}?=`;
@@ -159,10 +274,10 @@ function buildMimeMessage(lead, subject, bodyText, pdfPath) {
     `Content-Type: multipart/mixed; boundary="${boundary}"`,
     ``,
     `--${boundary}`,
-    `Content-Type: text/plain; charset="UTF-8"`,
+    `Content-Type: text/html; charset="UTF-8"`,
     `Content-Transfer-Encoding: base64`,
     ``,
-    Buffer.from(bodyText, 'utf8').toString('base64'),
+    Buffer.from(htmlBody, 'utf8').toString('base64'),
     ``,
   ];
 
@@ -218,8 +333,9 @@ async function main() {
       continue;
     }
 
-    const { subject, body } = loadTemplate(templatePath, lead);
-    const fullMimeRaw = buildMimeMessage(lead, subject, body, pdfPath);
+    const { subject, body, lang } = loadTemplate(templatePath, lead);
+    const htmlBody = buildPremiumEmailHtml({ subject, bodyText: body, lang });
+    const fullMimeRaw = buildMimeMessage(lead, subject, htmlBody, pdfPath);
 
     try {
       const gwsRes = createDraftViaGwsUpload(fullMimeRaw);
@@ -243,4 +359,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { main, resolveTemplatePath, loadTemplate, buildMimeMessage };
+module.exports = { main, resolveTemplatePath, loadTemplate, buildMimeMessage, buildPremiumEmailHtml, bodyTextToHtml };
