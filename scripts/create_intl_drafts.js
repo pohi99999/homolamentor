@@ -359,4 +359,13 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { main, resolveTemplatePath, loadTemplate, buildMimeMessage, buildPremiumEmailHtml, bodyTextToHtml };
+module.exports = {
+  main,
+  resolveTemplatePath,
+  loadTemplate,
+  buildMimeMessage,
+  buildPremiumEmailHtml,
+  bodyTextToHtml,
+  createDraftViaGwsUpload,
+  resolveGwsRunJsPath,
+};
