@@ -31,6 +31,13 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   létezik, a bounce-értesítés a Spam mappába érkezett). A Master CRM ekkor
   74 sor, 44 kiküldött megkeresés, 17 elutasítva/archiválva — mind az admin
   dashboardon (`/hu/admin`), mind a Sheets-ben ellenőrizve, szinkronban.
+- **2 új válasz rögzítve a CRM-ben (2026-08-12)**: Panattoni Europe
+  (László Kemenes sora, `lkemenes@panattoni.com`) — Percz Péter kollégája
+  válaszolt, konkrét érdeklődés az üllői iparterület és a székesfehérvári
+  logisztikai ingatlan iránt → "Aktív tárgyalás". Hotel Investments AG
+  (Holger Ballwanz, `dialog@ballwanz.immobilien`) — elutasítás, az
+  üzemeltető csak A-kategóriás nagyvárosokat (Berlin, Bécs) néz, resortot
+  nem → "Elutasítva / Archiválva". Lásd `scripts/update_crm_responses_2.js`.
 
 ### Kritikus tanulságok jövőbeli munkához
 
@@ -98,6 +105,18 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
    felhasználónak, és ha kérik, keress alternatív (konkrét személyhez vagy
    más osztályhoz tartozó) elérhetőséget a cég Impressum/Team oldalán.
 
+8. **CRM reakció-szinkronizáló szkriptben SOSE használj puszta cégnév-alapú
+   fallback-egyezést a sor-azonosításhoz.** Egy cégnek több kapcsolattartó-
+   sora is lehet a `Master_Vevőlista`-ban (pl. Panattoni Europe: László
+   Kemenes ÉS Tóth Mariann, külön sorokban) — a cégnév-substring egyezés
+   mindkettőt találatnak veszi, és a rossz sort is felülírja. Éles esetben
+   megtörtént: `update_crm_responses_2.js` első verziója a `rowStr.includes(
+   company.toLowerCase())` fallback miatt véletlenül felülírta Tóth Mariann
+   sorát is Percz Péter válaszával — kézzel kellett visszaállítani az
+   eredeti "Kiajánló kiküldve" státuszt és megjegyzést. **Megoldás**: csak
+   pontos (vagy tudott alternatív) e-mail cím(ek) alapján egyezz, cégnév
+   alapján soha.
+
 ### Releváns szkriptek (`scripts/`, `n8n/`)
 
 | Szkript | Feladat |
@@ -107,4 +126,5 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
 | `sync_intl_campaign_delivery.js` | Gmail Sent/Trash/Bounce ellenőrzés alapján CRM státusz frissítés ("Piszkozat bekészítve" → "Kiajánló kiküldve" / "Hibás e-mail cím") |
 | `add_missing_contacts.js` | Egyedi, kézzel felvett CRM kontaktok biztonságos append-je |
 | `audit_drafts_crm.js` | Csak-olvasás: Gmail ↔ CRM egyeztetés, kategória-eltérések |
+| `update_crm_responses.js` / `update_crm_responses_2.js` | Ad-hoc Gmail-válaszok (státusz + megjegyzés) rögzítése a CRM-ben, e-mail cím alapú sor-egyeztetéssel |
 | `n8n/generate_portfolio_pdf_en_v6.js` | A teljes tartalmú (13 ingatlan + Afrika-szekció) angol portfólió PDF generátora |
