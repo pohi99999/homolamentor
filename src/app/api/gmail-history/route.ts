@@ -76,7 +76,41 @@ export async function GET(request: Request) {
         maxResults: 15,
       });
 
-      const messagesList = listRes.data.messages || [];
+      // A címre illeszkedő találatokból kiindulva a TELJES beszélgetési szálakat
+      // kérjük le. Ok: a partner gyakran MÁS címről válaszol, mint amire írtunk
+      // (asszisztens, más osztály, csoportos postafiók), és az ilyen válasz a
+      // puszta `to:/from:` keresésbe nem esik bele — a szálba viszont igen.
+      // Éles eset (2026-08-17): a Cureus GmbH-nak kontakt@cureus.de címre ment a
+      // kiajánló, a válasz viszont smo@cureus.de-ről jött, ugyanabban a szálban.
+      const seedMessages = listRes.data.messages || [];
+      const threadIds = [
+        ...new Set(seedMessages.map((m) => m.threadId).filter(Boolean)),
+      ] as string[];
+
+      const messageIdSet = new Map<string, { id: string }>();
+      seedMessages.forEach((m) => {
+        if (m.id) messageIdSet.set(m.id, { id: m.id });
+      });
+
+      await Promise.all(
+        threadIds.map(async (threadId) => {
+          try {
+            const threadRes = await gmail.users.threads.get({
+              userId: "me",
+              id: threadId,
+              format: "minimal",
+            });
+            (threadRes.data.messages || []).forEach((m) => {
+              if (m.id) messageIdSet.set(m.id, { id: m.id });
+            });
+          } catch {
+            // Egy elérhetetlen szál nem boríthatja az egész lekérdezést —
+            // a seed üzenetek ilyenkor is megmaradnak.
+          }
+        })
+      );
+
+      const messagesList = [...messageIdSet.values()];
 
       if (messagesList.length > 0) {
         const detailedMessages = await Promise.all(
@@ -126,6 +160,8 @@ export async function GET(request: Request) {
                 direction: isOutgoing ? "Elküldött" : "Bejövő",
                 from: fromStr,
                 to: toStr,
+                // Csak rendezéshez; a válaszból a kliens elé nem kerül.
+                _sortTs: Number(msgRes.data.internalDate || 0),
               };
             } catch (itemErr) {
               console.warn(`Hiba a(z) ${msg.id} elérésénél:`, itemErr);
@@ -134,7 +170,16 @@ export async function GET(request: Request) {
           })
         );
 
-        const validMessages = detailedMessages.filter(Boolean);
+        // Legfrissebb elöl. A szálakból összegyűjtött üzenetek a szálon belüli
+        // sorrendben érkeznek, ezért itt kell egységes időrendbe tenni őket.
+        const validMessages = (detailedMessages.filter(Boolean) as NonNullable<
+          (typeof detailedMessages)[number]
+        >[])
+          .sort((a, b) => b._sortTs - a._sortTs)
+          .map(({ _sortTs, ...rest }) => {
+            void _sortTs;
+            return rest;
+          });
 
         return NextResponse.json({
           success: true,
