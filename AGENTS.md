@@ -14,7 +14,7 @@ Ez a szakasz a `scripts/` és `n8n/` alatti CRM/Gmail automatizációs munkáró
 szól (Homola Mentor Kft. B2B kiajánló kampányai). A Next.js-fejlesztéshez
 nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
 
-### Állapot (2026-08-11)
+### Állapot (2026-08-17)
 
 - **Magyar kampány**: lezárva, "várjuk a válaszokat" fázisban.
 - **Nemzetközi (DACH) kampány, 1. hullám**: 6 valós, cégek Impressum/Team
@@ -38,6 +38,19 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   (Holger Ballwanz, `dialog@ballwanz.immobilien`) — elutasítás, az
   üzemeltető csak A-kategóriás nagyvárosokat (Berlin, Bécs) néz, resortot
   nem → "Elutasítva / Archiválva". Lásd `scripts/update_crm_responses_2.js`.
+- **Nemzetközi kampány, 3. hullám — kutatott leadek (2026-08-17)**: 15 kutatott
+  lead a négy kiemelt projekt-szegmensre, ebből 12 új (3-at a duplikátum-szűrő
+  kiszűrt: Martijn Vlutters, Károly Palovics, Ferenc Gondi — mindhárman
+  korábban már kaptak kiajánlót). Szegmensenként: Senior Living 3 (IMMAC,
+  Cureus, Carestone), Ipari & Logisztikai 3 (CTP, Accolade, GARBE), Hospitality
+  2 (Therme Group, EurothermenResorts), Afrikai Infrastruktúra 4 (Meridiam,
+  Proparco, EAAIF/Ninety One, Africa50). Mind a 12-nek elkészült a piszkozat és
+  bekerült a CRM-be "Piszkozat bekészítve" státusszal. A Master CRM ekkor
+  **87 sor**. Lásd `scripts/process_new_leads.js`.
+  Két új e-mail sablon-téma készült: `email_04_industrial_logistics_{de,en}.txt`
+  és `email_05_africa_infrastructure_en.txt`, plusz a hiányzó
+  `email_02_senior_living_en.txt` (a `create_intl_drafts.js` PROJECT_TEMPLATES
+  mappingje ennek megfelelően bővült).
 
 ### Kritikus tanulságok jövőbeli munkához
 
@@ -117,6 +130,36 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
    pontos (vagy tudott alternatív) e-mail cím(ek) alapján egyezz, cégnév
    alapján soha.
 
+9. **Lead-kutatásnál a személyes e-mail cím kitalálása tilos — helyette
+   háromszintű verifikáció.** A `process_new_leads.js` minden leadnél tárolja az
+   `emailConfidence` mezőt: `"verified"` (a cím szó szerint így szerepel egy
+   publikus céges oldalon) vagy `"pattern-derived"` (a személy neve/beosztása
+   publikus, a címe nem, DE a cégdomain mintázata legalább **két független,
+   publikusan közölt címből** bizonyított). Harmadik szint — puszta találgatás —
+   nem kerülhet a listába. Éles megerősítés: a CTP mintázata
+   (`keresztnév.vezetéknév@ctp.eu`) két sajtókapcsolati címből lett igazolva
+   (`szabolcs.farkas@`, `pavel.svihalek@`), és az így képzett
+   `ferenc.gondi@ctp.eu` egyezett a CRM-ben már 2026-08-04 óta meglévő,
+   független kutatásból származó címmel. A verifikáltsági szint a CRM
+   Megjegyzés oszlopába is bekerül, hogy bounce esetén visszakövethető legyen,
+   melyik cím volt dedukált.
+
+10. **A DACH-cégek többsége ma már NEM publikál személyes e-mail címet** —
+   csak `info@` / `kontakt@` / `empfang@` osztály-szintű címet az Impressumban
+   (GDPR-óvatosság). Ez nem akadály: a döntéshozó nevét és beosztását az
+   Impressum/Management oldal kötelezően közli, így a levél megszólítása
+   célzott lehet a verifikáltan létező osztály-címre küldve. Ez lényegesen
+   biztonságosabb, mint találgatott személyes címre küldeni (vö. 7. tanulság).
+
+11. **A Sheets `values.append` nem feltétlenül a lap legvégére ír.** A 3.
+   hullámnál a 75 soros lapon az append az `A39:S50` tartományt adta vissza,
+   mert az API a „table" határát a 38. sornál érzékelte. `insertDataOption:
+   "INSERT_ROWS"` mellett ez **nem destruktív** — a korábbi 39+ sorok lejjebb
+   tolódtak, adat nem veszett el (ellenőrizve: 75 → 87 sor, 0 duplikátum,
+   0 üres sor). De az `updatedRange` értéke önmagában megtévesztő; írás után
+   érdemes sorszám- és duplikátum-ellenőrzést futtatni, nem az append válaszára
+   hagyatkozni.
+
 ### Releváns szkriptek (`scripts/`, `n8n/`)
 
 | Szkript | Feladat |
@@ -127,4 +170,5 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
 | `add_missing_contacts.js` | Egyedi, kézzel felvett CRM kontaktok biztonságos append-je |
 | `audit_drafts_crm.js` | Csak-olvasás: Gmail ↔ CRM egyeztetés, kategória-eltérések |
 | `update_crm_responses.js` / `update_crm_responses_2.js` | Ad-hoc Gmail-válaszok (státusz + megjegyzés) rögzítése a CRM-ben, e-mail cím alapú sor-egyeztetéssel |
+| `process_new_leads.js` | 3. hullám: kutatott nemzetközi leadek CRM-be töltése + piszkozat-generálás, `emailConfidence`/`source` verifikációs metaadatokkal |
 | `n8n/generate_portfolio_pdf_en_v6.js` | A teljes tartalmú (13 ingatlan + Afrika-szekció) angol portfólió PDF generátora |

@@ -42,10 +42,23 @@ const DACH_COUNTRIES = ['DE', 'AT', 'CH'];
 const PROJECT_TEMPLATES = {
   'Senior Living': {
     de: 'email_02_senior_living_de.txt',
+    en: 'email_02_senior_living_en.txt',
   },
   'Hospitality Resort': {
     de: 'email_03_hospitality_resort_de.txt',
     en: 'email_03_hospitality_resort_en.txt',
+  },
+  // 2026-08-17: az ipari/logisztikai és a nyugat-afrikai infrastruktúra témák
+  // a `scripts/process_new_leads.js` kutatott lead-hullámával kerültek be.
+  // Az afrikai projektfinanszírozási pipeline címzettjei nemzetközi intézmények
+  // (DFI-k, blended finance alapok), ezért ahhoz szándékosan csak angol sablon
+  // készült — DACH-országkód esetén is az angol fallback-re esik.
+  'Industrial Logistics': {
+    de: 'email_04_industrial_logistics_de.txt',
+    en: 'email_04_industrial_logistics_en.txt',
+  },
+  'Africa Infrastructure': {
+    en: 'email_05_africa_infrastructure_en.txt',
   },
 };
 
