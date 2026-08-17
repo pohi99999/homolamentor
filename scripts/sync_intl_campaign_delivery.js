@@ -29,7 +29,9 @@ const path = require("path");
 const { execFileSync } = require("child_process");
 
 const DRY_RUN = process.argv.includes("--dry-run");
-const TODAY = "2026-08-11";
+// A CRM megjegyzésbe írt szinkron-dátum. Minden kampányhullám előtt frissítendő,
+// különben a korábbi hullám dátuma kerülne az új sorokba.
+const TODAY = "2026-08-17";
 
 const IS_WIN = process.platform === "win32";
 
@@ -179,13 +181,22 @@ function main() {
 
     const { wasSent, bounced } = checkDeliveryStatus(email);
 
+    // A meglévő megjegyzést MEGŐRIZZÜK és hozzáfűzünk — a lead felvételekor ide
+    // került a cím-verifikációs szint és a forrás (lásd process_new_leads.js),
+    // ami épp bounce esetén a legértékesebb információ. Felülírás esetén ez
+    // pont akkor veszne el, amikor szükség lenne rá.
+    const prevNote = String(row[col.note] || "").trim();
+    const appendNote = (addition) => (prevNote ? `${prevNote} | ${addition}` : addition);
+
     if (bounced) {
       console.log(`[Hibás e-mail] Sor ${rowNum}: ${name} (${company}) <${email}> — bounce észlelve.`);
       results.bounced.push({ rowNum, name, company, email });
       if (!DRY_RUN) {
         updateCrmRow(rowNum, col, {
           status: "Hibás e-mail cím",
-          note: `Visszapattant / kézbesítési hiba (${TODAY}, scripts/sync_intl_campaign_delivery.js).`,
+          note: appendNote(
+            `Visszapattant / kézbesítési hiba (${TODAY}, scripts/sync_intl_campaign_delivery.js).`
+          ),
         });
       }
     } else if (wasSent) {
@@ -194,7 +205,9 @@ function main() {
       if (!DRY_RUN) {
         updateCrmRow(rowNum, col, {
           status: "Kiajánló kiküldve",
-          note: `Nemzetközi (DACH) kiajánló kiküldve (${TODAY}, scripts/sync_intl_campaign_delivery.js).`,
+          note: appendNote(
+            `Nemzetközi kiajánló kiküldve (${TODAY}, scripts/sync_intl_campaign_delivery.js).`
+          ),
         });
       }
     } else {

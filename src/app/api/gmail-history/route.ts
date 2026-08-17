@@ -141,47 +141,25 @@ export async function GET(request: Request) {
     console.warn("Gmail API élő lekérdezési hiba (fallback aktiválása):", errorMsg);
   }
 
-  // Intelligens felépítésű levél előzmények (Fallback ha a távoli API épp nem elérhető vagy nem adott vissza találatot)
-  const fallbackMessages = [
-    {
-      id: "fallback_1",
-      subject: `Re: Homola Mentor Kft. – B2B Együttműködés és Kapcsolatfelvétel (${cleanEmail})`,
-      date: new Date(Date.now() - 86400000 * 2).toLocaleString("hu-HU", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      snippet:
-        "Köszönjük a megkeresést! Érdekel minket a tárgyalási lehetőség, kérjük küldjék el a részletes ismertetőt az office.homlamentor@gmail.com címre.",
-      direction: "Bejövő",
-      from: cleanEmail,
-      to: "office.homlamentor@gmail.com",
-    },
-    {
-      id: "fallback_2",
-      subject: `Homola Mentor Kft. – Hivatalos projekt kiajánló és bemutatkozás`,
-      date: new Date(Date.now() - 86400000 * 5).toLocaleString("hu-HU", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      snippet:
-        "Tisztelt Partnerünk! Mellékelten továbbítjuk a Homola Mentor Kft. legújabb B2B stratégiai portfólióját és a SELAB anyagainkat.",
-      direction: "Elküldött",
-      from: "office.homlamentor@gmail.com",
-      to: cleanEmail,
-    },
-  ];
-
+  // Nincs találat, vagy a Gmail API nem érhető el.
+  //
+  // KRITIKUS: itt korábban egy fabrikált "fallback" levélpár állt (egy kitalált
+  // BEJÖVŐ válasszal: "Érdekel minket a tárgyalási lehetőség..."), amit a UI
+  // "Élő Levelezési Előzmények / Gmail API" jelvénnyel, valós adattól
+  // megkülönböztethetetlenül jelenített meg. Mivel a dátumai relatívak voltak
+  // (most-2 és most-5 nap), mindig frissnek látszott, és MINDEN olyan partnernél
+  // megjelent, akinek még nincs valós levelezése — vagyis pont a legfrissebb
+  // leadeknél. Ez hamis üzleti jelzés: nem létező partneri érdeklődést mutatott.
+  // 2026-08-17-én éles eseten igazolva (Africa50: aznap ment ki az első levél,
+  // a dashboard mégis 5 napos kiküldést és 2 napos "érdeklődő választ" mutatott).
+  //
+  // Üres listát adunk vissza — a PartnerDrawer erre már tartalmaz őszinte üres
+  // állapotot ("Nincs közvetlen levelezési előzmény ehhez az e-mail címhez...").
   return NextResponse.json({
     success: true,
     email: cleanEmail,
-    total: fallbackMessages.length,
-    messages: fallbackMessages,
-    source: "gmail_api_integrated_fallback",
+    total: 0,
+    messages: [],
+    source: "gmail_api_no_results",
   });
 }

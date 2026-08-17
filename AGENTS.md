@@ -51,6 +51,16 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   és `email_05_africa_infrastructure_en.txt`, plusz a hiányzó
   `email_02_senior_living_en.txt` (a `create_intl_drafts.js` PROJECT_TEMPLATES
   mappingje ennek megfelelően bővült).
+- **3. hullám kiküldve és auditálva (2026-08-17)**: a felhasználó mind a 12
+  piszkozatot kiküldte. A `sync_intl_campaign_delivery.js` mind a 12 sort
+  "Kiajánló kiküldve" státuszra váltotta — **12/12 sikeres, 0 bounce**.
+  A dedukált (`pattern-derived`) `maarten.otte@ctp.eu` **nem pattant vissza**,
+  ami megerősíti a kétforrásos mintázat-igazolás módszerét. Független,
+  cím-független bounce-audit (`from:mailer-daemon OR from:postmaster OR
+  subject:"Delivery Status Notification"...`, `includeSpamTrash: true`) is
+  0 találatot adott. Master CRM: **86 sor**, admin dashboardon ellenőrizve
+  (86 lead / 55 kiküldött megkeresés / 2 aktív tárgyalás / 18 elutasítva) —
+  mind a négy kártya egyezik a Sheets státusz-eloszlásával.
 
 ### Kritikus tanulságok jövőbeli munkához
 
@@ -160,6 +170,37 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
    érdemes sorszám- és duplikátum-ellenőrzést futtatni, nem az append válaszára
    hagyatkozni.
 
+12. **Kézbesítés-szinkron: a Megjegyzés oszlopot HOZZÁFŰZNI kell, nem
+   felülírni.** A `sync_intl_campaign_delivery.js` eredetileg felülírta a
+   Megjegyzés cellát a kiküldés tényével — ezzel a 3. hullám mind a 12 sorából
+   törölte a lead felvételekor odaírt `Cím-verifikáció: ... Forrás: ...`
+   metaadatot, vagyis pont azt az információt, ami egy későbbi bounce
+   kivizsgálásához kellene. Javítva: a szkript beolvassa a meglévő megjegyzést
+   és ` | ` elválasztóval hozzáfűz. A már megtörtént adatvesztést a
+   `scripts/restore_wave3_notes.js` (egyszeri javítószkript) állította helyre.
+   **Minden CRM-író szkriptnél kérdezd meg: felülír vagy hozzáfűz?**
+
+13. **A szinkron-szkriptek `TODAY` konstansát hullámonként frissíteni kell.**
+   A `sync_intl_campaign_delivery.js` `TODAY` értéke `2026-08-11`-en maradt;
+   enélkül a 3. hullám sorai a 2. hullám dátumával kerültek volna a CRM-be.
+   Ugyanitt a megjegyzés szövege "(DACH)"-ot írt, ami a 3. hullámra pontatlan
+   (francia, brit, marokkói intézmények is vannak) — általánosítva.
+
+14. **Az `/api/gmail-history` fabrikált levelezést adott vissza, ha a Gmail API
+   nem talált semmit — JAVÍTVA (2026-08-17).** A route végén egy "fallback"
+   levélpár állt, benne egy kitalált BEJÖVŐ válasszal ("Érdekel minket a
+   tárgyalási lehetőség..."), relatív dátumokkal (`Date.now() - 2/5 nap`), amit
+   a `PartnerDrawer` "Élő Levelezési Előzmények / Gmail API" jelvénnyel,
+   valós adattól megkülönböztethetetlenül jelenített meg. Mivel a fallback
+   akkor is aktiválódott, ha az API sikeresen válaszolt de 0 találattal, ez
+   **minden friss leadnél hamis partneri érdeklődést mutatott**. Éles eseten
+   igazolva: az Africa50-nél, ahol aznap ment ki az első levél, a dashboard
+   5 napos kiküldést és 2 napos "érdeklődő választ" mutatott. Javítás: üres
+   lista visszaadása (`source: "gmail_api_no_results"`) — a `PartnerDrawer`
+   már tartalmazott őszinte üres állapotot, azt kellett csak érvényre juttatni.
+   Ez ugyanaz a hibaosztály, mint a korábbi hardcode-olt növekedési görbe:
+   **soha ne fabrikálj adatot a dashboardra, még "fallback" néven sem.**
+
 ### Releváns szkriptek (`scripts/`, `n8n/`)
 
 | Szkript | Feladat |
@@ -171,4 +212,5 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
 | `audit_drafts_crm.js` | Csak-olvasás: Gmail ↔ CRM egyeztetés, kategória-eltérések |
 | `update_crm_responses.js` / `update_crm_responses_2.js` | Ad-hoc Gmail-válaszok (státusz + megjegyzés) rögzítése a CRM-ben, e-mail cím alapú sor-egyeztetéssel |
 | `process_new_leads.js` | 3. hullám: kutatott nemzetközi leadek CRM-be töltése + piszkozat-generálás, `emailConfidence`/`source` verifikációs metaadatokkal |
+| `restore_wave3_notes.js` | Egyszeri javítószkript: a szinkron által felülírt 3. hullám Megjegyzés-metaadatainak helyreállítása |
 | `n8n/generate_portfolio_pdf_en_v6.js` | A teljes tartalmú (13 ingatlan + Afrika-szekció) angol portfólió PDF generátora |
