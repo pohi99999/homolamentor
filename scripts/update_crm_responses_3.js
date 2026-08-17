@@ -1,25 +1,33 @@
 /**
  * Homola Mentor Kft. – Kampány Reakció Szinkronizáló Szkript (#3)
- * Dátum: 2026-08-17
+ * Dátum: 2026-08-17 (bővítve: Panattoni reakció, 2026-08-17)
  *
- * Cél: a 3. nemzetközi kampányhullámra beérkezett első válasz rögzítése a
- * Master_Vevőlista CRM-ben.
+ * Cél: a 3. nemzetközi kampányhullámra és a folyamatban lévő Panattoni
+ * tárgyalásra beérkezett válaszok rögzítése a Master_Vevőlista CRM-ben.
  *
- * A REAKCIÓ
- *   Cureus GmbH — a kiajánló 2026-08-17 09:58-kor ment ki Christian Möhrke
- *   (kontakt@cureus.de) címére; a válasz 50 perccel később, 10:48-kor érkezett
- *   Stefanie Monesitől (smo@cureus.de, Teamassistenz Projektentwicklung).
- *   Udvarias elutasítás két konkrét indokkal, ugyanakkor NEM teljes elzárkózás:
- *   mellékelték az akvizíciós profiljukat és jelezték, hogy a profiljukba illő
- *   projektekre nyitottak.
+ * A REAKCIÓK
+ *   1) Cureus GmbH — a kiajánló 2026-08-17 09:58-kor ment ki Christian Möhrke
+ *      (kontakt@cureus.de) címére; a válasz 50 perccel később, 10:48-kor érkezett
+ *      Stefanie Monesitől (smo@cureus.de, Teamassistenz Projektentwicklung).
+ *      Udvarias elutasítás két konkrét indokkal, ugyanakkor NEM teljes elzárkózás:
+ *      mellékelték az akvizíciós profiljukat és jelezték, hogy a profiljukba illő
+ *      projektekre nyitottak.
+ *   2) Panattoni Europe (László Kemenes sora, lkemenes@panattoni.com) — Percz
+ *      Péter Dr. válaszolt szabadság után, személyes találkozót egyeztetett
+ *      Budapesten (Alkotás Point Irodaház).
  *
  * MINTAKÖVETÉS (a korábbi tanulságok szerint)
  *   - `execFileSync` + közvetlen `gws.exe` bináris hívás, tiszta argv-tömbbel
  *     (AGENTS.md 1. tanulság — sosem execSync + cmd.exe shell).
  *   - Sor-azonosítás KIZÁRÓLAG pontos e-mail cím alapján, cégnév-fallback nélkül
- *     (AGENTS.md 8. tanulság — a cégnév-egyezés korábban rossz sort írt felül).
+ *     (AGENTS.md 8. tanulság — a cégnév-egyezés korábban rossz sort írt felül;
+ *     a Panattoni cégnek pl. Tóth Mariann néven is van külön sora, ahhoz ennek
+ *     a reakciónak semmi köze).
  *   - A Megjegyzés oszlopot HOZZÁFŰZÉSSEL frissíti, nem felülírja
  *     (AGENTS.md 12. tanulság — különben elveszne a cím-verifikációs metaadat).
+ *   - Idempotens: ha egy reakció szövege már szerepel a sor Megjegyzésében,
+ *     a szkript kihagyja (nem ír duplán), így többször is biztonságosan
+ *     futtatható.
  *
  * HASZNÁLAT
  *   node scripts/update_crm_responses_3.js --dry-run
@@ -57,6 +65,18 @@ const REACTIONS = [
       "Cureus_Ankaufsprofil_DE_2026.pdf akvizíciós profiljukat, és jelezték, hogy a profiljukba " +
       "illő projektekre bármikor nyitottak. Jövőbeli ajánlatnál: németországi, korai fázisú " +
       "(nem kulcsrakész) fejlesztés lehet releváns.",
+  },
+  {
+    label: "Panattoni Europe (László Kemenes sora)",
+    // Percz Péter válaszolt, de a CRM-ben az ő projektje László Kemenes
+    // sorához (lkemenes@panattoni.com) tartozik — kizárólag ezzel a pontos
+    // címmel egyezünk, Tóth Mariann (mtoth@panattoni.com) külön sorát nem
+    // érintjük.
+    emails: ["lkemenes@panattoni.com", "ppercz@panattoni.com"],
+    status: "Személyes találkozó",
+    note:
+      "2026.08.17: Percz Péter válaszolt szabadság után. Személyes találkozót " +
+      "egyeztetett Budapesten (Alkotás Point Irodaház).",
   },
 ];
 
@@ -156,6 +176,14 @@ function main() {
     for (const { rowNum, row, email } of matches) {
       const prevStatus = String(row[col.status] || "").trim();
       const prevNote = String(row[col.note] || "").trim();
+
+      // Idempotencia: ha ez a reakció-szöveg már szerepel a Megjegyzésben,
+      // korábban már lefutott a szinkron erre a sorra — ne írjunk duplán.
+      if (prevNote.includes(reaction.note)) {
+        console.log(`[Sor ${rowNum}] ${row[col.company]} <${email}> — már rögzítve, kihagyva.\n`);
+        continue;
+      }
+
       // Hozzáfűzés — a korábbi megjegyzés (benne a cím-verifikációs metaadat) megmarad.
       const newNote = prevNote ? `${prevNote} | ${reaction.note}` : reaction.note;
 

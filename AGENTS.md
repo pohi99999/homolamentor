@@ -73,6 +73,16 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   (németországi, korai fázisú fejlesztés lehet releváns a jövőben).
   CRM: "Kiajánló kiküldve" → "Elutasítva / Archiválva"; dashboard 55 → 54
   kiküldött, 18 → 19 elutasítva. Szkript: `scripts/update_crm_responses_3.js`.
+- **Panattoni Europe — személyes találkozó egyeztetve (2026-08-17)**: Percz
+  Péter Dr. válaszolt szabadság után, ugyanazon a soron (László Kemenes,
+  `lkemenes@panattoni.com`), ami 2026-08-12-én már kapott egy konkrét
+  érdeklődést. Személyes találkozót egyeztetett Budapesten (Alkotás Point
+  Irodaház). CRM: "Aktív tárgyalás" → "Személyes találkozó", a Megjegyzés
+  oszlop hozzáfűzve (nem felülírva). Ugyanaz a `scripts/update_crm_responses_3.js`
+  végezte, kibővítve egy második `REACTIONS` bejegyzéssel és egy
+  idempotencia-ellenőrzéssel (ha a reakció szövege már szerepel a
+  Megjegyzésben, a szkript kihagyja — így a már lefutott Cureus-reakció
+  nem íródott felül duplán, amikor a bővített szkript újra lefutott).
 
 ### Kritikus tanulságok jövőbeli munkához
 
@@ -332,7 +342,7 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
 | `add_missing_contacts.js` | Egyedi, kézzel felvett CRM kontaktok biztonságos append-je |
 | `audit_drafts_crm.js` | Csak-olvasás: Gmail ↔ CRM egyeztetés, kategória-eltérések |
 | `update_crm_responses.js` / `update_crm_responses_2.js` | Ad-hoc Gmail-válaszok (státusz + megjegyzés) rögzítése a CRM-ben, e-mail cím alapú sor-egyeztetéssel |
-| `update_crm_responses_3.js` | 3. hullám reakciói. Modern minta: `execFileSync` + `gws.exe`, pontos e-mail egyezés, és a Megjegyzés **hozzáfűzése** (nem felülírása) |
+| `update_crm_responses_3.js` | 3. hullám reakciói + folyamatban lévő Panattoni tárgyalás frissítései. Modern minta: `execFileSync` + `gws.exe`, pontos e-mail egyezés, Megjegyzés **hozzáfűzése** (nem felülírása), és **idempotencia-ellenőrzés** (a már rögzített reakciót kihagyja) |
 | `process_new_leads.js` | 3. hullám: kutatott nemzetközi leadek CRM-be töltése + piszkozat-generálás, `emailConfidence`/`source` verifikációs metaadatokkal |
 | `restore_wave3_notes.js` | Egyszeri javítószkript: a szinkron által felülírt 3. hullám Megjegyzés-metaadatainak helyreállítása |
 | `get_refresh_token.js` | Google OAuth refresh token generálás helyben (az OAuth Playground kiváltására). **Interaktív — a felhasználó futtatja külön terminálban.** A tokent fájlba írja, nem a képernyőre |
