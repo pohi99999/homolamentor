@@ -61,6 +61,18 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   0 találatot adott. Master CRM: **86 sor**, admin dashboardon ellenőrizve
   (86 lead / 55 kiküldött megkeresés / 2 aktív tárgyalás / 18 elutasítva) —
   mind a négy kártya egyezik a Sheets státusz-eloszlásával.
+- **A 3. hullám első válasza (2026-08-17)**: **Cureus GmbH — elutasítás.**
+  A kiajánló 09:58-kor ment ki Christian Möhrke (`kontakt@cureus.de`) címére,
+  a válasz 50 perccel később, 10:48-kor érkezett **Stefanie Monesitől**
+  (`smo@cureus.de`, Teamassistenz Projektentwicklung). Két konkrét indok:
+  (1) kizárólag Németországon belül terjeszkednek, külföldi projektet nem
+  visznek; (2) alapvetően nem vesznek át kulcsrakész vagy már nagyrészt kész
+  projektet — a Nagycenk 75%-os készültsége így kizáró ok. **Nem teljes
+  elzárkózás**: csatolták a `Cureus_Ankaufsprofil_DE_2026.pdf` akvizíciós
+  profiljukat, és jelezték, hogy a profiljukba illő projektekre nyitottak
+  (németországi, korai fázisú fejlesztés lehet releváns a jövőben).
+  CRM: "Kiajánló kiküldve" → "Elutasítva / Archiválva"; dashboard 55 → 54
+  kiküldött, 18 → 19 elutasítva. Szkript: `scripts/update_crm_responses_3.js`.
 
 ### Kritikus tanulságok jövőbeli munkához
 
@@ -291,6 +303,25 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
    > mert a végpont *válaszolt* — csak épp kitalált tartalommal. Health-check
    > sose csak státuszkódot nézzen, hanem a válasz értelmességét is.
 
+16. **A partner gyakran MÁS címről válaszol, mint amire írtunk — a Gmail-előzmény
+   lekérdezés ezért szál-alapú.** A `to:cím OR from:cím` keresés nem hozza be az
+   asszisztenstől vagy másik osztályról érkező választ. Éles eset (2026-08-17):
+   a Cureus GmbH-nak `kontakt@cureus.de` címre ment a kiajánló, a válasz viszont
+   `smo@cureus.de`-ről jött (Stefanie Monesi, Teamassistenz) — ugyanabban a
+   szálban (`threadId` egyezik), de a panelen nem látszott. Javítás: az
+   `/api/gmail-history` a találatok `threadId`-ja alapján a **teljes szálakat**
+   lekéri (`threads.get`), és `internalDate` szerint rendez (legfrissebb elöl,
+   mert a szálakból vegyes sorrendben érkeznek az üzenetek).
+   > Következmény a CRM-re: **egy partnerhez több e-mail cím tartozhat.** A
+   > reakció-szinkron szkriptekben ezért az `emails` mező tömb — de továbbra is
+   > KIZÁRÓLAG pontos egyezéssel, cégnév-fallback nélkül (8. tanulság).
+
+17. **Szerveroldali dátumformázásnál mindig adj meg `timeZone`-t.** A Vercel
+   futtatókörnyezet UTC-ben fut, ezért a `toLocaleString("hu-HU", {...})`
+   `timeZone` nélkül nyáron 2 órával korábbi időpontot mutat, mint amit a
+   felhasználó a Gmailben lát. Éles eset: a Cureus válasza 10:48-kor érkezett,
+   a dashboard 08:48-at írt. Javítva: `timeZone: "Europe/Budapest"`.
+
 ### Releváns szkriptek (`scripts/`, `n8n/`)
 
 | Szkript | Feladat |
@@ -301,6 +332,7 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
 | `add_missing_contacts.js` | Egyedi, kézzel felvett CRM kontaktok biztonságos append-je |
 | `audit_drafts_crm.js` | Csak-olvasás: Gmail ↔ CRM egyeztetés, kategória-eltérések |
 | `update_crm_responses.js` / `update_crm_responses_2.js` | Ad-hoc Gmail-válaszok (státusz + megjegyzés) rögzítése a CRM-ben, e-mail cím alapú sor-egyeztetéssel |
+| `update_crm_responses_3.js` | 3. hullám reakciói. Modern minta: `execFileSync` + `gws.exe`, pontos e-mail egyezés, és a Megjegyzés **hozzáfűzése** (nem felülírása) |
 | `process_new_leads.js` | 3. hullám: kutatott nemzetközi leadek CRM-be töltése + piszkozat-generálás, `emailConfidence`/`source` verifikációs metaadatokkal |
 | `restore_wave3_notes.js` | Egyszeri javítószkript: a szinkron által felülírt 3. hullám Megjegyzés-metaadatainak helyreállítása |
 | `get_refresh_token.js` | Google OAuth refresh token generálás helyben (az OAuth Playground kiváltására). **Interaktív — a felhasználó futtatja külön terminálban.** A tokent fájlba írja, nem a képernyőre |
