@@ -43,3 +43,6 @@ next-env.d.ts
 # generated pdfs
 *.pdf
 
+
+# Ideiglenes OAuth refresh token (scripts/get_refresh_token.js kimenete) - SOHA ne kerüljön verziókövetésbe
+REFRESH_TOKEN.txt

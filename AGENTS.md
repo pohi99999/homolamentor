@@ -201,8 +201,8 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
    Ez ugyanaz a hibaosztály, mint a korábbi hardcode-olt növekedési görbe:
    **soha ne fabrikálj adatot a dashboardra, még "fallback" néven sem.**
 
-15. **NYITOTT: a `/api/gmail-history` élő Gmail-lekérdezése éles környezetben
-   nem ad találatot.** A fallback eltávolítása után kiderült, hogy a végpont
+15. **MEGOLDVA (2026-08-17): a `/api/gmail-history` élő Gmail-lekérdezése éles
+   környezetben nem adott találatot.** A fallback eltávolítása után kiderült, hogy a végpont
    **minden** címre `total: 0`-t ad — beleértve olyanokat is, ahol bizonyítottan
    van levelezés (`lkemenes@panattoni.com`: Percz Péter válasza 2026-08-12;
    `maarten.otte@ctp.eu`: aznap kiküldött levél a Sent mappában). Ugyanezeket a
@@ -239,14 +239,52 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
    Javítva: az impersonált cím a `GMAIL_IMPERSONATED_USER` env változóból jön
    (alapértelmezés a régi office cím, hogy visszafelé kompatibilis maradjon).
 
-   **Teendő a tulajdonosnak** (titkot ügynök nem állít be):
-   1. `GOOGLE_REFRESH_TOKEN` generálása a **`peterpohankapersonal@gmail.com`**
-      fiókra (OAuth Playground, `gmail.readonly` scope — a route redirect URI-ja
-      már erre van állítva), és felvétele a Vercel env változók közé. Ettől az
-      OAuth ág aktiválódik, és a funkció ténylegesen működni fog.
-   2. Ha mégis a service account ágat használnád, a `GMAIL_IMPERSONATED_USER`-t
-      is állítsd `peterpohankapersonal@gmail.com`-ra — de ez csak Google
-      Workspace fiókkal járható út, sima Gmaillel nem.
+   **A megoldás menete (2026-08-17)** — a `GOOGLE_REFRESH_TOKEN` legenerálva a
+   `peterpohankapersonal@gmail.com` fiókra és felvéve a Vercelre. Igazolás:
+   `source: "gmail_api_live"`, a Panattoni-címre 7 valós üzenet (1 bejövő
+   automatikus szabadság-válasz 2026-08-04-ről + 6 elküldött), a 3. hullám
+   címeire 1-1 elküldött levél 2026-08-17 07:58-cal. Kontroll: nem létező
+   címre `gmail_api_no_results`, 0 üzenet — azaz nincs fabrikáció.
+
+   **Négy csapda, amibe belefutottunk — jövőbeli hasonló feladatnál nézd meg
+   elsőként:**
+
+   a) **ROSSZ PROJEKT.** A Google Cloudban több projekt is van; a weboldal
+      kliense a **`homola-admin-dashboard`** projektben él (`NextAuth Vercel`
+      néven, `852479495107-mhr459…`), NEM a `bas1987`-ben (`1064371205091-…`,
+      Firebase-hez auto-generált kliens). Az első nekifutás teljes egészében a
+      rossz projektben történt. **Ellenőrzés**: a weboldal által ténylegesen
+      használt client_id kiolvasható a NextAuth signin flow `Location`
+      fejlécéből (`/api/auth/csrf` → POST `/api/auth/signin/google`,
+      `redirect: 'manual'`) — ez cáfolhatatlan bizonyíték, ne tippelj.
+
+   b) **A client secret nem olvasható vissza — sehol.** A Google 2024 óta csak
+      létrehozáskor mutatja (utána `****P_qK`), a Vercelben pedig `Sensitive`
+      változóként szintén rejtett. Megoldás: **második secret létrehozása**
+      ("Add secret"); a kliensnek több aktív secretje is lehet. A refresh token
+      a *client_id*-hoz kötődik, nem a secrethez, ezért az új secrettel generált
+      token a Vercelben maradó régi secrettel is működik. A régit tilos letiltani
+      — azzal megy a NextAuth bejelentkezés.
+
+   c) **Az OAuth Playground használhatatlan volt** ezen a gépen: a
+      `developers.google.com/oauthplayground` stíluslapjai és JS-e nem töltődtek
+      be (vélhetően tartalomblokkoló bővítmény), így az "Authorize APIs" gomb
+      halott volt — sem kézi, sem szkriptelt kattintásra nem reagált. Megoldás:
+      `scripts/get_refresh_token.js`, ami helyben, külső oldal nélkül végzi el
+      ugyanazt (saját HTTP szerver a `localhost:5555/oauth2callback` redirect
+      URI-n, `access_type=offline` + `prompt=consent`). **A tokent fájlba írja,
+      nem a képernyőre**, hogy ne kerüljön terminál-előzménybe vagy
+      ügynök-beszélgetésbe; a fájl `.gitignore`-ban van.
+
+   d) **A szkript interaktív, ezért ügynök nem futtathatja.** A secret bekérése
+      maszkolt `readline`-nal történik, amihez valódi TTY kell — a nem-interaktív
+      Bash eszköz azonnal EOF-ot kap. A felhasználónak külön PowerShell ablakban
+      kell futtatnia.
+
+   > Ügynök-szabály: titkot (client secret, refresh token) ügynök nem gépel be,
+   > nem olvas ki és nem jelenít meg. A böngészőben az input mezőknél csak azt
+   > ellenőrizd, hogy *ki van-e töltve*, az értékét soha ne kérdezd le, és ne
+   > készíts képernyőképet olyan oldalról, ahol titok látszik.
    > Tanulság: **a fabrikált fallback két hónapig elrejtette, hogy az integráció
    > halott.** Egy fallback, ami valós adatnak látszik, nem hibatűrés, hanem
    > hibaelfedés. A rendszerdiagnosztika is félrevezetett: HTTP 200-at jelzett,
@@ -265,4 +303,5 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
 | `update_crm_responses.js` / `update_crm_responses_2.js` | Ad-hoc Gmail-válaszok (státusz + megjegyzés) rögzítése a CRM-ben, e-mail cím alapú sor-egyeztetéssel |
 | `process_new_leads.js` | 3. hullám: kutatott nemzetközi leadek CRM-be töltése + piszkozat-generálás, `emailConfidence`/`source` verifikációs metaadatokkal |
 | `restore_wave3_notes.js` | Egyszeri javítószkript: a szinkron által felülírt 3. hullám Megjegyzés-metaadatainak helyreállítása |
+| `get_refresh_token.js` | Google OAuth refresh token generálás helyben (az OAuth Playground kiváltására). **Interaktív — a felhasználó futtatja külön terminálban.** A tokent fájlba írja, nem a képernyőre |
 | `n8n/generate_portfolio_pdf_en_v6.js` | A teljes tartalmú (13 ingatlan + Afrika-szekció) angol portfólió PDF generátora |
