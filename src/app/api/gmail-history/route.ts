@@ -46,6 +46,14 @@ export async function GET(request: Request) {
         privateKey = privateKey.slice(1, -1);
       }
 
+      // FIGYELEM: ez az ág service account impersonationt (domain-wide
+      // delegation) végez, ami KIZÁRÓLAG Google Workspace fiókkal működik —
+      // sima @gmail.com címmel soha nem fog. A működő út a fenti OAuth ág,
+      // amihez GOOGLE_REFRESH_TOKEN kell. Lásd AGENTS.md 15. tanulság.
+      //
+      // Az impersonált postafiók env-ből felülírható, mert a kampány levelei
+      // a peterpohankapersonal@gmail.com fiókban ülnek (az office cím ahhoz
+      // "send mail as"-ként van kötve), nem az office fiókban.
       authClient = new google.auth.JWT({
         email: serviceAccountEmail,
         key: privateKey,
@@ -53,7 +61,8 @@ export async function GET(request: Request) {
           "https://www.googleapis.com/auth/gmail.readonly",
           "https://mail.google.com/",
         ],
-        subject: "office.homlamentor@gmail.com",
+        subject:
+          process.env.GMAIL_IMPERSONATED_USER || "office.homlamentor@gmail.com",
       });
     }
 

@@ -201,6 +201,58 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
    Ez ugyanaz a hibaosztály, mint a korábbi hardcode-olt növekedési görbe:
    **soha ne fabrikálj adatot a dashboardra, még "fallback" néven sem.**
 
+15. **NYITOTT: a `/api/gmail-history` élő Gmail-lekérdezése éles környezetben
+   nem ad találatot.** A fallback eltávolítása után kiderült, hogy a végpont
+   **minden** címre `total: 0`-t ad — beleértve olyanokat is, ahol bizonyítottan
+   van levelezés (`lkemenes@panattoni.com`: Percz Péter válasza 2026-08-12;
+   `maarten.otte@ctp.eu`: aznap kiküldött levél a Sent mappában). Ugyanezeket a
+   leveleket a lokális `gws` CLI hibátlanul megtalálja, tehát a levelek ott
+   vannak a fiókban — a webalkalmazás nem éri el őket.
+
+   **Gyökérok (2026-08-17-én a Vercel env változók ellenőrzésével azonosítva).**
+   A projekt env változói: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`,
+   `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_PRIVATE_KEY`, `NEXTAUTH_SECRET`,
+   `NEXTAUTH_URL`, `N8N_WEBHOOK_URL`, `RESEND_API_KEY`.
+   **`GOOGLE_REFRESH_TOKEN` NINCS beállítva.** A route hitelesítési logikája:
+
+   ```js
+   if (clientId && clientSecret && refreshToken)      // OAuth ág  -> KIESIK
+   else if (serviceAccountEmail && privateKey)        // JWT ág    -> ez fut
+   ```
+
+   A refresh token hiánya miatt a JWT (service account) ág fut, ami
+   `subject: "office.homlamentor@gmail.com"` impersonation-t végez. A
+   **domain-wide delegation viszont kizárólag Google Workspace fiókkal
+   működik — egy sima `@gmail.com` címmel soha nem fog**, ezért a Gmail hívás
+   mindig hibára fut, és eddig a fallback ágra esett.
+
+   Ez egyben megmagyarázza, miért működik a Sheets olvasás ugyanezzel a service
+   accounttal: ott nincs szükség impersonationre, elég a táblázatot megosztani
+   a service account címével. A Gmailnél nincs ilyen megkerülő út.
+
+   **Melyik postafiókban vannak a levelek?** A `peterpohankapersonal@gmail.com`
+   fiókban (15 143 üzenet) — ezt használja a `gws` CLI is, ezért találja meg a
+   kampánylevelet. Az `office.homlamentor@gmail.com` ehhez "send mail as"-ként
+   van hozzákötve: a válaszok mindkét címen látszanak, kiküldéskor pedig
+   választható a feladó. A route viszont hardcode-oltan az **office** címet
+   impersonálta, tehát még működő delegation esetén is rossz postafiókba nézett.
+   Javítva: az impersonált cím a `GMAIL_IMPERSONATED_USER` env változóból jön
+   (alapértelmezés a régi office cím, hogy visszafelé kompatibilis maradjon).
+
+   **Teendő a tulajdonosnak** (titkot ügynök nem állít be):
+   1. `GOOGLE_REFRESH_TOKEN` generálása a **`peterpohankapersonal@gmail.com`**
+      fiókra (OAuth Playground, `gmail.readonly` scope — a route redirect URI-ja
+      már erre van állítva), és felvétele a Vercel env változók közé. Ettől az
+      OAuth ág aktiválódik, és a funkció ténylegesen működni fog.
+   2. Ha mégis a service account ágat használnád, a `GMAIL_IMPERSONATED_USER`-t
+      is állítsd `peterpohankapersonal@gmail.com`-ra — de ez csak Google
+      Workspace fiókkal járható út, sima Gmaillel nem.
+   > Tanulság: **a fabrikált fallback két hónapig elrejtette, hogy az integráció
+   > halott.** Egy fallback, ami valós adatnak látszik, nem hibatűrés, hanem
+   > hibaelfedés. A rendszerdiagnosztika is félrevezetett: HTTP 200-at jelzett,
+   > mert a végpont *válaszolt* — csak épp kitalált tartalommal. Health-check
+   > sose csak státuszkódot nézzen, hanem a válasz értelmességét is.
+
 ### Releváns szkriptek (`scripts/`, `n8n/`)
 
 | Szkript | Feladat |
