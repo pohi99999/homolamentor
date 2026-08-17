@@ -142,6 +142,10 @@ export async function GET(request: Request) {
                 fromStr.toLowerCase().includes("office.homlamentor") ||
                 fromStr.toLowerCase().includes("peterpohanka");
 
+              // A timeZone megadása kötelező: a Vercel szerver UTC-ben fut, így
+              // enélkül minden időpont 2 órával korábbinak látszana (nyáron),
+              // mint amit a felhasználó a Gmailben lát. Éles eset (2026-08-17):
+              // a Cureus válasza 10:48-kor érkezett, a dashboard 08:48-at mutatott.
               const formattedDate = rawDate
                 ? new Date(rawDate).toLocaleString("hu-HU", {
                     year: "numeric",
@@ -149,6 +153,7 @@ export async function GET(request: Request) {
                     day: "2-digit",
                     hour: "2-digit",
                     minute: "2-digit",
+                    timeZone: "Europe/Budapest",
                   })
                 : "Nincs dátum";
 
