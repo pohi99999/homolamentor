@@ -83,6 +83,39 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   idempotencia-ellenőrzéssel (ha a reakció szövege már szerepel a
   Megjegyzésben, a szkript kihagyja — így a már lefutott Cureus-reakció
   nem íródott felül duplán, amikor a bővített szkript újra lefutott).
+- **Megosztható prémium portfólió-dosszié — Claude Artifact (2026-08-19)**: a
+  `public/Portfolio_HU_v6.pdf` teljes tartalma (mind a 13 ingatlaneszköz, a
+  nyugat-afrikai infrastruktúra-szekció szolár pipeline-nal és EPC/BOT
+  lehetőségekkel, a moduláris MobileHome divízió, kapcsolati blokk) átkerült
+  egy önálló, kétnyelvű (HU/EN, kliensoldali váltógombbal) HTML dokumentumba:
+  `marketing/portfolio-magazine.html`. Nem Next.js-oldal — a felhasználó
+  kifejezetten Claude Artifactként kérte, hogy a link vagy a böngészőből
+  nyomtatott PDF-verzió csatolható legyen e-mail megkeresésekhez. A dokumentum
+  új nyitó szekciót kapott (a korábbi "CONFIDENTIAL — csak intézményi
+  befektetőknek" zárt hangvétel helyett): a cég nem zárt ingatlanlistaként,
+  hanem működő nemzetközi kapcsolatrendszerként mutatkozik be, amely bármilyen
+  ingatlanbefektetési igényt, üzleti letelepedést vagy partnerkapcsolatot
+  össze tud hozni bármely országban/szektorban. Design: Fraunces (display) +
+  IBM Plex Sans/Mono (törzsszöveg, táblázatok, árak) — tudatosan más
+  betűpáros, mint a meglévő `n8n/generate_portfolio_pdf_en_v6.js` PDF-generátor
+  Playfair Display + Montserrat kombinációja. Nyomtatás/PDF-mentés a böngésző
+  natív print-dialógusán keresztül megy (`window.print()` gomb + `@media
+  print` szabályok szekciónkénti oldaltöréssel) — nincs külön puppeteer
+  PDF-pipeline hozzá, hogy a tartalom egyetlen forrásból (a HTML-fájlból)
+  származzon, ne váljon szét két rendszer között. Publikált Artifact URL:
+  https://claude.ai/code/artifact/bd5186db-92d8-442c-9924-3e4d3496d232
+  (Claude Code-fiókhoz kötött, alapból privát — a felhasználó ossza meg, ha
+  nyilvánossá szeretné tenni). **Frissítéshez**: a `marketing/portfolio-
+  magazine.html` szerkesztése után ugyanazt a fájlt kell újra publikálni
+  ugyanazzal az Artifact-tool hívással (ugyanaz az URL marad) — ez csak olyan
+  munkamenetből működik, amely ismeri ezt az URL-t (l. a fenti linket).
+  Ismert korlát: a Claude Code böngészős Artifact-előnézetben (beágyazott,
+  cross-origin sandboxos iframe) az automatizált görgetés és a HU/EN gombra
+  kattintás nem volt megbízhatóan tesztelhető ebből a munkamenetből (a
+  képernyőkép-eszköz időnként lefagyott/nem reagált) — a hero-szekció
+  vizuálisan hibátlanul renderelt (betűtípusok, gradiens cím, elrendezés), de
+  a nyelvváltó gombot és a hosszú görgetést valós böngészőben érdemes
+  manuálisan is ellenőrizni, mielőtt élesben kiküldésre kerül.
 
 ### Kritikus tanulságok jövőbeli munkához
 

@@ -1,0 +1,983 @@
+<title>Homlamentor Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Single deliberate visual world (premium advisory dossier) — dark ground is
+     the brand, not a mode; painted explicitly so it holds on either host theme. */
+  :root{
+    --ink:#0b0c10;
+    --surface:#14151d;
+    --surface-2:#1b1d28;
+    --surface-3:#22242f;
+    --hairline:rgba(201,160,90,.16);
+    --hairline-strong:rgba(201,160,90,.34);
+    --gold:#c9a05a;
+    --gold-soft:#e3c384;
+    --gold-deep:#8a6a35;
+    --teal:#4f9c94;
+    --teal-soft:#8fc9c2;
+    --text:#ece7dd;
+    --text-muted:#a89f8f;
+    --text-faint:#726a5c;
+    --shadow:0 24px 70px rgba(0,0,0,.5);
+    --radius-sm:4px;
+    --radius-md:9px;
+    --radius-lg:16px;
+    --content-w:860px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,h4{
+    font-family:'Fraunces', Georgia, 'Times New Roman', serif;
+    font-weight:600;
+    color:var(--text);
+    margin:0;
+    text-wrap:balance;
+  }
+
+  p{margin:0;}
+  a{color:inherit;}
+  ::selection{background:var(--gold-deep);color:var(--ink);}
+
+  .mono{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    font-variant-numeric:tabular-nums;
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    font-size:.72rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+  }
+
+  .visually-hidden{
+    position:absolute; width:1px; height:1px; overflow:hidden;
+    clip:rect(0 0 0 0); white-space:nowrap;
+  }
+
+  :focus-visible{
+    outline:2px solid var(--gold-soft);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    position:sticky; top:0; z-index:40;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:1rem;
+    padding:.85rem clamp(1.1rem,4vw,2.4rem);
+    background:rgba(11,12,16,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--hairline);
+  }
+  .toolbar-brand{
+    display:flex; align-items:baseline; gap:.5rem;
+    font-family:'Fraunces', serif; font-weight:600; font-size:1rem;
+    letter-spacing:.01em;
+    white-space:nowrap;
+  }
+  .toolbar-brand small{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:500; font-size:.68rem; color:var(--text-faint);
+    letter-spacing:.08em; text-transform:uppercase;
+  }
+  .toolbar-controls{display:flex; align-items:center; gap:.65rem;}
+  .lang-switch{
+    display:flex; border:1px solid var(--hairline-strong);
+    border-radius:999px; padding:3px; gap:2px;
+    background:var(--surface);
+  }
+  .lang-btn{
+    appearance:none; border:none; cursor:pointer;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem; font-weight:600; letter-spacing:.05em;
+    padding:.4rem .75rem; border-radius:999px;
+    background:transparent; color:var(--text-muted);
+    transition:background .18s ease, color .18s ease;
+  }
+  .lang-btn.is-active{background:var(--gold); color:var(--ink);}
+  .lang-btn:not(.is-active):hover{color:var(--text);}
+
+  .print-btn{
+    appearance:none; cursor:pointer;
+    display:flex; align-items:center; gap:.45rem;
+    border:1px solid var(--hairline-strong);
+    background:var(--surface);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:.8rem; font-weight:600;
+    padding:.5rem .9rem; border-radius:999px;
+    transition:border-color .18s ease, background .18s ease;
+  }
+  .print-btn:hover{border-color:var(--gold-soft); background:var(--surface-2);}
+  .print-btn svg{width:15px; height:15px; flex:none;}
+
+  /* ---------- Layout helpers ---------- */
+  .wrap{
+    max-width:var(--content-w);
+    margin:0 auto;
+    padding:0 clamp(1.1rem,4vw,2.4rem);
+  }
+  .wrap-wide{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 clamp(1.1rem,4vw,2.4rem);
+  }
+
+  /* ---------- Cover / hero ---------- */
+  .cover{
+    position:relative;
+    padding:clamp(3rem,9vw,6.5rem) 0 clamp(2.5rem,6vw,4rem);
+    background:
+      radial-gradient(ellipse 900px 480px at 50% -10%, rgba(201,160,90,.14), transparent 60%),
+      var(--ink);
+    border-bottom:1px solid var(--hairline);
+    overflow:hidden;
+  }
+  .cover::before{
+    content:"";
+    position:absolute; inset:0 0 auto 0; height:3px;
+    background:linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold-soft) 50%, var(--gold) 80%, transparent);
+    opacity:.85;
+  }
+  .cover-inner{position:relative; z-index:1;}
+  .cover .eyebrow{display:block; margin-bottom:1.1rem;}
+  .cover h1{
+    font-size:clamp(2.35rem, 5.4vw, 4.1rem);
+    line-height:1.05;
+    letter-spacing:-.01em;
+    background:linear-gradient(135deg, #f4ecd8 0%, var(--gold-soft) 45%, var(--gold-deep) 100%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .cover .subhead{
+    margin-top:.9rem;
+    font-size:clamp(1.02rem,2vw,1.2rem);
+    color:var(--text-muted);
+    max-width:42ch;
+    font-weight:400;
+  }
+  .cover .intro{
+    margin-top:2.1rem;
+    display:flex; flex-direction:column; gap:1.05rem;
+    max-width:64ch;
+    font-size:1.02rem;
+    color:#d8d2c4;
+  }
+  .cover .intro strong{color:var(--gold-soft); font-weight:600;}
+  .cover-actions{
+    margin-top:2.2rem;
+    display:flex; flex-wrap:wrap; gap:.9rem; align-items:center;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:.5rem;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-weight:600; font-size:.88rem;
+    padding:.75rem 1.4rem; border-radius:999px;
+    text-decoration:none; cursor:pointer; border:1px solid transparent;
+    transition:transform .16s ease, border-color .16s ease, background .16s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--gold); color:var(--ink);}
+  .btn-primary:hover{background:var(--gold-soft);}
+  .btn-ghost{border-color:var(--hairline-strong); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--gold-soft); color:var(--gold-soft);}
+  .cover-locations{
+    margin-top:2.6rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.78rem; letter-spacing:.04em;
+    color:var(--text-faint);
+  }
+
+  /* ---------- Stats band ---------- */
+  .stats{
+    border-bottom:1px solid var(--hairline);
+    background:var(--surface);
+  }
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+  }
+  .stat-tile{
+    padding:1.9rem 1.4rem;
+    border-right:1px solid var(--hairline);
+    text-align:left;
+  }
+  .stat-tile:last-child{border-right:none;}
+  .stat-tile .value{
+    font-family:'Fraunces', serif; font-weight:600; font-style:italic;
+    font-size:clamp(1.7rem,3vw,2.3rem);
+    color:var(--gold-soft);
+    display:block; line-height:1;
+  }
+  .stat-tile .label{
+    margin-top:.55rem; font-size:.82rem; color:var(--text-muted);
+    line-height:1.4;
+  }
+
+  @media (max-width:760px){
+    .stats-grid{grid-template-columns:repeat(2,1fr);}
+    .stat-tile:nth-child(2){border-right:none;}
+  }
+
+  /* ---------- Sections ---------- */
+  .section{padding:clamp(3rem,7vw,4.6rem) 0;}
+  .section + .section{border-top:1px solid var(--hairline);}
+  .section-head{max-width:64ch; margin-bottom:2.6rem;}
+  .section-head .eyebrow{display:block; margin-bottom:.85rem;}
+  .section-head h2{font-size:clamp(1.7rem,3.4vw,2.35rem); line-height:1.12;}
+  .section-head .section-intro{
+    margin-top:1rem; color:var(--text-muted); font-size:1rem; max-width:66ch;
+  }
+  .section--africa{background:linear-gradient(180deg, rgba(79,156,148,.05), transparent 30%);}
+  .section--africa .eyebrow{color:var(--teal-soft);}
+
+  /* ---------- Asset cards (Section I) ---------- */
+  .asset-list{display:flex; flex-direction:column; gap:1.3rem;}
+  .asset-card{
+    position:relative;
+    border:1px solid var(--hairline);
+    background:var(--surface);
+    border-radius:var(--radius-lg);
+    padding:1.7rem 1.8rem 1.8rem;
+    overflow:hidden;
+  }
+  .asset-num{
+    position:absolute; top:.4rem; right:1.3rem;
+    font-family:'Fraunces', serif; font-style:italic; font-weight:500;
+    font-size:3.4rem; line-height:1;
+    color:var(--gold); opacity:.11;
+    pointer-events:none; user-select:none;
+  }
+  .asset-top{
+    display:flex; flex-wrap:wrap; justify-content:space-between;
+    gap:1rem 1.5rem; align-items:flex-start; position:relative; z-index:1;
+  }
+  .asset-tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--gold-soft);
+    background:rgba(201,160,90,.1);
+    border:1px solid rgba(201,160,90,.28);
+    padding:.28rem .6rem; border-radius:var(--radius-sm);
+    margin-bottom:.65rem;
+  }
+  .asset-title{font-size:1.28rem; line-height:1.2; max-width:34ch;}
+  .asset-price{text-align:right; flex:none;}
+  .asset-price .plabel{
+    display:block; font-family:'IBM Plex Mono',monospace;
+    font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint);
+  }
+  .asset-price .pvalue{
+    display:block; margin-top:.2rem;
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.18rem; color:var(--gold-soft);
+  }
+  .asset-loc{
+    margin-top:.9rem;
+    display:inline-flex; align-items:center; gap:.4rem;
+    font-size:.82rem; color:var(--teal-soft);
+    background:rgba(79,156,148,.08);
+    border:1px solid rgba(79,156,148,.22);
+    padding:.3rem .65rem; border-radius:var(--radius-sm);
+  }
+  .asset-loc svg{width:12px; height:12px; flex:none;}
+  .asset-desc{
+    margin-top:1rem; font-size:.93rem; color:#cfc9bb; max-width:68ch; line-height:1.6;
+  }
+  .asset-features{
+    margin-top:1.1rem;
+    display:flex; flex-wrap:wrap; gap:.5rem;
+  }
+  .asset-features li{
+    list-style:none;
+    font-size:.78rem; color:var(--text-muted);
+    background:var(--surface-2);
+    border:1px solid var(--hairline);
+    padding:.4rem .7rem; border-radius:var(--radius-sm);
+  }
+
+  /* ---------- Pillars (Section II) ---------- */
+  .pillar-grid{display:flex; flex-direction:column; gap:1rem;}
+  .pillar-card{
+    display:flex; gap:1.1rem;
+    border:1px solid var(--hairline);
+    background:var(--surface);
+    border-radius:var(--radius-lg);
+    padding:1.3rem 1.5rem;
+  }
+  .pillar-num{
+    flex:none; width:2.5rem; height:2.5rem;
+    border-radius:var(--radius-sm);
+    background:rgba(79,156,148,.12);
+    border:1px solid rgba(79,156,148,.32);
+    color:var(--teal-soft);
+    font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:.85rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pillar-card h3{font-size:1.05rem; margin-bottom:.4rem;}
+  .pillar-card p{font-size:.9rem; color:var(--text-muted);}
+
+  /* ---------- Solar table ---------- */
+  .table-wrap{
+    margin-top:1.6rem;
+    border:1px solid var(--hairline);
+    border-radius:var(--radius-lg);
+    overflow:auto;
+    background:var(--surface);
+  }
+  table{border-collapse:collapse; width:100%; min-width:560px;}
+  thead th{
+    text-align:left;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.68rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--teal-soft);
+    padding:.85rem 1rem;
+    border-bottom:1px solid var(--hairline-strong);
+    white-space:nowrap;
+  }
+  tbody td{
+    padding:.75rem 1rem;
+    font-size:.87rem;
+    border-bottom:1px solid var(--hairline);
+    color:var(--text-muted);
+    white-space:nowrap;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(odd){background:rgba(255,255,255,.012);}
+  td.num, th.num{text-align:right;}
+  td.cost{color:var(--gold-soft); font-weight:600;}
+  td.loc{color:var(--text); font-family:'IBM Plex Sans',sans-serif;}
+
+  .grid-note{
+    margin-top:1.4rem; font-size:.88rem; color:var(--text-muted);
+    max-width:70ch; line-height:1.65;
+  }
+
+  /* ---------- EPC opportunities ---------- */
+  .epc-list{margin-top:1.6rem; display:flex; flex-direction:column; gap:.7rem;}
+  .epc-item{
+    border:1px solid var(--hairline);
+    border-left:2px solid var(--teal);
+    background:var(--surface);
+    border-radius:var(--radius-sm);
+    padding:.9rem 1.1rem;
+  }
+  .epc-item .name{
+    display:block; font-family:'Fraunces',serif; font-weight:600;
+    color:var(--teal-soft); font-size:1rem; margin-bottom:.3rem;
+  }
+  .epc-item .detail{font-size:.87rem; color:var(--text-muted); line-height:1.6;}
+
+  .ecowas-panel{
+    margin-top:2rem;
+    border:1px solid rgba(79,156,148,.32);
+    background:linear-gradient(135deg, rgba(79,156,148,.09), rgba(79,156,148,.02));
+    border-radius:var(--radius-lg);
+    padding:1.5rem 1.7rem;
+  }
+  .ecowas-panel h4{font-size:1rem; color:var(--teal-soft); margin-bottom:.85rem;}
+  .ecowas-panel ul{margin:0; padding:0; display:flex; flex-direction:column; gap:.55rem;}
+  .ecowas-panel li{
+    list-style:none; font-size:.88rem; color:#cfc9bb;
+    padding-left:1.1rem; position:relative; line-height:1.55;
+  }
+  .ecowas-panel li::before{
+    content:"—"; position:absolute; left:0; color:var(--teal-soft);
+  }
+
+  /* ---------- Modular housing stats ---------- */
+  .mod-stats{
+    margin-top:2.2rem;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1rem;
+  }
+  .mod-tile{
+    border:1px solid var(--hairline); background:var(--surface);
+    border-radius:var(--radius-lg); padding:1.4rem;
+  }
+  .mod-tile .value{
+    font-family:'Fraunces',serif; font-weight:600; font-style:italic;
+    font-size:1.8rem; color:var(--gold-soft); display:block;
+  }
+  .mod-tile .title{font-size:.88rem; font-weight:600; margin-top:.5rem;}
+  .mod-tile .desc{font-size:.82rem; color:var(--text-muted); margin-top:.4rem; line-height:1.5;}
+
+  .adv-block{
+    margin-top:2rem; border:1px solid var(--hairline); background:var(--surface);
+    border-radius:var(--radius-lg); padding:1.6rem 1.8rem;
+  }
+  .adv-block h3{font-size:1.05rem; color:var(--gold-soft); margin-bottom:.6rem;}
+  .adv-block > p{font-size:.9rem; color:var(--text-muted); margin-bottom:1.1rem; max-width:68ch;}
+  .adv-items{display:flex; flex-direction:column; gap:.65rem;}
+  .adv-item{
+    background:var(--surface-2); border:1px solid var(--hairline);
+    border-radius:var(--radius-sm); padding:.85rem 1rem;
+  }
+  .adv-item .t{display:block; font-weight:600; color:var(--gold-soft); font-size:.88rem; margin-bottom:.2rem;}
+  .adv-item .d{font-size:.85rem; color:var(--text-muted);}
+
+  @media (max-width:700px){
+    .mod-stats{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Contact ---------- */
+  .contact-card{
+    max-width:520px; margin:0 auto;
+    text-align:center;
+    border:1px solid var(--hairline-strong);
+    background:radial-gradient(ellipse at 50% 0%, rgba(201,160,90,.09), var(--surface) 60%);
+    border-radius:var(--radius-lg);
+    padding:2.4rem 2rem;
+  }
+  .contact-badge{
+    width:60px; height:60px; border-radius:50%;
+    background:rgba(201,160,90,.14); border:1px solid rgba(201,160,90,.4);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 1rem;
+    font-family:'Fraunces',serif; font-weight:600; font-size:1.3rem; color:var(--gold-soft);
+  }
+  .contact-card h3{font-size:1.5rem;}
+  .contact-role{
+    margin-top:.35rem; font-family:'IBM Plex Mono',monospace;
+    font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--gold-soft);
+  }
+  .contact-links{margin-top:1.5rem; display:flex; flex-direction:column; gap:.7rem; align-items:center;}
+  .contact-link{
+    display:inline-flex; align-items:center; gap:.55rem;
+    font-size:.94rem; color:var(--text); text-decoration:none;
+  }
+  .contact-link svg{width:16px; height:16px; color:var(--gold-soft); flex:none;}
+  .contact-link:hover{color:var(--gold-soft);}
+
+  .closing-panel{
+    max-width:640px; margin:2.6rem auto 0; text-align:center;
+  }
+  .closing-panel h3{font-size:1.2rem;}
+  .closing-panel p{margin-top:.8rem; font-size:.94rem; color:var(--text-muted); line-height:1.65;}
+  .closing-panel .btn{margin-top:1.3rem;}
+
+  .disclaimer{
+    max-width:680px; margin:2.6rem auto 0;
+    font-size:.78rem; color:var(--text-faint); line-height:1.6; text-align:center;
+  }
+
+  .site-footer{
+    border-top:1px solid var(--hairline);
+    padding:1.8rem clamp(1.1rem,4vw,2.4rem);
+    text-align:center;
+    font-size:.78rem; color:var(--text-faint);
+  }
+
+  /* ---------- Reveal-on-load (guarded so base state is always visible) ---------- */
+  @media (prefers-reduced-motion: no-preference){
+    .reveal{animation:fadeUp .75s cubic-bezier(.22,.61,.36,1) both;}
+    .reveal-delay-1{animation-delay:.08s;}
+    .reveal-delay-2{animation-delay:.16s;}
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(14px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+  }
+
+  /* ---------- Print ---------- */
+  @media print{
+    @page{margin:14mm;}
+    html,body{background:#0b0c10 !important;}
+    *{-webkit-print-color-adjust:exact !important; print-color-adjust:exact !important;}
+    .toolbar{display:none !important;}
+    .cover{padding-top:0;}
+    .page-one{break-after:page;}
+    .section{break-before:page; padding-top:0;}
+    .asset-card, .pillar-card, .epc-item, .mod-tile, .stat-tile, tr{break-inside:avoid;}
+    a[href]{color:inherit; text-decoration:none;}
+    .btn{border:1px solid var(--hairline-strong);}
+  }
+</style>
+
+<div class="toolbar">
+  <div class="toolbar-brand">HOMLAMENTOR <small id="brandSuffix">· Portfólió</small></div>
+  <div class="toolbar-controls">
+    <div class="lang-switch" role="group" aria-label="Nyelv / Language">
+      <button class="lang-btn is-active" id="btnHu" data-lang="hu" aria-pressed="true">HU</button>
+      <button class="lang-btn" id="btnEn" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <button class="print-btn" id="printBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      <span id="printLabel">PDF mentése</span>
+    </button>
+  </div>
+</div>
+
+<main id="app"></main>
+
+<script>
+(function(){
+  var D = {
+    hu: {
+      htmlLang:'hu',
+      brandSuffix:'· Portfólió',
+      printLabel:'PDF mentése',
+      hero:{
+        kicker:'HOMLAMENTOR KFT — TANÁCSADÓI PORTFÓLIÓ · 2026',
+        h1:'Portfólió &amp; Globális Kapcsolatrendszer',
+        subhead:'Ingatlanbefektetés, üzleti letelepedés és stratégiai partnerkapcsolatok Európában és Nyugat-Afrikában.',
+        intro:[
+          'A <strong>HOMLAMENTOR KFT</strong> nem egy zárt ingatlanlista, hanem egy élő kapcsolatrendszer. Kiterjedt nemzetközi hálózatunk és folyamatosan bővülő adatbázisunk révén gyakorlatilag <strong>bármilyen ingatlanbefektetési igényt, üzleti letelepedést vagy stratégiai partnerkapcsolatot</strong> össze tudunk hozni — bármely országban, bármely szektorban, amennyiben a másik fél nyitott az egyeztetésre.',
+          'Csapatunk Budapesttől Abidjanig épít és tart fenn közvetlen, ellenőrzött kapcsolatokat tulajdonosokkal, fejlesztőkkel, állami szereplőkkel és intézményi befektetőkkel egyaránt. Az alábbi válogatás jelenlegi, aktív off-market lehetőségeinket mutatja be — ha az Ön igénye nem szerepel köztük, keressen minket: hálózatunk minden bizonnyal talál rá megoldást.'
+        ],
+        ctaContact:'Kapcsolatfelvétel',
+        ctaScroll:'Portfólió megtekintése',
+        locations:'Budapest · Sopron · Abidjan (Elefántcsontpart) · Lusaka (Zambia)'
+      },
+      stats:[
+        {value:'13', label:'Aktív, off-market ingatlanprojekt'},
+        {value:'560+ MW', label:'Tervezés alatt álló szolár kapacitás Nyugat-Afrikában'},
+        {value:'4', label:'Ország, ahol jelenleg aktív ügyleteink futnak'},
+        {value:'2', label:'Kontinens — egy összefüggő kapcsolatrendszer'}
+      ],
+      sectionI:{
+        eyebrow:'Szekció I',
+        title:'Off-Market Ingatlanbefektetési Portfólió',
+        intro:'Kiemelt, off-market ingatlanbefektetési lehetőségek Magyarországon és Ausztriában: ipari és logisztikai területek, turisztikai és wellness fejlesztések, valamint prémium lakó- és kereskedelmi projektek.',
+        priceLabel:'Irányár',
+        featuresLabel:'Főbb jellemzők',
+        assets:[
+          {num:'01', category:'Ipari &amp; Logisztika', title:'Győrszentiváni Ipari és Mezőgazdasági Terület', location:'Győrszentiván (M1 autópálya 1 km)', price:'6.000.000 EUR',
+            desc:'Győrszentiván stratégiai fekvésű ipari és mezőgazdasági területe az M1-es autópályától mindössze 1 km-re található. A komplexum magában foglal egy 10.300 m²-es kiépített ipari telephelyet, 107 hektár jó minőségű szántót, ebből 46 hektár kavicsbányászati engedéllyel rendelkező bányát közvetlen vasútvágány kapcsolattal.',
+            features:['M1 autópálya 1 km','10.300 m² ipari telephely','107 ha szántó','46 ha engedélyezett kavicsbánya vasútvágánnyal']},
+          {num:'02', category:'Egészségügy &amp; Senior Living', title:'Nagycenk Senior Living &amp; Egészségügyi Központ', location:'Nagycenk (Sopron régió)', price:'9.000.000 EUR',
+            desc:'Nagycenken található prémium senior living és egészségügyi komplexum 75%-os készültségi állapotban. A 1,7 hektáros ősfás parkban elterülő, 6.284 m²-es felépítmény mintegy 8 hónap alatt kulcsrakészen befejezhető. A projekt 56 idősotthoni lakóegységet, 18 emelt szintű apartmant, saját wellness részleget és egészségügyi blokkot foglal magában.',
+            features:['75%-os készültségi fok','8 hónapos befejezés','1,7 ha terület','6.284 m² alapterület','56+18 lakóegység wellnessel']},
+          {num:'03', category:'Turizmus &amp; Vendéglátó', title:'Szentendre Pap-sziget Termál Resort', location:'Szentendre, Pap-sziget (Budapest 20 km)', price:'Kérésre (Off-Market)',
+            desc:'Egyedülálló Duna-parti turisztikai és wellness fejlesztési lehetőség Szentendrén, a Pap-szigeten. A 3,5 hektáros magánterület saját, 1.850 méter mélyről feltörő, 50°C-os termálkúttal rendelkezik (1.500 liter/perc hozammal). Budapesttől mindössze 20 km-re fekvő, ritka adottságú gyógy- és élményfürdő resort projekt.',
+            features:['3,5 ha Duna-parti magánterület','saját 1.850 m mély termálkút (50°C, 1.500 l/perc)','Budapest 20 km']},
+          {num:'04', category:'Turizmus &amp; Vendéglátó / Lakó', title:'Keszthelyi Balatoni Lakópark Projekt', location:'Keszthely (Balaton-part)', price:'8.000.000 USD',
+            desc:'Közvetlen Balaton-közeli, közel 1 hektáros prémium fejlesztési telek Keszthelyen. A területen egy szerkezetkész állapotban lévő, 42 lakásos luxus társasház épülettömb található kiépített mélygarázzsal, liftaknákkal és jóváhagyott tervekkel.',
+            features:['Közel 1 ha Balaton-parti telek','szerkezetkész 42 lakásos társasház-váz','komplett mélygarázzsal és liftaknákkal']},
+          {num:'05', category:'Ipari &amp; Logisztika', title:'Kamion Park &amp; Logisztikai Terminál (M5)', location:'Magyar-szerb határövezet (M5 autópálya)', price:'5.000.000.000 HUF',
+            desc:'Nemzetközi kamionpark és logisztikai terminál az M5-ös autópálya közvetlen szomszédságában, a magyar-szerb határövezetben. A 6,66 hektáros bekerített ipari terület 370 kamion egyidejű parkolására alkalmas, TIR szervizzel, sofőrmotellel és 200 fős melegkonyhás étteremmel ellátott.',
+            features:['Magyar-szerb határövezet','M5 autópálya mellett','6,66 ha ipari terület','370 kamionos kapacitás','TIR szerviz, motel és 200 fős étterem']},
+          {num:'06', category:'Kereskedelmi / Retail', title:'Keszthely Vt-8 Kereskedelmi Fejlesztési Telek', location:'Keszthely (Déli bevezető)', price:'1.050.000 EUR',
+            desc:'Keszthely déli bevezető főútja mellett fekvő 17.943 m²-es, egybefüggő kereskedelmi fejlesztési telek. Vt-8 besorolású övezet 50-75%-os beépíthetőséggel, áruház vagy retail park létesítésére kiválóan alkalmas. Az ingatlan 100%-os tiszta projektcéggel együtt (Share Deal) megvásárolható.',
+            features:['17.943 m² egybefüggő terület déli bevezetőnél','Vt-8 övezet (50-75% beépíthetőség)','100% tiszta projektcég (Share Deal)']},
+          {num:'07', category:'Turizmus &amp; Vendéglátó', title:'Hotel die Traube (Admont, Ausztria)', location:'Admont, Stájerország (Ausztria)', price:'1.950.000 EUR',
+            desc:'Működő, patinás hotel és vendéglátó komplexum az ausztriai Admontban (Stájerország). A tehermentes ingatlan 100%-os osztrák GmbH-val együtt eladó. Az eladó igény esetén azonnali visszabérlési és hosszú távú üzemeltetési garanciát nyújt a befektetőnek.',
+            features:['Működő stájer szállodaingatlan','100%-os osztrák GmbH-val együtt, tehermentesen','azonnali visszabérlési és üzemeltetési ajánlattal']},
+          {num:'08', category:'Turizmus &amp; Vendéglátó', title:'Balatoni Wellness Park &amp; Resort (Gyenesdiás)', location:'Gyenesdiás (Balaton)', price:'2.150.000.000 HUF',
+            desc:'Gyenesdiáson található 49.000 m²-es wellness park és üdülőkomplexum. A területen 2.300 m²-nyi igényes felépítmény áll (10 felszerelt apartman, étterem, wellness részleg), kiegészítve egy 100 férőhelyes, közművesített prémium lakóautó és kemping parkolóval.',
+            features:['49.000 m² egybefüggő terület','2.300 m² felépítmény (10 apartman, étterem, wellness)','100 férőhelyes prémium lakóautó parkoló']},
+          {num:'09', category:'Turizmus &amp; Vendéglátó / Luxus', title:'Balatongyöröki Golfpálya és Vízparti Terület', location:'Balatongyörök (közvetlen Balaton-part)', price:'6.000.000 EUR',
+            desc:'Különleges, 72 hektáros, közvetlen Balaton-parti ingatlankomplexum Balatongyörökön. Nemzetközi szabványoknak megfelelő, régebben működő 18 lyukú golfpályát, saját strandot, klubházat és panorámás éttermet tartalmaz, vitorláskikötő és apartmanpark fejlesztési opcióval.',
+            features:['72 ha közvetlen Balaton-parti terület','professzionális, 18 lyukú golfkomplexum stranddal és klubházzal','kikötőfejlesztési opcióval']},
+          {num:'10', category:'Ipari &amp; Logisztika', title:'Üllő — Stratégiai Fejlesztési Terület (kicsi)', location:'Üllő, M4 autópálya / repülőtér csomópont', price:'780.000.000 HUF',
+            desc:'Prémium fejlesztési célú terület Budapest délkeleti agglomerációjának egyik legdinamikusabban fejlődő logisztikai zónájában. A 18 247 m²-es (1,82 ha) telek közvetlenül az M4-es autópálya csomópontjánál helyezkedik el, 5 km-re a Ferihegyi repülőtértől. A terület Kiemelt Fejlesztési Terület státuszú, tehermentes, 1/1 céges tulajdon, azonnal birtokba vehető.',
+            features:['18 247 m² (1,82 ha) — három telek (3633/2, 3634/3, 3635 hrsz.)','Közvetlen M4 autópálya-csomópont, kiváló láthatóság','Repülőtér (BUD): 5 km (kb. 7 perc) · M0 körgyűrű: kb. 8 perc','Övezet: Gksz-Sz2, max. 40% beépíthetőség (~7 300 m²)','Max. építménymagasság 8,0 m; redundáns közművek, két fúrt kút','Kiemelt Fejlesztési Terület — gyorsított engedélyezés']},
+          {num:'11', category:'Ipari &amp; Logisztika', title:'Nagykanizsa — Ipari Telephely (Vágóhíd utca)', location:'8800 Nagykanizsa, Vágóhíd utca 4.', price:'460.000.000 HUF',
+            desc:'Eladó ipari telephely Nagykanizsán, a 71-es főút közvetlen közelében, kiváló közlekedési kapcsolatokkal. A 1,5–2 hektáros beépített ipari telek komplex feldolgozócsarnokkal, nagy raktárépülettel és teljes ipari infrastruktúrával rendelkezik. Ideális élelmiszeripar, logisztika, raktározás vagy könnyűipari termelés céljaira.',
+            features:['1,5–2 ha (15 000–20 000 m²) ipari telek','Beépített terület ~4 500 m² + rakodózónák (fő csarnok ~2 594 m², raktár ~2 214 m²)','Teljes közműellátás: 380V ipari áram, víz, gáz, szennyvíz','Teherautó-rakodók, tágas parkolók, több bejárat, kamerarendszer','Balaton: 30 km · Hévíz: 32 km · M7: közvetlen elérés · Zalaegerszeg: 38 km']},
+          {num:'12', category:'Ipari &amp; Logisztika', title:'Székesfehérvár — Stratégiai Ipari és Logisztikai Terület', location:'Székesfehérvár, Börgöndi út közelében', price:'5.000.000 EUR', priceLabel:'Kikiáltási ár',
+            desc:'Kivételes stratégiai fekvésű ipari és logisztikai fejlesztési terület Székesfehérváron, félúton Budapest és a Balaton között. A telek a Börgöndi útról közelíthető meg, amely a várost köti össze a repülőtérrel. A terület gyeppel fedett, azonnal fejleszthető; a reptér melletti tervezett ipari park és a növekvő teherforgalmi vasúti kapacitás kiváló befektetési lehetőséget biztosít.',
+            features:['Közvetlenül az M7 autópálya mellett (jó rálátással)','M6: 30 km (Horvátország/Szerbia) · M1: 40 km (Ausztria/Szlovákia) · M0: 45 km','Börgöndi repülőtér: kb. 500 m (fejlesztés alatt)','Börgöndi vasútállomás a VO teherforgalmi gyűrűn; nagy teljesítményű trafó a közelben','Zöldmezős, tehermentes, azonnal fejleszthető (020388/10 hrsz.)']},
+          {num:'13', category:'Ipari &amp; Logisztika', title:'Üllő — Nagy Iparterület (115 ha)', location:'Üllő, M4 autópálya / repülőtér közelében', price:'20.000–25.000 Ft/m²',
+            desc:'Kiemelkedő méretű, 115 hektáros ipari fejlesztési bázisterület Üllőn, közvetlenül a 4-es autópálya mellett, a repülőtér közelében. A kivett (beépítésre szánt) terület azonnal fejleszthető, 12 méteres megengedett építési magassággal. A csatlakozó 330 hektáros szomszédos terület megegyezés alapján, kb. féláron is megszerezhető.',
+            features:['115 ha bázisterület, kivett, azonnal fejleszthető','12 m megengedett építménymagasság','M4 autópálya: 100 m · Ferihegy (4-es terminál): néhány km · Budapest–Belgrád vasút: 500 m','Opció: +330 ha szomszédos terület kb. 10 000–15 000 Ft/m² áron','Ideális logisztikának, nagyraktárnak, ipari parknak, e-kereskedelmi hubnak']}
+        ]
+      },
+      sectionII:{
+        eyebrow:'Szekció II',
+        title:'Nyugat-Afrikai Infrastruktúra- és Projekt-Finanszírozás',
+        intro:'Kiemelkedő off-market befektetési és társbefektetői lehetőségek Elefántcsontparton, Abidjan központtal. Magántőkealapok és bankok részére, állami garanciákkal és kiemelkedő megtérüléssel az ECOWAS szabadkereskedelmi övezetben.',
+        pillars:[
+          {num:'01', title:'Megújuló Energia', desc:'50+ MW kapacitású napelemes kiserőművek és hálózatok fejlesztése, hosszú távú állami átvételi garanciákkal és multilaterális fedezetvállalással. Az alábbi táblázat a jelenleg előkészítés alatt álló szolár erőmű projekteket foglalja össze.'},
+          {num:'02', title:'Távközlési Infrastruktúra', desc:'Országos távközlési oszlophálózat (towerco) építése és üzemeltetése Elefántcsontpart frekventált pontjain, hosszú távú bérleti szerződésekkel.'},
+          {num:'03', title:'Agrár- és Élelmiszeripar', desc:'Modern mezőgazdasági takarmány- és élelmiszer-előállító üzemek létesítése a növekvő helyi élelmiszerigény kiszolgálására, vám- és adómentes övezetben.'}
+        ],
+        solarTitle:'Szolár Erőmű Pipeline (Elefántcsontpart)',
+        solarHeaders:['Helység','Méret','Tároló / BESS','Szerződés','Bruttó költség'],
+        solarRows:[
+          ['Katiola','50 MWac','Nincs','PPP / IPP / PPA','47 millió EUR'],
+          ['Tengréla','50 MWac','Nincs','PPP / IPP / PPA','47 millió EUR'],
+          ['Bouna','2×50 MWac','Nincs','PPP / IPP / PPA','100 millió EUR'],
+          ['Dabakala','100 MWac','33 MWh','PPP / IPP / PPA','110 millió EUR'],
+          ['Niakaramandougou','100 MWac','33 MWh','PPP / IPP / PPA','110 millió EUR'],
+          ['Singrobo (úszó)','30/22 MWac','Nincs','JV / PPA','27 millió EUR'],
+          ['Singrobo','30/22 MWac','Nincs','JV / PPA','25 millió EUR'],
+          ['Soubré (úszó)','50 MWac','Nincs','PPP / IPP / PPA','50 millió EUR'],
+          ['Popoli (úszó)','50 MWac','Nincs','PPP / IPP / PPA','50 millió EUR']
+        ],
+        gridNote:'Elektromos energia szállító és elosztó hálózat építése az északi régiókban. Megbízó / projektgazda: Côte d’Ivoire Energy (állami vállalat) — EPC és előfinanszírozás keretén belül. Az 1. fázisra elkülönített fedezet: 14 milliárd Fcfa (XOF); 1 EUR = 655,795 Fcfa (fix árfolyam). Közép- és kisfeszültségű hálózat építése: kb. 3.500 km.',
+        epcTitle:'Építőipari és Ingatlanfejlesztési Vállalkozási Lehetőségek (EPC+F / BOT)',
+        epcIntro:'Kiemelt abidjani és Elefántcsontpart-szerte elérhető építőipari és ingatlanfejlesztési vállalkozási lehetőségek, EPC+F és BOT konstrukciókban:',
+        epcItems:[
+          {name:'YOP Village', detail:'Abidjan, Yopougon kerület — 8 ha, 330 millió EUR, EPC+F, JV/Konzorcium szerződés, azonnali kezdéssel. Az RDA aláírása után a dokumentáció rendelkezésre áll.'},
+          {name:'Diamond City', detail:'Songon — teljesen új, 60.000 lakásos városépítés. Állami projekt, privát fejlesztőnek kiadva, EPC+F részvétellel. A pontosításhoz személyes találkozó szükséges Abidjanban.'},
+          {name:'Abidjan — Bevásárlóközpontok', detail:'Több projekt, 3–5 milliárd Fcfa értékben, BOT szerződéssel. Dokumentáció az RDA aláírása után.'},
+          {name:'SanPedro — Ipari Zóna', detail:'250 ha, teljesen új ipari zóna, BOT szerződéssel. Dokumentáció az RDA aláírása után.'}
+        ],
+        ecowasTitle:'ECOWAS Szabadkereskedelmi Övezet — Befektetői Kedvezmények',
+        ecowasItems:[
+          'Társasági adómentesség a kezdeti működési években.',
+          'Vámmentesség a tőkejavak (gépek, berendezések) importja esetén.',
+          'A profit és a tőke 100%-os hazautalhatósága külföldi magántőke-befektetők számára.'
+        ]
+      },
+      sectionIII:{
+        eyebrow:'Szekció III',
+        title:'Konténeres Mobilházak &amp; Regionális Expanzió',
+        intro:'Kiváló minőségű, konténerben szállítható, önellátó napelemes rendszerrel ellátott moduláris lakóterek (30 m², 50 m², 80–100 m²) európai exportra és afrikai összeszerelésre optimalizálva.',
+        stats:[
+          {value:'100%', title:'Konténerben szállítható', desc:'Bárhol a világon gyorsan és egyszerűen telepíthető, szabványos tengeri konténeres logisztikával.'},
+          {value:'50%', title:'Munkaköltség-megtakarítás', desc:'Az afrikai (Abidjan és Lusaka) összeszerelő üzemek helyi munkaerejének bevonásával.'},
+          {value:'Profit', title:'100% transzportprofit', desc:'A lapraszerelt, helyszínen felállított moduláris házak szállítási hatékonysága révén.'}
+        ],
+        advTitle:'Stratégiai és Gazdasági Előnyök a Gyártó Partnerek Számára',
+        advIntro:'A HOMLAMENTOR KFT logisztikai és összeszerelési franchise-struktúrája közvetlen pénzügyi és versenyképességi előnyt biztosít a nemzetközi piacon.',
+        advItems:[
+          {t:'1. Lapraszerelt konténeres logisztika', d:'A konténeres szállítás a tengerentúli szállítási többletköltséget nettó működési árréssé alakítja.'},
+          {t:'2. Helyi összeszerelő központok (Abidjan &amp; Lusaka)', d:'A helyi képzett munkaerő az európai árszinthez képest 50%-kal csökkenti az összeszerelési költségeket.'}
+        ]
+      },
+      sectionIV:{
+        eyebrow:'Szekció IV',
+        title:'Kapcsolat &amp; Tanácsadás',
+        subtitle:'Kiemelt üzleti és off-market befektetési megkeresések',
+        name:'László Homola',
+        role:'Ügyvezető menedzser &amp; tulajdonos',
+        email:'office.homlamentor@gmail.com',
+        phone:'+36 70 633 270',
+        closingTitle:'Nem találta, amit keresett?',
+        closingText:'Ez a válogatás csak illusztráció — hálózatunk ennél jóval szélesebb kört fed le. Ha ingatlanbefektetési igénye, üzleti letelepedési terve vagy partnerkeresése van bármely országban, keressen minket: rendszerünk és kapcsolataink segítségével nagy eséllyel megtaláljuk a megoldást.',
+        closingCta:'Írjon nekünk',
+        disclaimer:'A jelen anyagban szereplő adatok tájékoztató jellegűek, a pontos feltételeket egyeztetés és hivatalos ellenőrzés (due diligence) tárgyát képezik. Az anyag üzleti célú megosztásra készült — kérjük, kezelje bizalmasan.'
+      },
+      footer:'© 2026 HOMLAMENTOR KFT — Minden jog fenntartva.'
+    },
+
+    en: {
+      htmlLang:'en',
+      brandSuffix:'· Portfolio',
+      printLabel:'Save as PDF',
+      hero:{
+        kicker:'HOMLAMENTOR KFT — ADVISORY PORTFOLIO · 2026',
+        h1:'Portfolio &amp; Global Network',
+        subhead:'Real estate investment, business relocation, and strategic partnerships across Europe and West Africa.',
+        intro:[
+          '<strong>HOMLAMENTOR KFT</strong> is not a fixed list of listings — it is a living network. Through our extensive international relationships and continuously growing database, we can bring together virtually <strong>any real estate investment need, business relocation, or strategic partnership</strong> — in any country, in any sector — provided the other party is open to being approached.',
+          'Our team builds and maintains direct, verified relationships — from Budapest to Abidjan — with owners, developers, government counterparts, and institutional investors alike. The selection below reflects our current, active off-market opportunities; if what you’re looking for isn’t listed, reach out. Our network will very likely find a way.'
+        ],
+        ctaContact:'Get in touch',
+        ctaScroll:'View the portfolio',
+        locations:'Budapest · Sopron · Abidjan (Ivory Coast) · Lusaka (Zambia)'
+      },
+      stats:[
+        {value:'13', label:'Active, off-market real estate assets'},
+        {value:'560+ MW', label:'Solar capacity in development across West Africa'},
+        {value:'4', label:'Countries with active deal flow'},
+        {value:'2', label:'Continents — one connected network'}
+      ],
+      sectionI:{
+        eyebrow:'Section I',
+        title:'Off-Market Real Estate Investment Portfolio',
+        intro:'Featured off-market real estate investment opportunities in Hungary and Austria: industrial and logistics sites, tourism and wellness developments, and premium residential and commercial projects.',
+        priceLabel:'Asking Price',
+        featuresLabel:'Key Highlights',
+        assets:[
+          {num:'01', category:'Industrial &amp; Logistics', title:'Győrszentiván Industrial &amp; Agricultural Land', location:'Győrszentiván (1 km from M1 highway)', price:'6,000,000 EUR',
+            desc:'Strategically located industrial and agricultural land in Győrszentiván, just 1 km from the M1 highway. The complex includes a 10,300 m² developed industrial facility, 107 hectares of high-quality arable land, and a 46-hectare licensed gravel quarry with a direct railway connection.',
+            features:['M1 highway 1 km away','10,300 m² industrial facility','107 ha arable land','46 ha licensed gravel pit with rail siding']},
+          {num:'02', category:'Healthcare &amp; Senior Living', title:'Nagycenk Senior Living &amp; Healthcare Center', location:'Nagycenk (Sopron region)', price:'9,000,000 EUR',
+            desc:'Premium senior living and healthcare complex in Nagycenk at 75% completion. Set in a 1.7-hectare mature tree park, the 6,284 m² building can be completed turnkey in approximately 8 months. Features 56 senior care units, 18 upgraded apartments, a private wellness section, and a healthcare block.',
+            features:['75% completion rate','8-month turnkey completion','1.7 ha land','6,284 m² floor area','56+18 residential units with wellness']},
+          {num:'03', category:'Tourism &amp; Hospitality', title:'Szentendre Pap Island Thermal Resort', location:'Szentendre, Pap Island (20 km from Budapest)', price:'On Request (Off-Market)',
+            desc:'Unique Danube waterfront tourism and wellness development opportunity on Pap Island in Szentendre. The 3.5-hectare private estate features its own 1,850-meter deep thermal well yielding 50°C water at 1,500 liters/minute. Located just 20 km from Budapest.',
+            features:['3.5 ha Danube waterfront private land','Own 1,850 m deep thermal well (50°C, 1,500 L/min)','20 km from Budapest']},
+          {num:'04', category:'Tourism &amp; Hospitality / Residential', title:'Keszthely Balaton Residential Park Project', location:'Keszthely (Lake Balaton shore)', price:'8,000,000 USD',
+            desc:'Premium development plot of nearly 1 hectare, directly near Lake Balaton in Keszthely. The site includes a structurally complete 42-unit luxury condominium shell with a finished underground garage, elevator shafts, and approved plans.',
+            features:['Nearly 1 ha plot near Lake Balaton','Structurally complete 42-unit condominium shell','Finished underground garage and elevator shafts']},
+          {num:'05', category:'Industrial &amp; Logistics', title:'Truck Park &amp; Logistics Terminal (M5)', location:'Hungarian-Serbian border zone (M5 highway)', price:'5,000,000,000 HUF',
+            desc:'International truck park and logistics terminal directly adjacent to the M5 motorway, in the Hungarian-Serbian border zone. The fenced, 6.66-hectare industrial site accommodates up to 370 trucks simultaneously, with a TIR service center, driver motel, and a 200-seat full-service restaurant.',
+            features:['Hungarian-Serbian border zone','Directly by the M5 motorway','6.66 ha industrial site','370-truck capacity','TIR service, motel, and 200-seat restaurant']},
+          {num:'06', category:'Commercial / Retail', title:'Keszthely Vt-8 Commercial Development Plot', location:'Keszthely (southern approach road)', price:'1,050,000 EUR',
+            desc:'A contiguous 17,943 m² commercial development plot along the southern approach road into Keszthely. Zoned Vt-8 with 50-75% buildable ratio, ideal for a department store or retail park. The property is available together with a 100% clean single-purpose vehicle (share deal).',
+            features:['17,943 m² contiguous plot on southern approach road','Vt-8 commercial zoning (50-75% buildable)','100% clean SPV (share deal)']},
+          {num:'07', category:'Tourism &amp; Hospitality', title:'Hotel die Traube (Admont, Austria)', location:'Admont, Styria (Austria)', price:'1,950,000 EUR',
+            desc:'Operational, storied traditional hotel and hospitality complex in Admont, Styria (Austria). The debt-free property is offered together with a 100% Austrian GmbH. The seller offers an immediate leaseback and long-term operating guarantee to the investor upon request.',
+            features:['Operational Styrian hotel property','Debt-free, offered with a 100% Austrian GmbH','Immediate leaseback and management offer available']},
+          {num:'08', category:'Tourism &amp; Hospitality', title:'Balaton Wellness Park &amp; Resort (Gyenesdiás)', location:'Gyenesdiás (Lake Balaton)', price:'2,150,000,000 HUF',
+            desc:'49,000 m² wellness park and resort complex located in Gyenesdiás. Features 2,300 m² of high-end structures (10 equipped apartments, restaurant, wellness area), accompanied by a fully serviced 100-pitch premium RV/camper park.',
+            features:['49,000 m² contiguous land','2,300 m² built structure (10 apartments, restaurant, wellness)','100-pitch premium RV park']},
+          {num:'09', category:'Tourism &amp; Hospitality / Luxury', title:'Balatongyörök Golf Course &amp; Waterfront Property', location:'Balatongyörök (direct Lake Balaton shore)', price:'6,000,000 EUR',
+            desc:'A rare 72-hectare direct Lake Balaton waterfront property ensemble in Balatongyörök. Includes an operational 18-hole championship golf course built to international standards, private beach, clubhouse, and panoramic restaurant, with marina and apartment park expansion potential.',
+            features:['72 ha direct Lake Balaton waterfront plot','Operational 18-hole golf course with beach &amp; clubhouse','Marina development option']},
+          {num:'10', category:'Industrial &amp; Logistics', title:'Üllő Strategic Development Site (Small Parcel)', location:'Üllő, M4 motorway / Airport junction', price:'780,000,000 HUF',
+            desc:'Premium development site in one of the most dynamically growing logistics zones of Budapest’s south-eastern agglomeration. The 18,247 m² (1.82 ha) plot sits directly at the M4 motorway junction, 5 km from Budapest Ferihegy Airport. The site holds Priority Development Area status, is debt-free, held under 1/1 corporate title, and available for immediate possession.',
+            features:['18,247 m² (1.82 ha) across three plots (parcels 3633/2, 3634/3, 3635)','Direct M4 motorway junction, excellent visibility','Airport (BUD): 5 km (~7 min) · M0 Ring Road: ~8 min','Zoning: Gksz-Sz2, max. 40% buildable (~7,300 m²)','Max. building height 8.0 m; redundant utilities, two drilled wells','Priority Development Area – accelerated permitting']},
+          {num:'11', category:'Industrial &amp; Logistics', title:'Nagykanizsa Industrial Site (Vágóhíd utca)', location:'8800 Nagykanizsa, Vágóhíd utca 4.', price:'460,000,000 HUF',
+            desc:'Industrial site for sale in Nagykanizsa, directly adjacent to Road 71 with excellent transport links. The 1.5–2 hectare built-up industrial plot includes a processing hall, a large warehouse building, and complete industrial infrastructure — ideal for food processing, logistics, warehousing, or light manufacturing.',
+            features:['1.5–2 ha (15,000–20,000 m²) industrial plot','Built-up area ~4,500 m² + loading zones (main hall ~2,594 m², warehouse ~2,214 m²)','Full utilities: 380V industrial power, water, gas, sewage','Truck loading docks, ample parking, multiple entrances, CCTV','Lake Balaton: 30 km · Hévíz: 32 km · M7: direct access · Zalaegerszeg: 38 km']},
+          {num:'12', category:'Industrial &amp; Logistics', title:'Székesfehérvár Strategic Industrial &amp; Logistics Site', location:'Székesfehérvár, near Börgönd road', price:'5,000,000 EUR', priceLabel:'Asking Price (Auction)',
+            desc:'An exceptionally located industrial and logistics development site in Székesfehérvár, midway between Budapest and Lake Balaton. Accessible from Börgönd road, which connects the city to the airport. The grass-covered greenfield site requires no demolition and is immediately developable.',
+            features:['Directly adjacent to the M7 motorway (with visibility)','M6: 30 km (Croatia/Serbia) · M1: 40 km (Austria/Slovakia) · M0: 45 km','Börgönd Airport: ~500 m (under development)','Börgönd railway station on the VO freight ring; high-capacity substation nearby','Greenfield, debt-free, immediately developable (parcel 020388/10)']},
+          {num:'13', category:'Industrial &amp; Logistics', title:'Üllő Large Industrial Site (115 ha)', location:'Üllő, near M4 motorway / airport', price:'20,000–25,000 HUF/m²',
+            desc:'An outstanding 115-hectare industrial development base site in Üllő, directly alongside the M4 motorway near the airport. The site is zoned for development and immediately buildable, with a permitted building height of 12 meters. An adjacent 330-hectare site can also be acquired by agreement at roughly half price.',
+            features:['115 ha base site, zoned for development, immediately buildable','12 m permitted building height','M4 motorway: 100 m · Ferihegy (Terminal 4): a few km · Budapest–Belgrade railway: 500 m','Option: +330 ha adjacent site at ~HUF 10,000–15,000/m²','Ideal for logistics, large-format warehousing, industrial park, e-commerce hub']}
+        ]
+      },
+      sectionII:{
+        eyebrow:'Section II',
+        title:'West African Infrastructure &amp; Project Finance',
+        intro:'Outstanding off-market investment and co-investment opportunities in Ivory Coast, centered in Abidjan, for private equity funds and banks — featuring sovereign guarantees, high yields, and tax exemptions within the ECOWAS free trade zone.',
+        pillars:[
+          {num:'01', title:'Renewable Energy', desc:'Development of 50+ MW grid-connected solar power plants and networks, backed by long-term sovereign power purchase guarantees and multilateral credit support. See the current solar pipeline below.'},
+          {num:'02', title:'Telecommunications Infrastructure', desc:'Construction and operation of a nationwide telecom tower network (TowerCo) at strategic locations across Ivory Coast, backed by long-term lease agreements.'},
+          {num:'03', title:'Agriculture &amp; Food Processing', desc:'Establishment of modern agricultural feed and food processing plants to serve growing local food demand, within a customs- and tax-exempt zone.'}
+        ],
+        solarTitle:'Solar Power Plant Pipeline (Ivory Coast)',
+        solarHeaders:['Location','Size','Storage / BESS','Contract','Gross Cost'],
+        solarRows:[
+          ['Katiola','50 MWac','None','PPP / IPP / PPA','EUR 47 million'],
+          ['Tengréla','50 MWac','None','PPP / IPP / PPA','EUR 47 million'],
+          ['Bouna','2×50 MWac','None','PPP / IPP / PPA','EUR 100 million'],
+          ['Dabakala','100 MWac','33 MWh','PPP / IPP / PPA','EUR 110 million'],
+          ['Niakaramandougou','100 MWac','33 MWh','PPP / IPP / PPA','EUR 110 million'],
+          ['Singrobo (floating)','30/22 MWac','None','JV / PPA','EUR 27 million'],
+          ['Singrobo','30/22 MWac','None','JV / PPA','EUR 25 million'],
+          ['Soubré (floating)','50 MWac','None','PPP / IPP / PPA','EUR 50 million'],
+          ['Popoli (floating)','50 MWac','None','PPP / IPP / PPA','EUR 50 million']
+        ],
+        gridNote:'Construction of an electricity transmission and distribution network in the northern regions. Project owner: Côte d’Ivoire Energy (state-owned utility), under an EPC + pre-financing framework. Budget allocated for Phase 1: XOF 14 billion (1 EUR = XOF 655.795, fixed). Medium- and low-voltage network construction: approx. 3,500 km.',
+        epcTitle:'Construction &amp; Real Estate Development Opportunities (EPC+F / BOT)',
+        epcIntro:'Featured construction and real estate development opportunities available in Abidjan and across Ivory Coast, under EPC+F and BOT structures:',
+        epcItems:[
+          {name:'YOP Village', detail:'Abidjan, Yopougon district — 8 ha, EUR 330 million, EPC+F, JV/Consortium agreement, immediate start. Documentation available upon signature of the RDA.'},
+          {name:'Diamond City', detail:'Songon — entirely new 60,000-unit city development. State project awarded to a private developer, EPC+F participation. An in-person meeting in Abidjan is required to finalize details.'},
+          {name:'Abidjan Shopping Malls', detail:'Multiple projects, valued at XOF 3–5 billion, BOT contract. Documentation available following the RDA.'},
+          {name:'San Pedro Industrial Zone', detail:'250 ha, entirely new industrial zone, BOT contract. Documentation available following the RDA.'}
+        ],
+        ecowasTitle:'ECOWAS Free Trade &amp; Investment Incentives',
+        ecowasItems:[
+          'Corporate tax holidays for initial operating years.',
+          'Customs duty exemptions on capital machinery and equipment.',
+          '100% repatriation of profits &amp; capital for foreign private equity investors.'
+        ]
+      },
+      sectionIII:{
+        eyebrow:'Section III',
+        title:'Containerized Mobile Homes &amp; Regional Expansion',
+        intro:'Premium-quality, container-shippable, solar self-sufficient modular living spaces (30 m², 50 m², 80-100 m²), optimized for European export and African assembly.',
+        stats:[
+          {value:'100%', title:'Fully containerized', desc:'Rapidly and easily deployable anywhere in the world via standard ocean container logistics.'},
+          {value:'50%', title:'Labor cost savings', desc:'Achieved by engaging local labor at the African (Abidjan and Lusaka) assembly plants.'},
+          {value:'Profit', title:'100% transport profit', desc:'Driven by the shipping efficiency of flat-pack modular homes assembled on-site.'}
+        ],
+        advTitle:'Strategic &amp; Economic Advantages for Manufacturing Partners',
+        advIntro:'HOMLAMENTOR KFT’s logistics and assembly franchise structure delivers a direct financial and competitive advantage in the international market.',
+        advItems:[
+          {t:'1. Flat-pack containerized logistics', d:'Containerized shipping converts overseas transport overhead into net operational margin.'},
+          {t:'2. Local assembly hubs (Abidjan &amp; Lusaka)', d:'Local skilled labor lowers assembly costs by 50% compared to European baselines.'}
+        ]
+      },
+      sectionIV:{
+        eyebrow:'Section IV',
+        title:'Contact &amp; Advisory',
+        subtitle:'Priority business and off-market investment inquiries',
+        name:'László Homola',
+        role:'Managing Director &amp; Owner',
+        email:'office.homlamentor@gmail.com',
+        phone:'+36 70 633 270',
+        closingTitle:'Didn’t find what you were looking for?',
+        closingText:'This selection is only a sample — our network reaches far wider. If you have a real estate investment need, a business relocation plan, or are looking for a partner in any country, reach out: our systems and relationships are very likely to find a solution.',
+        closingCta:'Email us',
+        disclaimer:'The information in this material is provided for informational purposes; exact terms are subject to negotiation and formal due diligence. This material is intended for business sharing — please treat it as confidential.'
+      },
+      footer:'© 2026 HOMLAMENTOR KFT — All rights reserved.'
+    }
+  };
+
+  var pinIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>';
+  var mailIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><path d="M3 7l9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>';
+  var phoneIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>';
+
+  function esc(s){ return String(s); }
+
+  function assetCard(a, d1){
+    var priceLabel = a.priceLabel || d1.priceLabel;
+    var feats = a.features.map(function(f){ return '<li>'+f+'</li>'; }).join('');
+    return '' +
+      '<div class="asset-card">' +
+        '<span class="asset-num">'+a.num+'</span>' +
+        '<div class="asset-top">' +
+          '<div>' +
+            '<span class="asset-tag">'+a.category+'</span>' +
+            '<h3 class="asset-title">'+a.title+'</h3>' +
+          '</div>' +
+          '<div class="asset-price">' +
+            '<span class="plabel">'+priceLabel+'</span>' +
+            '<span class="pvalue mono">'+a.price+'</span>' +
+          '</div>' +
+        '</div>' +
+        '<span class="asset-loc">'+pinIcon+' '+a.location+'</span>' +
+        '<p class="asset-desc">'+a.desc+'</p>' +
+        '<ul class="asset-features">'+feats+'</ul>' +
+      '</div>';
+  }
+
+  function pillarCard(p){
+    return '' +
+      '<div class="pillar-card">' +
+        '<div class="pillar-num">'+p.num+'</div>' +
+        '<div><h3>'+p.title+'</h3><p>'+p.desc+'</p></div>' +
+      '</div>';
+  }
+
+  function render(lang){
+    var d = D[lang];
+    document.documentElement.lang = d.htmlLang;
+    document.getElementById('brandSuffix').textContent = d.brandSuffix;
+    document.getElementById('printLabel').textContent = d.printLabel;
+    document.getElementById('btnHu').classList.toggle('is-active', lang==='hu');
+    document.getElementById('btnHu').setAttribute('aria-pressed', lang==='hu');
+    document.getElementById('btnEn').classList.toggle('is-active', lang==='en');
+    document.getElementById('btnEn').setAttribute('aria-pressed', lang==='en');
+
+    var h = d.hero;
+    var heroHtml = '' +
+      '<section class="cover page-one">' +
+        '<div class="wrap cover-inner">' +
+          '<span class="eyebrow reveal">'+h.kicker+'</span>' +
+          '<h1 class="reveal reveal-delay-1">'+h.h1+'</h1>' +
+          '<p class="subhead reveal reveal-delay-1">'+h.subhead+'</p>' +
+          '<div class="intro reveal reveal-delay-2">' + h.intro.map(function(p){return '<p>'+p+'</p>';}).join('') + '</div>' +
+          '<div class="cover-actions reveal reveal-delay-2">' +
+            '<a class="btn btn-primary" href="mailto:'+d.sectionIV.email+'">'+h.ctaContact+'</a>' +
+            '<a class="btn btn-ghost" href="#section-i">'+h.ctaScroll+'</a>' +
+          '</div>' +
+          '<div class="cover-locations reveal reveal-delay-2">'+h.locations+'</div>' +
+        '</div>' +
+      '</section>' +
+      '<section class="stats page-one">' +
+        '<div class="wrap-wide stats-grid">' +
+          d.stats.map(function(s){return '<div class="stat-tile"><span class="value mono">'+s.value+'</span><span class="label">'+s.label+'</span></div>';}).join('') +
+        '</div>' +
+      '</section>';
+
+    var s1 = d.sectionI;
+    var s1Html = '' +
+      '<section class="section" id="section-i">' +
+        '<div class="wrap">' +
+          '<div class="section-head">' +
+            '<span class="eyebrow">'+s1.eyebrow+'</span>' +
+            '<h2>'+s1.title+'</h2>' +
+            '<p class="section-intro">'+s1.intro+'</p>' +
+          '</div>' +
+          '<div class="asset-list">' + s1.assets.map(function(a){return assetCard(a, s1);}).join('') + '</div>' +
+        '</div>' +
+      '</section>';
+
+    var s2 = d.sectionII;
+    var solarRows = s2.solarRows.map(function(r){
+      return '<tr><td class="loc">'+r[0]+'</td><td class="mono">'+r[1]+'</td><td class="mono">'+r[2]+'</td><td>'+r[3]+'</td><td class="mono cost">'+r[4]+'</td></tr>';
+    }).join('');
+    var solarHeaders = s2.solarHeaders.map(function(hh){return '<th>'+hh+'</th>';}).join('');
+    var epcItems = s2.epcItems.map(function(e){return '<div class="epc-item"><span class="name">'+e.name+'</span><span class="detail">'+e.detail+'</span></div>';}).join('');
+    var ecowasItems = s2.ecowasItems.map(function(i){return '<li>'+i+'</li>';}).join('');
+    var s2Html = '' +
+      '<section class="section section--africa" id="section-ii">' +
+        '<div class="wrap">' +
+          '<div class="section-head">' +
+            '<span class="eyebrow">'+s2.eyebrow+'</span>' +
+            '<h2>'+s2.title+'</h2>' +
+            '<p class="section-intro">'+s2.intro+'</p>' +
+          '</div>' +
+          '<div class="pillar-grid">' + s2.pillars.map(pillarCard).join('') + '</div>' +
+          '<h3 style="margin-top:2.4rem;font-size:1.15rem;color:var(--teal-soft);">'+s2.solarTitle+'</h3>' +
+          '<div class="table-wrap"><table><thead><tr>'+solarHeaders+'</tr></thead><tbody>'+solarRows+'</tbody></table></div>' +
+          '<p class="grid-note">'+s2.gridNote+'</p>' +
+          '<h3 style="margin-top:2.6rem;font-size:1.15rem;color:var(--teal-soft);">'+s2.epcTitle+'</h3>' +
+          '<p class="grid-note" style="margin-top:.6rem;">'+s2.epcIntro+'</p>' +
+          '<div class="epc-list">'+epcItems+'</div>' +
+          '<div class="ecowas-panel"><h4>'+s2.ecowasTitle+'</h4><ul>'+ecowasItems+'</ul></div>' +
+        '</div>' +
+      '</section>';
+
+    var s3 = d.sectionIII;
+    var s3Html = '' +
+      '<section class="section" id="section-iii">' +
+        '<div class="wrap">' +
+          '<div class="section-head">' +
+            '<span class="eyebrow">'+s3.eyebrow+'</span>' +
+            '<h2>'+s3.title+'</h2>' +
+            '<p class="section-intro">'+s3.intro+'</p>' +
+          '</div>' +
+          '<div class="mod-stats">' + s3.stats.map(function(t){return '<div class="mod-tile"><span class="value">'+t.value+'</span><span class="title">'+t.title+'</span><p class="desc">'+t.desc+'</p></div>';}).join('') + '</div>' +
+          '<div class="adv-block">' +
+            '<h3>'+s3.advTitle+'</h3><p>'+s3.advIntro+'</p>' +
+            '<div class="adv-items">' + s3.advItems.map(function(a){return '<div class="adv-item"><span class="t">'+a.t+'</span><span class="d">'+a.d+'</span></div>';}).join('') + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</section>';
+
+    var s4 = d.sectionIV;
+    var initials = s4.name.split(' ').map(function(w){return w[0];}).join('');
+    var s4Html = '' +
+      '<section class="section" id="section-iv">' +
+        '<div class="wrap" style="text-align:center;">' +
+          '<div class="section-head" style="margin:0 auto 2.4rem;text-align:center;">' +
+            '<span class="eyebrow">'+s4.eyebrow+'</span>' +
+            '<h2>'+s4.title+'</h2>' +
+            '<p class="section-intro" style="margin-left:auto;margin-right:auto;">'+s4.subtitle+'</p>' +
+          '</div>' +
+          '<div class="contact-card">' +
+            '<div class="contact-badge">'+initials+'</div>' +
+            '<h3>'+s4.name+'</h3>' +
+            '<div class="contact-role">'+s4.role+'</div>' +
+            '<div class="contact-links">' +
+              '<a class="contact-link" href="mailto:'+s4.email+'">'+mailIcon+' '+s4.email+'</a>' +
+              '<a class="contact-link" href="tel:'+s4.phone.replace(/\s+/g,'')+'">'+phoneIcon+' '+s4.phone+'</a>' +
+            '</div>' +
+          '</div>' +
+          '<div class="closing-panel">' +
+            '<h3>'+s4.closingTitle+'</h3>' +
+            '<p>'+s4.closingText+'</p>' +
+            '<a class="btn btn-primary" href="mailto:'+s4.email+'">'+s4.closingCta+'</a>' +
+          '</div>' +
+          '<p class="disclaimer">'+s4.disclaimer+'</p>' +
+        '</div>' +
+      '</section>';
+
+    document.getElementById('app').innerHTML = heroHtml + s1Html + s2Html + s3Html + s4Html;
+
+    var footer = document.getElementById('siteFooter');
+    if(!footer){
+      footer = document.createElement('footer');
+      footer.className = 'site-footer';
+      footer.id = 'siteFooter';
+      document.body.appendChild(footer);
+    }
+    footer.textContent = d.footer;
+  }
+
+  document.getElementById('btnHu').addEventListener('click', function(){ render('hu'); });
+  document.getElementById('btnEn').addEventListener('click', function(){ render('en'); });
+  document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+
+  render('hu');
+})();
+</script>
