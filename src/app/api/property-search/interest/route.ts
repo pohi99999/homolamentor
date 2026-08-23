@@ -101,18 +101,27 @@ export async function POST(request: Request) {
 
   // A visitor confirmation email is intentionally NOT sent here: this project
   // has no verified Resend sending domain yet, and the shared sandbox sender
-  // (onboarding@resend.dev, used below) can only deliver to the account's own
-  // verified address — every other route in this codebase already respects
-  // that limit by sending only to office.homlamentor@gmail.com. Sending to an
-  // arbitrary visitor address from that sender would fail silently. Once a
-  // custom domain is verified in Resend, a visitor confirmation can be added
-  // back using CONFIRMATION_COPY-style per-locale text.
+  // (onboarding@resend.dev, used below) can only deliver to the Resend
+  // account's own verified address (peterpohankapersonal@gmail.com — see
+  // sendTeamEmail() below). Sending to an arbitrary visitor address from that
+  // sender fails outright. Once a custom domain is verified in Resend, a
+  // visitor confirmation can be added back using CONFIRMATION_COPY-style
+  // per-locale text.
 
   async function sendTeamEmail(): Promise<{ success: boolean; message?: string }> {
     if (!resend) return { success: false, message: "RESEND_API_KEY not configured" };
+    // Live-verified on production (2026-08-23): Resend's sandbox sender can
+    // only deliver to the Resend ACCOUNT's own verified address, which is
+    // peterpohankapersonal@gmail.com — NOT office.homlamentor@gmail.com,
+    // even though that alias is what other routes in this codebase send to.
+    // office.homlamentor@gmail.com is a "send mail as" alias on that same
+    // Gmail account, but Resend's sandbox restriction checks the literal
+    // verified address, not aliases. Sending to office.homlamentor@gmail.com
+    // here failed with: "You can only send testing emails to your own email
+    // address (peterpohankapersonal@gmail.com)."
     const res = await resend.emails.send({
       from: "HOMLAMENTOR <onboarding@resend.dev>",
-      to: ["office.homlamentor@gmail.com"],
+      to: ["peterpohankapersonal@gmail.com"],
       subject: `Új kereslet-találat érdeklődés: ${query}`,
       html: teamEmailHtml,
     });
