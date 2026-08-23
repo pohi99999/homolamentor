@@ -456,6 +456,37 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
      vizsgálat szükséges, nem kódhiba).
    - **A spec §4 admin státusz-workflow-ja (Új→Kapcsolatba lépve→Lezárva)
      szándékosan elhalasztva** — l. a terv dokumentum záró jegyzetét.
+   - **Éles audit után egy ÖTÖDIK, valódi hiba is előkerült és javítva lett
+     (2026-08-23, main-be mergelés UTÁN, közvetlenül a fő ágra commitolva
+     `a00d234` alatt):** a `property-search/interest/route.ts` csapat-
+     értesítő e-mailje `office.homlamentor@gmail.com`-ra próbált menni, de a
+     Resend sandbox-feladója (`onboarding@resend.dev`) élesben bizonyítottan
+     csak a fiók SAJÁT, hitelesített címére tud kézbesíteni —
+     `peterpohankapersonal@gmail.com`-ra, NEM az `office.homlamentor@gmail.com`
+     aliasra (bár ez utóbbi ugyanarra a Gmail-fiókra van "send mail as"-ként
+     kötve, a Resend a szó szerinti címet ellenőrzi). Élő hiba a Resend API-tól:
+     *"You can only send testing emails to your own email address
+     (peterpohankapersonal@gmail.com)."* Javítva: a küldés címzettje mostantól
+     `peterpohankapersonal@gmail.com`. **Ez valószínűleg ugyanígy érinti a
+     `/api/contact` és `/api/international-contact` meglévő route-jait is**
+     (mindkettő `office.homlamentor@gmail.com`-ra küld ugyanezzel a sandbox-
+     feladóval) — ezt ez a session NEM javította, külön ellenőrzendő/javítandó.
+
+> [!warning] Következő munkamenet — itt folytasd
+> Három konkrét, nyitva hagyott tétel a 2026-08-23-i ingatlan-kereső munkából:
+> 1. **AI Gateway 403/429 fiók-szintű hiba megoldása** (Vercel support vagy
+>    fiók-vizsgálat — nem kódhiba, l. fent).
+> 2. **Admin státusz-workflow** (Új→Kapcsolatba lépve→Lezárva) a `/admin/demand`
+>    oldalon, ha a csapat igényli — l. fent, "szándékosan elhalasztva".
+> 3. **Mobil nézet valós ellenőrzése** — a 2026-08-23-i session böngésző-
+>    eszköze (`claude-in-chrome` `resize_window`) nem tudta átméretezni a
+>    tényleges renderelési viewportot (`window.innerWidth` 1920 maradt a
+>    hívás után is) — ez tooling-korlát volt, nem elvégzett és bukott
+>    ellenőrzés. Érdemes más úton (valós eszköz, vagy ha elérhető, Chrome
+>    DevTools MCP) leellenőrizni a `PropertySearchSection.tsx` és a többi
+>    érintett komponens reszponzív viselkedését.
+> 4. **Gyanú**: a fent leírt Resend-címzett hiba valószínűleg a `/api/contact`
+>    és `/api/international-contact` route-okat is érinti — ellenőrizendő.
 
 ### Releváns szkriptek (`scripts/`, `n8n/`)
 
