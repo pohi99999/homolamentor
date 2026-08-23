@@ -11,6 +11,59 @@ const LOCALE_NAMES: Record<string, string> = {
   fr: "French",
 };
 
+const MESSAGES: Record<
+  string,
+  {
+    tooShort: string;
+    tooLong: string;
+    rateLimited: string;
+    unavailable: string;
+    genericError: string;
+    noResults: string;
+  }
+> = {
+  hu: {
+    tooShort: "A keresési kifejezés túl rövid.",
+    tooLong: "A keresési kifejezés túl hosszú.",
+    rateLimited: "Túl sok keresés érkezett rövid idő alatt. Kérjük, próbálja újra néhány perc múlva.",
+    unavailable:
+      "A keresési szolgáltatás jelenleg nem elérhető. Kérjük, próbálja meg később, vagy vegye fel velünk közvetlenül a kapcsolatot.",
+    genericError: "Hiba történt a keresés során. Kérjük, próbálja meg később.",
+    noResults: "Jelenleg nem találtunk nyilvános hirdetést erre a keresésre.",
+  },
+  en: {
+    tooShort: "The search term is too short.",
+    tooLong: "The search term is too long.",
+    rateLimited: "Too many searches in a short time. Please try again in a few minutes.",
+    unavailable:
+      "The search service is currently unavailable. Please try again later, or contact us directly.",
+    genericError: "Something went wrong during the search. Please try again later.",
+    noResults: "We couldn't find any public listings for this search right now.",
+  },
+  de: {
+    tooShort: "Der Suchbegriff ist zu kurz.",
+    tooLong: "Der Suchbegriff ist zu lang.",
+    rateLimited: "Zu viele Suchanfragen in kurzer Zeit. Bitte versuchen Sie es in ein paar Minuten erneut.",
+    unavailable:
+      "Der Suchdienst ist derzeit nicht verfügbar. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt.",
+    genericError: "Bei der Suche ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
+    noResults: "Wir haben derzeit keine öffentlichen Angebote für diese Suche gefunden.",
+  },
+  fr: {
+    tooShort: "Le terme de recherche est trop court.",
+    tooLong: "Le terme de recherche est trop long.",
+    rateLimited: "Trop de recherches en peu de temps. Veuillez réessayer dans quelques minutes.",
+    unavailable:
+      "Le service de recherche est actuellement indisponible. Veuillez réessayer plus tard ou nous contacter directement.",
+    genericError: "Une erreur s'est produite pendant la recherche. Veuillez réessayer plus tard.",
+    noResults: "Nous n'avons trouvé aucune annonce publique pour cette recherche pour le moment.",
+  },
+};
+
+function getMessages(locale: string) {
+  return MESSAGES[locale] || MESSAGES.hu;
+}
+
 function buildSystemPrompt(locale: string): string {
   const langName = LOCALE_NAMES[locale] || "Hungarian";
   return `You are a real estate market research assistant for HOMLAMENTOR KFT, a Hungarian real estate intermediary company.
@@ -91,12 +144,13 @@ export async function POST(request: Request) {
 
   const query = (body.query || "").trim();
   const locale = body.locale && LOCALE_NAMES[body.locale] ? body.locale : "hu";
+  const messages = getMessages(locale);
 
   if (query.length < 3) {
-    return NextResponse.json({ error: "A keresési kifejezés túl rövid." }, { status: 400 });
+    return NextResponse.json({ error: messages.tooShort }, { status: 400 });
   }
   if (query.length > 300) {
-    return NextResponse.json({ error: "A keresési kifejezés túl hosszú." }, { status: 400 });
+    return NextResponse.json({ error: messages.tooLong }, { status: 400 });
   }
 
   const sessionId = await getOrCreateDemandSessionId();
@@ -121,7 +175,7 @@ export async function POST(request: Request) {
       results: parsed.results.slice(0, 5),
       notice:
         parsed.results.length === 0
-          ? parsed.notice || "Jelenleg nem találtunk nyilvános hirdetést erre a keresésre."
+          ? parsed.notice || messages.noResults
           : undefined,
     };
     return NextResponse.json(response);
@@ -130,20 +184,19 @@ export async function POST(request: Request) {
     if (statusCode === 429) {
       return NextResponse.json<PropertySearchResponse>({
         results: [],
-        notice: "Túl sok keresés érkezett rövid idő alatt. Kérjük, próbálja újra néhány perc múlva.",
+        notice: messages.rateLimited,
       });
     }
     if (statusCode === 402 || statusCode === 403) {
       return NextResponse.json<PropertySearchResponse>({
         results: [],
-        notice:
-          "A keresési szolgáltatás jelenleg nem elérhető. Kérjük, próbálja meg később, vagy vegye fel velünk közvetlenül a kapcsolatot.",
+        notice: messages.unavailable,
       });
     }
     console.error("Property search error:", error);
     return NextResponse.json<PropertySearchResponse>({
       results: [],
-      notice: "Hiba történt a keresés során. Kérjük, próbálja meg később.",
+      notice: messages.genericError,
     });
   }
 }
