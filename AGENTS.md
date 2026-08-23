@@ -161,6 +161,20 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
    (kézzel karbantartott, teljes tartalommal) — ez generálja
    `public/Portfolio_EN_v6.pdf`-et, NEM az `n8n/generate_portfolio_pdf.js`.
 
+   > **RÉSZBEN FELOLDVA (2026-08-23).** A hiányzó 4 ingatlan (Üllő stratégiai
+   > terület, Nagykanizsa ipari telephely, Székesfehérvár ipari/logisztikai
+   > terület, Üllő 115 ha) felkerült a `src/data/properties.ts`-be és mind a 4
+   > nyelvi JSON-ba (`prop10`–`prop13`, hu/en/de/fr) — a weboldal
+   > `/ingatlan-portal` oldala és a `VIPAccessGateway` (ugyanabból a
+   > `properties.ts`-ből dolgozik) most már mind a 13 tételt mutatja, a
+   > `src/lib/knowledge.ts` Brunella-tudásbázis is frissült. **Ami továbbra is
+   > hiányzik**: a nyugat-afrikai szolár/EPC-BOT szekció nincs benne a JSON-okban
+   > vagy a `PropertyTeaserGrid`/`VIPAccessGateway` komponensekben (más oldal,
+   > más adatstruktúra kellene hozzá) — az `n8n/generate_portfolio_pdf.js` +
+   > `portfolio_magazine.ejs` páros is változatlan, a HU PDF hiteles forrása
+   > ezért még mindig csak a `marketing/portfolio-magazine.html` /
+   > `n8n/generate_portfolio_pdf_en_v6.js`.
+
 5. **Gmail piszkozat HTML törzs**: a teljes, önálló `<!DOCTYPE html><html>
    <head><style>...</style></head><body>...` dokumentum (nem csak egy body
    fragment) **helyesen jelenik meg** a Gmail piszkozat-szerkesztőjében —
