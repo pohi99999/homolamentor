@@ -11,24 +11,7 @@ const SHEET_NAME = "Kereslet_Talalatok";
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-const CONFIRMATION_COPY: Record<string, { subject: string; body: string }> = {
-  hu: {
-    subject: "Köszönjük az érdeklődését – HOMLAMENTOR KFT",
-    body: "Köszönjük, hogy jelezte érdeklődését. Kollégáink hamarosan felveszik Önnel a kapcsolatot.",
-  },
-  en: {
-    subject: "Thank you for your interest – HOMLAMENTOR KFT",
-    body: "Thank you for reaching out. Our team will contact you shortly.",
-  },
-  de: {
-    subject: "Vielen Dank für Ihr Interesse – HOMLAMENTOR KFT",
-    body: "Vielen Dank für Ihre Anfrage. Unser Team wird sich in Kürze bei Ihnen melden.",
-  },
-  fr: {
-    subject: "Merci de votre intérêt – HOMLAMENTOR KFT",
-    body: "Merci de nous avoir contactés. Notre équipe vous répondra sous peu.",
-  },
-};
+const SUPPORTED_LOCALES = ["hu", "en", "de", "fr"];
 
 async function appendDemandRow(row: string[]): Promise<{ success: boolean; message?: string }> {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -85,7 +68,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const safeLocale = locale && CONFIRMATION_COPY[locale] ? locale : "hu";
+  const safeLocale = locale && SUPPORTED_LOCALES.includes(locale) ? locale : "hu";
   const today = new Date().toISOString().split("T")[0];
 
   const row = [
@@ -116,31 +99,32 @@ export async function POST(request: Request) {
     </div>
   `;
 
-  const userEmailHtml = `
-    <div style="background-color: #0b0f19; color: #f1f5f9; font-family: sans-serif; padding: 40px; border-radius: 16px; max-width: 600px; margin: 0 auto; border: 1px solid #1e293b;">
-      <h1 style="color: #ffffff; font-size: 20px; margin: 0 0 16px 0;">HOMLAMENTOR KFT</h1>
-      <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">${escapeHtml(CONFIRMATION_COPY[safeLocale].body)}</p>
-    </div>
-  `;
+  // A visitor confirmation email is intentionally NOT sent here: this project
+  // has no verified Resend sending domain yet, and the shared sandbox sender
+  // (onboarding@resend.dev, used below) can only deliver to the account's own
+  // verified address — every other route in this codebase already respects
+  // that limit by sending only to office.homlamentor@gmail.com. Sending to an
+  // arbitrary visitor address from that sender would fail silently. Once a
+  // custom domain is verified in Resend, a visitor confirmation can be added
+  // back using CONFIRMATION_COPY-style per-locale text.
 
-  const [sheetResult, teamEmailResult, userEmailResult] = await Promise.allSettled([
+  async function sendTeamEmail(): Promise<{ success: boolean; message?: string }> {
+    if (!resend) return { success: false, message: "RESEND_API_KEY not configured" };
+    const res = await resend.emails.send({
+      from: "HOMLAMENTOR <onboarding@resend.dev>",
+      to: ["office.homlamentor@gmail.com"],
+      subject: `Új kereslet-találat érdeklődés: ${query}`,
+      html: teamEmailHtml,
+    });
+    if (res.error) {
+      return { success: false, message: res.error.message };
+    }
+    return { success: true };
+  }
+
+  const [sheetResult, teamEmailResult] = await Promise.allSettled([
     appendDemandRow(row),
-    resend
-      ? resend.emails.send({
-          from: "HOMLAMENTOR <onboarding@resend.dev>",
-          to: ["office.homlamentor@gmail.com"],
-          subject: `Új kereslet-találat érdeklődés: ${query}`,
-          html: teamEmailHtml,
-        })
-      : Promise.resolve({ skipped: true }),
-    resend
-      ? resend.emails.send({
-          from: "HOMLAMENTOR <onboarding@resend.dev>",
-          to: [email],
-          subject: CONFIRMATION_COPY[safeLocale].subject,
-          html: userEmailHtml,
-        })
-      : Promise.resolve({ skipped: true }),
+    sendTeamEmail(),
   ]);
 
   const sheetOk = sheetResult.status === "fulfilled" && sheetResult.value.success;
@@ -150,19 +134,33 @@ export async function POST(request: Request) {
       sheetResult.status === "fulfilled" ? sheetResult.value.message : sheetResult.reason
     );
   }
-  if (teamEmailResult.status === "rejected") {
-    console.error("Csapat-értesítő e-mail hiba:", teamEmailResult.reason);
+  const teamEmailOk = teamEmailResult.status === "fulfilled" && teamEmailResult.value.success;
+  if (!teamEmailOk) {
+    console.error(
+      "Csapat-értesítő e-mail hiba:",
+      teamEmailResult.status === "fulfilled" ? teamEmailResult.value.message : teamEmailResult.reason
+    );
   }
-  if (userEmailResult.status === "rejected") {
-    console.error("Visszaigazoló e-mail hiba:", userEmailResult.reason);
+
+  // Honest status (I2): if neither the Sheets row nor the team notification
+  // actually landed anywhere, this lead has no durable record at all — the
+  // caller must not be told this succeeded.
+  if (!sheetOk && !teamEmailOk) {
+    return NextResponse.json(
+      {
+        success: false,
+        integrations: { sheet: "failed", teamEmail: resend ? "failed" : "mocked", userEmail: "skipped" },
+      },
+      { status: 502 }
+    );
   }
 
   return NextResponse.json({
     success: true,
     integrations: {
       sheet: sheetOk ? "success" : "failed",
-      teamEmail: resend ? (teamEmailResult.status === "fulfilled" ? "sent" : "failed") : "mocked",
-      userEmail: resend ? (userEmailResult.status === "fulfilled" ? "sent" : "failed") : "mocked",
+      teamEmail: resend ? (teamEmailOk ? "sent" : "failed") : "mocked",
+      userEmail: "skipped",
     },
   });
 }

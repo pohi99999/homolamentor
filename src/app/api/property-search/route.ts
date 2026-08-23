@@ -4,6 +4,8 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { getOrCreateDemandSessionId } from "@/lib/demandSession";
 import type { TeaserResult, PropertySearchResponse } from "@/lib/propertySearch";
 
+export const maxDuration = 60;
+
 const LOCALE_NAMES: Record<string, string> = {
   hu: "Hungarian",
   en: "English",
@@ -82,11 +84,47 @@ Respond ONLY with a JSON object of this exact shape (no markdown code fences, no
 "notice" must contain a short, human-readable message ONLY when results is empty, explaining that nothing relevant was found.`;
 }
 
-function parseModelJson(text: string): { results: TeaserResult[]; notice: string | null } {
+/**
+ * Compliance layer (C1): the system prompt tells the model to never leak a
+ * source URL, advertiser name, phone number, or email address, but a
+ * web-search-grounded LLM is realistically likely to slip one in anyway.
+ * This is enforced a second time here, independent of the prompt, because
+ * leaking a competitor's listing contact defeats the entire business premise
+ * (and the stated legal constraint) of this feature.
+ */
+const URL_SOURCE = "https?:\\/\\/\\S+|\\bwww\\.[\\w-]+\\.[a-z]{2,}\\b|\\b[\\w-]+\\.(com|hu|net|org|de|at|co|io)\\b";
+const EMAIL_SOURCE = "[\\w.+-]+@[\\w-]+\\.[\\w.-]+";
+const PHONE_SOURCE = "\\+?\\d[\\d\\s().-]{6,}\\d";
+
+// Fresh RegExp instances per call — a shared module-level `g` regex would
+// carry stale `lastIndex` state across calls to `.test()`/`.replace()`.
+function containsLeak(text: string): boolean {
+  return (
+    new RegExp(URL_SOURCE, "gi").test(text) ||
+    new RegExp(EMAIL_SOURCE, "gi").test(text) ||
+    new RegExp(PHONE_SOURCE, "g").test(text)
+  );
+}
+
+function redact(text: string): string {
+  return text
+    .replace(new RegExp(URL_SOURCE, "gi"), "[redacted]")
+    .replace(new RegExp(EMAIL_SOURCE, "gi"), "[redacted]")
+    .replace(new RegExp(PHONE_SOURCE, "g"), "[redacted]");
+}
+
+/**
+ * Returns null when the model's response could not be parsed at all (hard
+ * parse failure — e.g. markdown-fenced or truncated output), so the caller
+ * can distinguish that from a genuinely empty result set (I3). Presenting a
+ * parse failure as "no results found" would misrepresent a technical error
+ * as a market fact.
+ */
+function parseModelJson(text: string): { results: TeaserResult[]; notice: string | null } | null {
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
   if (start === -1 || end === -1) {
-    return { results: [], notice: null };
+    return null;
   }
   try {
     const raw = JSON.parse(text.slice(start, end + 1));
@@ -104,10 +142,21 @@ function parseModelJson(text: string): { results: TeaserResult[]; notice: string
               : [],
           }))
           .filter((r: TeaserResult) => r.summary.length > 0)
+          // C1: drop any result whose summary itself looks like it leaked a
+          // source URL/advertiser contact — a summary needing redaction is
+          // not trustworthy enough to salvage. Shorter fields (locationHint,
+          // category, features[]) are redacted in place instead.
+          .filter((r: TeaserResult) => !containsLeak(r.summary))
+          .map((r: TeaserResult) => ({
+            ...r,
+            locationHint: redact(r.locationHint),
+            category: redact(r.category),
+            features: r.features.map((f) => redact(f)),
+          }))
       : [];
     return { results, notice: typeof raw.notice === "string" ? raw.notice : null };
   } catch {
-    return { results: [], notice: null };
+    return null;
   }
 }
 
@@ -171,6 +220,17 @@ export async function POST(request: Request) {
     });
 
     const parsed = parseModelJson(text);
+    if (parsed === null) {
+      // Hard parse failure (I3): the model may well have found real
+      // listings — the code just failed to read its output. Reporting
+      // "no results" here would misrepresent a technical failure as a
+      // market fact, so use the generic error message instead.
+      console.error("Property search: unparseable model response:", text);
+      return NextResponse.json<PropertySearchResponse>({
+        results: [],
+        notice: messages.genericError,
+      });
+    }
     const response: PropertySearchResponse = {
       results: parsed.results.slice(0, 5),
       notice:
