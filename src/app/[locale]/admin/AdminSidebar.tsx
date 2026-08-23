@@ -10,6 +10,7 @@ import {
   Loader2,
   LogOut,
   Mail,
+  Search,
   Settings,
   Users,
 } from "lucide-react";
@@ -28,6 +29,7 @@ const navItems: NavItem[] = [
   { name: "CRM Leadek", href: "/admin/leads", icon: Users },
   { name: "Google Sheets Sync", href: "/admin/sync", icon: Database, triggersSync: true },
   { name: "Megkeresések", href: "/admin/outreach", icon: Mail },
+  { name: "Kereslet", href: "/admin/demand", icon: Search },
   { name: "Beállítások", href: "/admin/settings", icon: Settings },
 ];
 
