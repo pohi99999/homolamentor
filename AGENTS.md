@@ -379,6 +379,84 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
    felhasználó a Gmailben lát. Éles eset: a Cureus válasza 10:48-kor érkezett,
    a dashboard 08:48-at írt. Javítva: `timeZone: "Europe/Budapest"`.
 
+18. **Élő AI-webkeresős ingatlan-kereső funkció leszállítva (2026-08-23),
+   subagent-driven-development munkafolyamattal, 11 taskban.** Spec:
+   `docs/superpowers/specs/2026-08-23-ingatlan-kereso-design.md`, terv:
+   `docs/superpowers/plans/2026-08-23-ingatlan-kereso.md` (a ledger, briefek és
+   review-csomagok a `.superpowers/sdd/2026-08-23-ingatlan-kereso/` alatt
+   voltak, git-ignore-olva — a git történet a végleges rekord). Új fájlok:
+   `src/lib/propertySearch.ts`, `src/lib/demandSession.ts`,
+   `src/app/api/property-search/route.ts` (+`interest/route.ts`),
+   `src/app/api/demand-sync/route.ts`, `src/components/PropertySearchSection.tsx`,
+   `src/app/[locale]/admin/{demand/page.tsx,components/DemandTable.tsx}`,
+   `scripts/init_demand_sheet.js`. Az `/ingatlan-portal` oldal `PropertyRequestForm`
+   szekcióját váltotta ki (a fájl a repóban maradt, nem hivatkozott).
+   - **AI Gateway izoláltan**: a Brunella chat változatlan `ai@4.0.17`-je mellett
+     egy npm-aliasolt `ai-gateway-sdk` (ténylegesen `ai@^7`, NEM `^6` — a Vercel
+     `ai-gateway` skill ajánlása menet közben már elavult volt, a telepítéskor
+     `npm view <csomag> dependencies`-szel ellenőrizve a `@ai-sdk/provider`
+     verzió-párosítást) + `@ai-sdk/anthropic@^4.0.41` biztosítja a web-search
+     tool-t (`anthropic.tools.webSearch_20260209` — szintén frissebb, mint bármely
+     dokumentált példa, live `gateway.getAvailableModels()`-szel ellenőrizve).
+   - **Kettős compliance-védelem**: a forrás-URL/hirdető-elérhetőség sose
+     szivároghat ki — ez a rendszerpromptban ÉS a válasz-parsolásban (regex-alapú
+     szűrés/redaktálás, gyanús summary esetén a teljes találat eldobva) is
+     kikényszerítve, mert a záró review helyesen jelezte, hogy csak a promptra
+     hagyatkozni nem elég egy webkereséssel dolgozó modellnél.
+   - **Sheets-írás deployolt route-ban KIZÁRÓLAG `googleapis` + service account
+     JWT-vel**, SOSE a `gws` CLI-vel (az nem npm-függőség, csak helyi egyszeri
+     szkriptekben biztonságos — l. `scripts/init_demand_sheet.js`). Eközben
+     kiderült, hogy a **meglévő** `/api/contact` és `/api/international-contact`
+     route-ok (ezt a tervet megelőzően, korábban) `execFilePromise('gws', …)`-t
+     hívnak — ez Vercel serverlessen valószínűleg csendben hibázik. **Ezt ez a
+     terv nem javította**, külön követendő hiba, dokumentálva itt és a projekt
+     Obsidian-jegyzetében.
+   - **Resend-küldésnél mindig ellenőrizd a `res.error` mezőt** — az SDK
+     `resolve`-ol API-szintű hibán is, nem `reject`-el, ezért puszta
+     `Promise.allSettled`-fulfillment alapján "sikeresnek" jelenteni egy
+     valójában elutasított küldést pontosan az a hibaosztály, amit a 14-15.
+     tanulság már leírt. A záró review derítette ki élesben.
+   - **`onboarding@resend.dev` (a Resend sandbox-feladója) csak a saját fiók
+     ellenőrzött címére tud kézbesíteni**, tetszőleges (pl. látogató által
+     megadott) címre nem — ezért a kereső funkció végül **nem küld** látogatói
+     visszaigazoló e-mailt (csak csapat-értesítőt), amíg nincs ellenőrzött
+     egyedi küldő domain a Resource-ban. Ha ez megtörténik, a visszaigazolás
+     visszaépíthető.
+   - **Google Cloud OAuth: a `gws` CLI saját, elavult `/o/oauth2/auth` végpontot
+     hív** (a friss `/o/oauth2/v2/auth` helyett) — ez adta a "400 Bad Request /
+     malformed request" hibát újra-hitelesítéskor, NEM a Google Cloud Console
+     (`bas1987` projekt) hibás konfigurációja volt, ahogy elsőre tűnt. A
+     `gws auth login` parancs maga generál helyes redirect_uri-t és portot, csak
+     a régi authorize-endpointra küldi — ha ez újra előjön, a kiírt URL-ben
+     `/o/oauth2/auth` → `/o/oauth2/v2/auth` csere megoldja, Cloud Console-turkálás
+     nélkül.
+   - **A Vercel dashboard böngészős automatizálása ebben a munkamenetben
+     koordináta-alapú kattintással megbízhatatlan volt** (API-kulcs modal,
+     env-változó menü) — a működő módszer: `read_page(filter:"interactive")` a
+     reffekhez, `form_input` szöveg/select/checkbox mezőkhöz, és
+     `javascript_tool`-lal `document.querySelector(...).click()` gombokhoz.
+     Csak a Vercel dashboardra vonatkozik, a weboldal saját UI-ján a normál
+     koordináta-kattintás működött.
+   - **Vercel env változók (`GOOGLE_PRIVATE_KEY` stb.) csak Production+Preview
+     scope-ra vannak felvéve, Development-re nem** — ezért `vercel env pull`
+     sose hozza le őket helyi fejlesztéshez, függetlenül a "Sensitive" jelzéstől.
+     A Sheets-írás élő bizonyítása emiatt a deployolt (Preview/Production)
+     környezetre halasztva, nem helyi teszttel igazolva.
+   - **AI Gateway költségvédelem**: team-szintű havi $15-os Budget beállítva
+     (`https://vercel.com/brunellaagent-1630s-projects/~/ai-gateway/budgets`,
+     havi frissítés, 50/75/100%-os e-mail riasztással) — ez a self-serve
+     dashboardon elérhető legszűkebb védelem, valódi per-percenkénti RPM-limit
+     nem volt elérhető opció ezen a csomagon.
+   - **Ismert, nyitva hagyott üzleti probléma a session végén**: a Vercel AI
+     Gateway ezen a projekten minden modellnél/szolgáltatónál (Anthropic,
+     Bedrock, Claude-on-AWS, Google Vertex) 403/429-et ad vissza, annak
+     ellenére, hogy $5 kredit ténylegesen elérhető a fiókon — a kód ezt
+     helyesen, becsületes hibaüzenettel kezeli, de az élő keresés funkcionálisan
+     nem működik, amíg ez nincs rendezve (Vercel support vagy fiók-szintű
+     vizsgálat szükséges, nem kódhiba).
+   - **A spec §4 admin státusz-workflow-ja (Új→Kapcsolatba lépve→Lezárva)
+     szándékosan elhalasztva** — l. a terv dokumentum záró jegyzetét.
+
 ### Releváns szkriptek (`scripts/`, `n8n/`)
 
 | Szkript | Feladat |

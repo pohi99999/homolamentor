@@ -1605,7 +1605,23 @@ Ellenőrizd a beérkező csapat-e-mailt: a `<script>`/`<img onerror>` tartalom e
 
 Nyisd meg `/hu/admin/demand`-ot, ellenőrizd, hogy a Task 11 Step 1-3 során létrejött összes teszt-sor megjelenik, és a keresőmező helyesen szűr.
 
-- [ ] **Step 5: Push a távoli GitHub repóba**
+- [x] **Step 5: Push a távoli GitHub repóba — VÉGREHAJTVA 2026-08-23, folyamatosan taskonként**
+
+## Utólagos jegyzet: a spec §4 admin státusz-workflow szándékos elhalasztása
+
+A design spec eredetileg egy kézi státusz-váltást (Új → Kapcsolatba lépve → Lezárva) is elvárt az
+admin `/admin/demand` oldalon. A Task 10 tervezésekor ez a controller döntése alapján **kimaradt** a
+scope-ból (csak olvasható táblázat készült, `DemandRow.id` is csak szintetikus sorszám, nem valódi
+Sheets-sorindex) — ezt a döntést menet közben nem rögzítettem sehol, amit a záró review helyesen
+hiányosságként jelzett.
+
+**Explicit döntés (2026-08-23, záró review után):** a státusz-workflow írásbeli (PATCH-route + UI)
+megvalósítása **elhalasztva**, nem ennek a tervnek a része. Indoklás: nem adatvesztés/kritikus hiba —
+a leadek látszanak és olvashatók az admin felületen, a csapat átmenetileg kézzel is tudja követni a
+Sheets-ben magában (Állapot oszlop szerkesztése közvetlenül a Google Sheets felületén). A rendes
+megvalósításhoz (a) egy valódi sor-azonosítási séma kellene a jelenlegi szintetikus `id` helyett, és
+(b) egy új, admin-védett PATCH `/api/demand-sync` (vagy külön route) — ez egy önálló, kis követő
+feladat, nem ennek a session-nek a maradék kapacitásába való besűrítés.
 
 ```bash
 git push origin feat/portfolio-magazine-artifact
