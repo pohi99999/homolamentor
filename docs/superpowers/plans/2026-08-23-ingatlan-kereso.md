@@ -32,7 +32,16 @@
 **Interfaces:**
 - Produces: `ai-gateway-sdk` csomagnév, ami ténylegesen az `ai@^6` csomag — a következő taskok ebből importálnak (`gateway`, `generateText`, `APICallError`). `@ai-sdk/anthropic` csomag, amiből `anthropic.tools.webSearch_20250305(...)` jön.
 
-- [ ] **Step 1: Vercel AI Gateway engedélyezése a projekten (tulajdonosi/deploy teendő)**
+- [x] **Step 1: Vercel AI Gateway engedélyezése a projekten — VÉGREHAJTVA 2026-08-23.**
+  A Vercel CLI ezen a gépen már be volt jelentkezve (`brunellaagent-1630s-projects` csapat),
+  `vercel link` összekötötte a repót a `homolamentor` projekttel, az AI Gateway a
+  projekt `/ai-gateway` oldalán már élesen elérhető volt (nem kellett külön bekapcsolni),
+  és a `vercel env pull .env.local` sikeresen lehozta a `VERCEL_OIDC_TOKEN`-t. A rate limit
+  beállítást (opcionális lépés) ez a munkamenet nem végezte el — l. a plan végén.
+
+  <details><summary>Eredeti terv (referenciaként, ha más gépen/fiókban kell megismételni)</summary>
+
+  Ezt a lépést a projekt tulajdonosának/a Vercel-hozzáféréssel rendelkező személynek kell elvégeznie — ügynök nem tud Vercel dashboardon böngészőben authentikálni:
 
 Ezt a lépést a projekt tulajdonosának/a Vercel-hozzáféréssel rendelkező személynek kell elvégeznie — ügynök nem tud Vercel dashboardon böngészőben authentikálni:
 
@@ -42,37 +51,50 @@ Ezt a lépést a projekt tulajdonosának/a Vercel-hozzáféréssel rendelkező s
 4. `vercel env pull .env.local` — ez leírja a `VERCEL_OIDC_TOKEN`-t (rövid élettartamú JWT, ~24 óra) `.env.local`-ba, amiből a Gateway hitelesítése automatikusan működik helyi fejlesztéskor. Vercelre deployolva ez automatikus, nem kell semmit beállítani.
 5. Opcionális, de ajánlott: Settings → AI Gateway → **Rate Limits** — állíts be per-user RPM-et (pl. 10 kérés/perc) és napi token-plafont, hogy a szabadon elérhető keresőmező ne okozhasson elszabadult költést.
 
-- [ ] **Step 2: Izolált `ai@^6` alias-csomag telepítése**
+  </details>
+
+- [x] **Step 2: Izolált `ai@^7` alias-csomag telepítése — VÉGREHAJTVA 2026-08-23**
 
 ```bash
-npm install ai-gateway-sdk@npm:ai@^6.0.0
+npm install ai-gateway-sdk@npm:ai@^7.0.0
 ```
 
-Ez a meglévő `"ai": "4.0.17"` bejegyzést **nem** módosítja a `package.json`-ban — egy új, `ai-gateway-sdk` nevű bejegyzés jön létre `"ai-gateway-sdk": "npm:ai@^6.x.x"` értékkel. A Brunella chat (`src/app/api/chat/route.ts`, `AIChatAssistant.tsx`) továbbra is a régi `"ai"` csomagot importálja, teljesen érintetlen.
+> **Verzió-korrekció a spec/skill-ajánláshoz képest.** A Vercel `ai-gateway` skill `ai@^6.0.0`-t
+> ajánlott, de ez a munkamenet idejére már elavult volt. Telepítés közben ellenőriztem:
+> `@ai-sdk/anthropic@latest` (`4.0.41`) a `@ai-sdk/provider@4.0.7` / `@ai-sdk/provider-utils@5.0.29`
+> párost igényli, míg `ai@^6` (`6.0.264`) még a `@ai-sdk/provider@3.0.15` / `provider-utils@4.0.46`
+> régebbi párral jött — ez némán inkompatibilis kombináció lett volna (fut, de a tool-definíciók
+> a futásidőben eltérő interfészt implementálnának). `ai@7.0.77` dependencies pontosan egyezik
+> az anthropic csomag igényével (`@ai-sdk/provider@4.0.7` / `provider-utils@5.0.29`) — ezért
+> **`ai@^7`-re kell telepíteni, nem `^6`-ra**. Ellenőrzés telepítés után mindig:
+> `npm view <csomag>@<verzió> dependencies` mindkét oldalon, és nézd meg, hogy a
+> `@ai-sdk/provider`/`@ai-sdk/provider-utils` verziók egyeznek-e.
 
-- [ ] **Step 3: `@ai-sdk/anthropic` telepítése**
+Ez a meglévő `"ai": "4.0.17"` bejegyzést **nem** módosítja a `package.json`-ban — egy új, `ai-gateway-sdk` nevű bejegyzés jön létre `"ai-gateway-sdk": "npm:ai@^7.0.77"` értékkel. A Brunella chat (`src/app/api/chat/route.ts`, `AIChatAssistant.tsx`) továbbra is a régi `"ai"` csomagot importálja, teljesen érintetlen.
+
+- [x] **Step 3: `@ai-sdk/anthropic` telepítése — VÉGREHAJTVA 2026-08-23**
 
 ```bash
 npm install @ai-sdk/anthropic@latest
 ```
 
-Ez egy vadonatúj csomag ebben a projektben (eddig nem volt Anthropic-integráció), nincs verzióütközés.
+Ez egy vadonatúj csomag ebben a projektben (eddig nem volt Anthropic-integráció), nincs verzióütközés. Telepített verzió: `^4.0.41`.
 
-- [ ] **Step 4: Ellenőrzés**
+- [x] **Step 4: Ellenőrzés — ELVÉGEZVE 2026-08-23**
 
 ```bash
 node -e "const {gateway} = require('ai-gateway-sdk'); console.log(typeof gateway)"
 ```
 
-Elvárt kimenet: `function`
+Kapott kimenet: `function` ✓
 
 ```bash
 grep -E '"ai"|"ai-gateway-sdk"|@ai-sdk/anthropic|@ai-sdk/openai' package.json
 ```
 
-Elvárt kimenet: mind a négy sor szerepel, `"ai": "4.0.17"` változatlan.
+Kapott kimenet: mind a négy sor szerepel, `"ai": "4.0.17"` változatlan, `"ai-gateway-sdk": "npm:ai@^7.0.77"`. `npx tsc --noEmit` a teljes projekten hibamentes.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit — a package.json/package-lock.json véglegesítése a Task 11 végén, egy közös commitban történik a teszt-lead törlésével együtt (l. lentebb)**
 
 ```bash
 git add package.json package-lock.json

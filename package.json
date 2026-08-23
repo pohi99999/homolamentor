@@ -11,9 +11,11 @@
     "sync-campaign": "node scripts/sync_campaign_delivery.js"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.41",
     "@ai-sdk/openai": "^4.0.8",
     "@ai-sdk/react": "4.0.17",
     "ai": "4.0.17",
+    "ai-gateway-sdk": "npm:ai@^7.0.77",
     "ejs": "^6.0.1",
     "framer-motion": "^12.42.2",
     "googleapis": "^173.0.0",
