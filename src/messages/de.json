@@ -73,6 +73,20 @@
     "title": "Immobilien- & Industrieportal",
     "subtitle": "Internationaler Verkauf und Vermittlung von Industriegebieten, Logistikparks und Off-Market-Gewerbeimmobilien."
   },
+  "PropertySearchSection": {
+    "title": "Finden Sie, was Sie suchen",
+    "subtitle": "Sagen Sie uns, welche Immobilie oder welches Gewerbegrundstück Sie suchen — wir durchsuchen den Live-Markt und zeigen Ihnen die Ergebnisse.",
+    "inputPlaceholder": "z. B. \"Industriehalle bei Szeged\"",
+    "searchButton": "Suchen",
+    "searching": "Suche läuft...",
+    "searchingHint": "Wir durchsuchen live öffentliche Angebote — das kann einige Sekunden dauern.",
+    "nameLabel": "Vollständiger Name",
+    "emailLabel": "E-Mail-Adresse",
+    "interestButton": "Interessiert",
+    "interestSubmit": "Absenden",
+    "interestSuccess": "Vielen Dank! Unser Team wird sich in Kürze bei Ihnen melden.",
+    "errorNotice": "Etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut."
+  },
   "PropertyRequestForm": {
     "title": "Individuelle Anforderungen einreichen",
     "subtitle": "Nicht das Richtige gefunden? Geben Sie Ihre Parameter an, und wir finden die ideale Industriefläche für Ihre Ziele.",

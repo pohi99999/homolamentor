@@ -73,6 +73,20 @@
     "title": "Real Estate & Industrial Portal",
     "subtitle": "International sale and brokerage of industrial areas, logistics parks, and off-market commercial properties."
   },
+  "PropertySearchSection": {
+    "title": "Find what you're looking for",
+    "subtitle": "Tell us what property or industrial site you need — we'll search the live market and show you what we found.",
+    "inputPlaceholder": "e.g. \"industrial hall near Szeged\"",
+    "searchButton": "Search",
+    "searching": "Searching...",
+    "searchingHint": "We're searching live public listings — this may take a few seconds.",
+    "nameLabel": "Full name",
+    "emailLabel": "Email address",
+    "interestButton": "I'm interested",
+    "interestSubmit": "Submit",
+    "interestSuccess": "Thank you! Our team will contact you shortly.",
+    "errorNotice": "Something went wrong. Please try again later."
+  },
   "PropertyRequestForm": {
     "title": "Submit Custom Requirements",
     "subtitle": "Didn't find what you were looking for? Specify your parameters, and we will find the ideal industrial area for your goals.",

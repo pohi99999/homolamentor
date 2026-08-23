@@ -73,6 +73,20 @@
     "title": "Ingatlan & Iparterület Portál",
     "subtitle": "Kiemelt ipari területek, logisztikai parkok és off-market kereskedelmi ingatlanok értékesítése és közvetítése nemzetközi szinten."
   },
+  "PropertySearchSection": {
+    "title": "Keresse meg, amit szeretne",
+    "subtitle": "Írja be, milyen ingatlant vagy iparterületet keres — élőben rákeresünk a piacra, és megmutatjuk, mit találtunk.",
+    "inputPlaceholder": "pl. \"ipari csarnok Szeged környékén\"",
+    "searchButton": "Keresés",
+    "searching": "Keresés...",
+    "searchingHint": "Élőben keresünk a nyilvános piaci hirdetések között — ez néhány másodpercet igénybe vehet.",
+    "nameLabel": "Teljes név",
+    "emailLabel": "E-mail cím",
+    "interestButton": "Érdekel",
+    "interestSubmit": "Küldés",
+    "interestSuccess": "Köszönjük! Kollégáink hamarosan felveszik Önnel a kapcsolatot.",
+    "errorNotice": "Hiba történt. Kérjük, próbálja meg később."
+  },
   "PropertyRequestForm": {
     "title": "Egyedi igények benyújtása",
     "subtitle": "Nem találta meg a megfelelőt? Adja meg specifikus paramétereit, és felkutatjuk a céljainak megfelelő ipari területet.",

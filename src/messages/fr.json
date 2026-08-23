@@ -73,6 +73,20 @@
     "title": "Portail Immobilier & Zones Industrielles",
     "subtitle": "Vente et courtage international de zones industrielles de premier ordre, parcs logistiques et biens commerciaux hors marché (off-market)."
   },
+  "PropertySearchSection": {
+    "title": "Trouvez ce que vous recherchez",
+    "subtitle": "Indiquez-nous le bien ou le terrain industriel que vous recherchez — nous explorons le marché en direct et vous montrons ce que nous avons trouvé.",
+    "inputPlaceholder": "p. ex. \"hall industriel près de Szeged\"",
+    "searchButton": "Rechercher",
+    "searching": "Recherche en cours...",
+    "searchingHint": "Nous recherchons en direct parmi les annonces publiques — cela peut prendre quelques secondes.",
+    "nameLabel": "Nom complet",
+    "emailLabel": "Adresse e-mail",
+    "interestButton": "Je suis intéressé(e)",
+    "interestSubmit": "Envoyer",
+    "interestSuccess": "Merci ! Notre équipe vous contactera prochainement.",
+    "errorNotice": "Une erreur s'est produite. Veuillez réessayer plus tard."
+  },
   "PropertyRequestForm": {
     "title": "Soumettre vos besoins spécifiques",
     "subtitle": "Vous n'avez pas trouvé votre bonheur ? Précisez vos critères et nous rechercherons le terrain industriel idéal pour vos objectifs.",
