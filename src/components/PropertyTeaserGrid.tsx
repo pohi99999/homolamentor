@@ -74,7 +74,7 @@ export default function PropertyTeaserGrid() {
           })}
         </div>
 
-        {/* Grid rács - 9 valós ingatlan */}
+        {/* Grid rács - 13 valós ingatlan */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProperties.map((item, idx) => {
             // Próbáljuk meg kiolvasni a lefordított elemeket, ha léteznek az i18n JSON-ben

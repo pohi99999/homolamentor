@@ -204,6 +204,60 @@
           "marina development option"
         ],
         "description": "Rare 72-hectare direct Lake Balaton waterfront property in Balatongyörök. Includes an operational 18-hole championship golf course built to international standards, private beach, clubhouse, and panoramic restaurant, with marina and apartment park expansion potential."
+      },
+      "prop10": {
+        "title": "Üllő Strategic Development Site",
+        "location": "Üllő, M4 motorway / Airport junction",
+        "price": "780,000,000 HUF",
+        "category": "Industrial & Logistics",
+        "features": [
+          "18,247 m² (1.82 ha) across three plots (parcels 3633/2, 3634/3, 3635)",
+          "Direct M4 motorway junction, excellent visibility",
+          "Airport (BUD): 5 km (~7 min) · M0 Ring Road: ~8 min",
+          "Zoning: Gksz-Sz2, max. 40% buildable (~7,300 m²)",
+          "Priority Development Area – accelerated permitting"
+        ],
+        "description": "Premium development site in one of the most dynamically growing logistics zones of Budapest's south-eastern agglomeration. The 18,247 m² (1.82 ha) plot sits directly at the M4 motorway junction, 5 km from Budapest Ferihegy Airport. The site holds Priority Development Area status, is debt-free, held under 1/1 corporate title, and available for immediate possession."
+      },
+      "prop11": {
+        "title": "Nagykanizsa Industrial Site (Vágóhíd Street)",
+        "location": "8800 Nagykanizsa, Vágóhíd utca 4.",
+        "price": "460,000,000 HUF",
+        "category": "Industrial & Logistics",
+        "features": [
+          "1.5–2 ha (15,000–20,000 m²) industrial plot",
+          "Built-up area ~4,500 m² + loading zones (main hall ~2,594 m², warehouse ~2,214 m²)",
+          "Full utilities: 380V industrial power, water, gas, sewage",
+          "Truck loading docks, ample parking, multiple entrances, CCTV"
+        ],
+        "description": "Industrial site for sale in Nagykanizsa, directly adjacent to Road 71 with excellent transport links. The 1.5–2 hectare built-up industrial plot includes a processing hall, a large warehouse building, and complete industrial infrastructure — ideal for food processing, logistics, warehousing, or light manufacturing."
+      },
+      "prop12": {
+        "title": "Székesfehérvár — Strategic Industrial & Logistics Site",
+        "location": "Székesfehérvár, near Börgönd Road",
+        "price": "5,000,000 EUR",
+        "category": "Industrial & Logistics",
+        "features": [
+          "Directly along the M7 motorway (excellent visibility)",
+          "M6: 30 km (Croatia/Serbia) · M1: 40 km (Austria/Slovakia) · M0: 45 km",
+          "Börgönd Airport: ~500 m (under development)",
+          "Börgönd railway station on the VO freight ring; high-capacity substation nearby",
+          "Greenfield, debt-free, immediately developable (parcel 020388/10)"
+        ],
+        "description": "Exceptionally well-located industrial and logistics development site in Székesfehérvár, halfway between Budapest and Lake Balaton. The plot is accessed via Börgönd Road, which connects the city to the airport. The site is grass-covered and immediately developable; the planned industrial park next to the airport and the growing rail freight capacity provide an excellent investment opportunity."
+      },
+      "prop13": {
+        "title": "Üllő — Large Industrial Area (115 ha)",
+        "location": "Üllő, near M4 motorway / airport",
+        "price": "20,000–25,000 HUF/m²",
+        "category": "Industrial & Logistics",
+        "features": [
+          "115 ha base area, already re-zoned, immediately developable",
+          "12 m permitted building height",
+          "M4 motorway: 100 m · Ferihegy (Terminal 4): a few km · Budapest–Belgrade railway: 500 m",
+          "Option: additional 330 ha adjacent land at approx. 10,000–15,000 HUF/m²"
+        ],
+        "description": "An exceptionally large, 115-hectare industrial development base area in Üllő, directly beside motorway M4, near the airport. The re-zoned (building-designated) land is immediately developable, with a permitted building height of 12 meters. The adjacent 330-hectare parcel can also be acquired, by agreement, at roughly half the price."
       }
     }
   },

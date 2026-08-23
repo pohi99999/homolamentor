@@ -204,6 +204,60 @@
           "Option de développement de marina"
         ],
         "description": "Domaine d'exception de 72 hectares en bordure directe du lac Balaton à Balatongyörök. Comprend un parcours de golf 18 trous de classe internationale en activité, une plage privée, un clubhouse et un restaurant panoramique, avec opportunité d'extension de marina."
+      },
+      "prop10": {
+        "title": "Üllő — Terrain Stratégique à Développer",
+        "location": "Üllő, autoroute M4 / échangeur aéroport",
+        "price": "780 000 000 HUF",
+        "category": "Industriel & Logistique",
+        "features": [
+          "18 247 m² (1,82 ha) répartis sur trois parcelles (3633/2, 3634/3, 3635)",
+          "Accès direct à l'échangeur de l'autoroute M4, excellente visibilité",
+          "Aéroport (BUD) : 5 km (env. 7 min) · Périphérique M0 : env. 8 min",
+          "Zonage : Gksz-Sz2, constructibilité max. 40 % (~7 300 m²)",
+          "Zone de développement prioritaire – autorisations accélérées"
+        ],
+        "description": "Terrain de développement premium situé dans l'une des zones logistiques les plus dynamiques de l'agglomération sud-est de Budapest. La parcelle de 18 247 m² (1,82 ha) se trouve directement à l'échangeur de l'autoroute M4, à 5 km de l'aéroport de Budapest-Ferihegy. Le terrain bénéficie du statut de zone de développement prioritaire, est libre de dettes, détenu à 100 % par une société de projet, et disponible pour prise de possession immédiate."
+      },
+      "prop11": {
+        "title": "Nagykanizsa — Site Industriel (rue Vágóhíd)",
+        "location": "8800 Nagykanizsa, Vágóhíd utca 4.",
+        "price": "460 000 000 HUF",
+        "category": "Industriel & Logistique",
+        "features": [
+          "1,5–2 ha (15 000–20 000 m²) de terrain industriel",
+          "Surface bâtie ~4 500 m² + zones de chargement (hall principal ~2 594 m², entrepôt ~2 214 m²)",
+          "Réseaux complets : électricité industrielle 380V, eau, gaz, égouts",
+          "Quais de chargement pour camions, vastes parkings, plusieurs accès, vidéosurveillance"
+        ],
+        "description": "Site industriel à vendre à Nagykanizsa, directement à proximité de la route 71, avec d'excellentes liaisons de transport. Le terrain industriel bâti de 1,5 à 2 hectares comprend un hall de transformation, un grand entrepôt et une infrastructure industrielle complète — idéal pour l'agroalimentaire, la logistique, le stockage ou la production légère."
+      },
+      "prop12": {
+        "title": "Székesfehérvár — Terrain Industriel et Logistique Stratégique",
+        "location": "Székesfehérvár, à proximité de la route de Börgönd",
+        "price": "5 000 000 EUR",
+        "category": "Industriel & Logistique",
+        "features": [
+          "Directement le long de l'autoroute M7 (excellente visibilité)",
+          "M6 : 30 km (Croatie/Serbie) · M1 : 40 km (Autriche/Slovaquie) · M0 : 45 km",
+          "Aéroport de Börgönd : env. 500 m (en développement)",
+          "Gare de Börgönd sur l'anneau de fret VO ; poste de transformation à forte puissance à proximité",
+          "Terrain vierge, libre de dettes, immédiatement constructible (parcelle 020388/10)"
+        ],
+        "description": "Terrain de développement industriel et logistique exceptionnellement bien situé à Székesfehérvár, à mi-chemin entre Budapest et le lac Balaton. La parcelle est accessible depuis la route de Börgönd, qui relie la ville à l'aéroport. Le terrain est enherbé et immédiatement constructible ; le parc industriel prévu à proximité de l'aéroport et la capacité ferroviaire de fret croissante offrent une excellente opportunité d'investissement."
+      },
+      "prop13": {
+        "title": "Üllő — Vaste Zone Industrielle (115 ha)",
+        "location": "Üllő, à proximité de l'autoroute M4 / aéroport",
+        "price": "20 000–25 000 HUF/m²",
+        "category": "Industriel & Logistique",
+        "features": [
+          "115 ha de terrain de base, déjà reclassé, immédiatement constructible",
+          "Hauteur de construction autorisée : 12 m",
+          "Autoroute M4 : 100 m · Aéroport de Ferihegy (Terminal 4) : quelques km · Voie ferrée Budapest–Belgrade : 500 m",
+          "Option : 330 ha supplémentaires de terrain adjacent à environ 10 000–15 000 HUF/m²"
+        ],
+        "description": "Zone de développement industriel exceptionnellement vaste de 115 hectares à Üllő, directement le long de l'autoroute M4, à proximité de l'aéroport. Le terrain reclassé (constructible) est immédiatement développable, avec une hauteur de construction autorisée de 12 mètres. La parcelle adjacente de 330 hectares peut également être acquise, par accord, à environ la moitié du prix."
       }
     }
   },

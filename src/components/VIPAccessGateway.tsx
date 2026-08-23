@@ -127,7 +127,7 @@ export default function VIPAccessGateway() {
                 </p>
               </div>
 
-              {/* VIP Ingatlan Rács - Mind a 9 valós projekt feloldva */}
+              {/* VIP Ingatlan Rács - Mind a 13 valós projekt feloldva */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {properties.map((item) => {
                   let title = item.title;

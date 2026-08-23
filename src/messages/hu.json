@@ -204,6 +204,60 @@
           "kikötőfejlesztési opcióval"
         ],
         "description": "Különleges, 72 hektáros, közvetlen Balaton-parti ingatlankomplexum Balatongyörökön. Nemzetközi szabványoknak megfelelő, működő 18 lyukú golfpályát, saját strandot, klubházat és panorámás éttermet tartalmaz, vitorláskikötő és apartmanpark fejlesztési opcióval."
+      },
+      "prop10": {
+        "title": "Üllő — Stratégiai Fejlesztési Terület",
+        "location": "Üllő, M4 autópálya / repülőtér csomópont",
+        "price": "780.000.000 HUF",
+        "category": "Ipari & Logisztika",
+        "features": [
+          "18 247 m² (1,82 ha) — három telek (3633/2, 3634/3, 3635 hrsz.)",
+          "Közvetlen M4 autópálya-csomópont, kiváló láthatóság",
+          "Repülőtér (BUD): 5 km (kb. 7 perc) · M0 körgyűrű: kb. 8 perc",
+          "Övezet: Gksz-Sz2, max. 40% beépíthetőség (~7 300 m²)",
+          "Kiemelt Fejlesztési Terület — gyorsított engedélyezés"
+        ],
+        "description": "Prémium fejlesztési célú terület Budapest délkeleti agglomerációjának egyik legdinamikusabban fejlődő logisztikai zónájában. A 18 247 m²-es (1,82 ha) telek közvetlenül az M4-es autópálya csomópontjánál helyezkedik el, 5 km-re a Ferihegyi repülőtértől. A terület Kiemelt Fejlesztési Terület státuszú, tehermentes, 1/1 céges tulajdon, azonnal birtokba vehető."
+      },
+      "prop11": {
+        "title": "Nagykanizsa — Ipari Telephely (Vágóhíd utca)",
+        "location": "8800 Nagykanizsa, Vágóhíd utca 4.",
+        "price": "460.000.000 HUF",
+        "category": "Ipari & Logisztika",
+        "features": [
+          "1,5–2 ha (15 000–20 000 m²) ipari telek",
+          "Beépített terület ~4 500 m² + rakodózónák (fő csarnok ~2 594 m², raktár ~2 214 m²)",
+          "Teljes közműellátás: 380V ipari áram, víz, gáz, szennyvíz",
+          "Teherautó-rakodók, tágas parkolók, több bejárat, kamerarendszer"
+        ],
+        "description": "Eladó ipari telephely Nagykanizsán, a 71-es főút közvetlen közelében, kiváló közlekedési kapcsolatokkal. A 1,5–2 hektáros beépített ipari telek komplex feldolgozócsarnokkal, nagy raktárépülettel és teljes ipari infrastruktúrával rendelkezik. Ideális élelmiszeripar, logisztika, raktározás vagy könnyűipari termelés céljaira."
+      },
+      "prop12": {
+        "title": "Székesfehérvár — Stratégiai Ipari és Logisztikai Terület",
+        "location": "Székesfehérvár, Börgöndi út közelében",
+        "price": "5.000.000 EUR",
+        "category": "Ipari & Logisztika",
+        "features": [
+          "Közvetlenül az M7 autópálya mellett (jó rálátással)",
+          "M6: 30 km (Horvátország/Szerbia) · M1: 40 km (Ausztria/Szlovákia) · M0: 45 km",
+          "Börgöndi repülőtér: kb. 500 m (fejlesztés alatt)",
+          "Börgöndi vasútállomás a VO teherforgalmi gyűrűn; nagy teljesítményű trafó a közelben",
+          "Zöldmezős, tehermentes, azonnal fejleszthető (020388/10 hrsz.)"
+        ],
+        "description": "Kivételes stratégiai fekvésű ipari és logisztikai fejlesztési terület Székesfehérváron, félúton Budapest és a Balaton között. A telek a Börgöndi útról közelíthető meg, amely a várost köti össze a repülőtérrel. A terület gyeppel fedett, azonnal fejleszthető; a reptér melletti tervezett ipari park és a növekvő teherforgalmi vasúti kapacitás kiváló befektetési lehetőséget biztosít."
+      },
+      "prop13": {
+        "title": "Üllő — Nagy Iparterület (115 ha)",
+        "location": "Üllő, M4 autópálya / repülőtér közelében",
+        "price": "20.000–25.000 Ft/m²",
+        "category": "Ipari & Logisztika",
+        "features": [
+          "115 ha bázisterület, kivett, azonnal fejleszthető",
+          "12 m megengedett építménymagasság",
+          "M4 autópálya: 100 m · Ferihegy (4-es terminál): néhány km · Budapest–Belgrád vasút: 500 m",
+          "Opció: +330 ha szomszédos terület kb. 10 000–15 000 Ft/m² áron"
+        ],
+        "description": "Kiemelkedő méretű, 115 hektáros ipari fejlesztési bázisterület Üllőn, közvetlenül a 4-es autópálya mellett, a repülőtér közelében. A kivett (beépítésre szánt) terület azonnal fejleszthető, 12 méteres megengedett építési magassággal. A csatlakozó 330 hektáros szomszédos terület megegyezés alapján, kb. féláron is megszerezhető."
       }
     }
   },
