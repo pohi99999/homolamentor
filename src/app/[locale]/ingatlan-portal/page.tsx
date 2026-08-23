@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing';
 
 const PropertyTeaserGrid = dynamic(() => import('@/components/PropertyTeaserGrid'));
 const VIPAccessGateway = dynamic(() => import('@/components/VIPAccessGateway'));
-const PropertyRequestForm = dynamic(() => import('@/components/PropertyRequestForm'));
+const PropertySearchSection = dynamic(() => import('@/components/PropertySearchSection'));
 
 export async function generateMetadata({
   params,
@@ -54,14 +54,14 @@ export default function RealEstatePortalPage() {
         {/* Ingatlan Hero Fejléc */}
         <RealEstateHero />
 
+        {/* Élő AI Ingatlankereső */}
+        <PropertySearchSection />
+
         {/* Kiemelt Ajánlatok Grid (Teaser) */}
         <PropertyTeaserGrid />
 
         {/* VIP Beléptető Kapu & Zártkörű Ingatlanok */}
         <VIPAccessGateway />
-
-        {/* Egyedi Keresési Igények Leadása */}
-        <PropertyRequestForm />
       </main>
 
       {/* Lábléc */}
