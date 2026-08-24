@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
 import { requireAdmin } from "@/lib/requireAdmin";
+import { DEMAND_STATUSES, type DemandStatus } from "@/lib/demandStatus";
 
 const SPREADSHEET_ID =
   process.env.GOOGLE_SPREADSHEET_ID_MASTER ||
@@ -8,9 +9,6 @@ const SPREADSHEET_ID =
 const SHEET_NAME = "Kereslet_Talalatok";
 const STATUS_COLUMN = "J";
 const FIRST_DATA_ROW = 2; // row 1 is the header
-
-export const DEMAND_STATUSES = ["Új", "Kapcsolatba lépve", "Lezárva"] as const;
-export type DemandStatus = (typeof DEMAND_STATUSES)[number];
 
 export interface DemandRow {
   id: string;

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Loader2, Mail, MapPin, RefreshCw, Search, Tag, User } from "lucide-react";
-import { DEMAND_STATUSES, type DemandRow, type DemandStatus } from "@/app/api/demand-sync/route";
+import type { DemandRow } from "@/app/api/demand-sync/route";
+import { DEMAND_STATUSES, type DemandStatus } from "@/lib/demandStatus";
 
 const STATUS_STYLES: Record<string, string> = {
   Új: "bg-blue-500/10 text-blue-400 border-blue-500/20",
