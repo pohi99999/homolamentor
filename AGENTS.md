@@ -570,19 +570,34 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   > nem regisztrál kattintást vagy váratlanul görgeti az oldalt, ellenőrizd a konzolt
   > `vercel.live` hibára, és inkább `find`-alapú `ref`-fel kattints koordináta helyett.
 
+- **2026-08-24 — Mobil nézet valós ellenőrzése (Chrome DevTools MCP-vel) és egy valódi
+  reszponzív hiba javítva.** A korábbi `claude-in-chrome` `resize_window` tooling-korlátja
+  helyett a `chrome-devtools` MCP `emulate` funkciójával (`viewport: "390x844x3,mobile,touch"`)
+  sikerült valódi mobil viewportot emulálni. A `PropertySearchSection` (kereső mező, szűrő
+  chipek, off-market kártyák, AI-keresési eredménykártyák "Érdekel" inline űrlappal, VIP
+  belépő űrlap) mind hibátlanul, túlcsordulás nélkül renderelt. **Egy valódi hibát viszont
+  talált**: a főoldal `Hero.tsx` `<h1>`-je ("Prémium Vállalkozásfejlesztés & Nemzetközi
+  Terjeszkedés") ténylegesen kilógott a 390px-es viewportból mindkét oldalon
+  (`getBoundingClientRect()`: `x=-17.7`, `right=407.7` egy 390px-es viewporton) — a
+  `text-4xl` mobil alapméret + `font-black` + `tracking-wide` kombináció mellett a hosszú
+  "Vállalkozásfejlesztés" összetett szó nem fért el, és `break-words` hiányában nem tudott
+  sorba törni, csak túlnyúlt (a szülő `overflow-hidden`-je miatt nem okozott vízszintes
+  scrollt, csak levágta/olvashatatlanná tette a szöveg szélét). Ugyanez a minta (`text-4xl`
+  mobil alapméret, `font-black`, `tracking-wide`/`tracking-tight`, `break-words` nélkül)
+  megismétlődött mind a négy Hero-komponensben (`Hero`, `AfricaHero`, `RealEstateHero`,
+  `ContactHero`) és két további címben (`mobilhaz-projekt/page.tsx`,
+  `InternationalDivision.tsx`) — mindegyik javítva: mobil alapméret eggyel csökkentve
+  (`text-3xl`) + `break-words` biztonsági háló. Élesben, mind a hat érintett oldalon
+  (`/hu`, `/hu/afrika-inkubator`, `/hu/ingatlan-portal`, `/hu/mobilhaz-projekt`,
+  `/hu/nemzetkozi-divizio`, `/hu/kapcsolat`) `getBoundingClientRect()`-tel visszaellenőrizve
+  — mindegyik `h1`/cím a 0–390px tartományon belülre esik a javítás után.
+
 > [!warning] Következő munkamenet — itt folytasd
 > Nyitva hagyott tételek:
-> 1. **Mobil nézet valós ellenőrzése** — a 2026-08-23-i session böngésző-
->    eszköze (`claude-in-chrome` `resize_window`) nem tudta átméretezni a
->    tényleges renderelési viewportot (`window.innerWidth` 1920 maradt a
->    hívás után is) — ez tooling-korlát volt, nem elvégzett és bukott
->    ellenőrzés. Érdemes más úton (valós eszköz, vagy ha elérhető, Chrome
->    DevTools MCP) leellenőrizni a `PropertySearchSection.tsx` és a többi
->    érintett komponens reszponzív viselkedését.
-> 2. **Gyanú**: a Resend-címzett hiba (l. fent, 5. hiba) valószínűleg a
+> 1. **Gyanú**: a Resend-címzett hiba (l. fent, 5. hiba) valószínűleg a
 >    `/api/contact` és `/api/international-contact` route-okat is érinti —
 >    ellenőrizendő.
-> 3. **A `google/gemini-2.5-flash` + `perplexitySearch` kombináció Free
+> 2. **A `google/gemini-2.5-flash` + `perplexitySearch` kombináció Free
 >    Tier-en marad** — ha a keresési forgalom megnő, érdemes figyelni, nem
 >    fut-e bele ismét a fiókszintű rate limitbe (l. fent). Ha ez gondot okoz,
 >    a kreditvásárlás (Homola Lászlóval egyeztetve) továbbra is nyitott opció.
