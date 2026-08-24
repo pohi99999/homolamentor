@@ -239,7 +239,6 @@ export async function POST(request: Request) {
     return NextResponse.json(response);
   } catch (error: unknown) {
     const statusCode = extractStatusCode(error);
-    console.error("Property search error [diag]:", statusCode, JSON.stringify(error, Object.getOwnPropertyNames(error as object)));
     if (statusCode === 429) {
       return NextResponse.json<PropertySearchResponse>({
         results: [],

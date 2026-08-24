@@ -472,21 +472,68 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
      (mindkettő `office.homlamentor@gmail.com`-ra küld ugyanezzel a sandbox-
      feladóval) — ezt ez a session NEM javította, külön ellenőrzendő/javítandó.
 
+- **2026-08-24 — AI Gateway 403/429 megoldva: ingyenes fixszel, Anthropic Claude
+  helyett Google Gemini 2.5 Flash + Gateway-natív Perplexity search.** A gyökérok
+  a Vercel Support agent szerint kettős volt (Vertex 403 = Anthropic-specifikus
+  `webSearch` tool séma nem támogatott Vertexen; Anthropic/Bedrock 429 = Free
+  Tier modellkorlátozás), de élő diagnosztikával kiderült, hogy **súlyosabb**:
+  a `providerOptions.gateway.order` önmagában NEM korlátoz — csak preferencia-
+  sorrend, a Gateway a listán kívüli providerre is fallback-elhet, ha az elsőt
+  nem támogatja a payload (ez okozta, hogy `order: ["anthropic"]` mellett is
+  Vertexre ment a kérés). A tényleges korlátozáshoz `only: ["anthropic"]` kell.
+  Ezután viszont kiderült, hogy **minden Anthropic modell** (Haiku 4.5 is, nem
+  csak Sonnet/Opus) `RestrictedModelsError`-t ad Free Tier-en — a Support
+  agent válasza ezen a ponton pontatlan volt. Egy ideiglenes, egy hívásból
+  8 modellt tesztelő probe route (`src/app/api/property-search/probe/route.ts`,
+  törölve használat után) igazolta: **OpenAI (`gpt-4o-mini`, `gpt-4.1-nano`),
+  Google (`gemini-2.5-flash`) és Meta (`llama-3.3-70b`) szabadon használható**
+  a Free Tier-en, csak az Anthropic és a DeepSeek van korlátozva. A Free Tier-nek
+  emellett egy nagyon alacsony, **fiókszintű aggregát rate limitje** is van —
+  a probe 9 egymást követő hívása egy request-en belül kimerítette, ezután
+  minden modell (a korábban működők is) 429-et adott percekig, majd magától
+  helyreállt. Végleges megoldás: a modellt `google/gemini-2.5-flash`-re
+  váltottuk, az Anthropic-specifikus `anthropic.tools.webSearch_20260209`
+  helyett a Gateway saját, provider-független `gateway.tools.perplexitySearch()`
+  tool-ját használjuk (ez bármelyik modellel párosítható, nem csak Anthropickal).
+  Élesben igazolva: valós, 4 találatos ingatlanpiaci keresési eredmény, a
+  compliance-szűrés (forrás-URL/hirdető-elérhetőség redaktálása) is helyesen
+  működött rajta. **Ingyenes megoldás, nem kellett fizetős kreditet vásárolni.**
+  > [!warning] Tanulság jövőbeli AI Gateway munkához
+  > 1. `providerOptions.gateway.order` ≠ korlátozás — csak `only` zár ki
+  >    ténylegesen providereket a fallback-láncból.
+  > 2. Egy Support-válasz (akár AI agent, akár ember) állítása a fiók
+  >    tényleges korlátozásairól nem helyettesíti az élő, empirikus tesztet —
+  >    itt is tévesnek bizonyult ("csak Sonnet/Opus korlátozott" → valójában
+  >    minden Anthropic modell).
+  > 3. Diagnosztikai hibaüzenetért mindig logold a teljes hiba-objektumot
+  >    (`JSON.stringify(error, Object.getOwnPropertyNames(error))`), mert a
+  >    `error.message`/`statusCode` felszíni mezői önmagukban nem elegek —
+  >    a Gateway a tényleges okot (`RestrictedModelsError` névvel és pontos
+  >    szöveggel) csak a beágyazott `cause`-ban adja vissza.
+  > 4. Több modellt egy request-en belül, gyors egymásutánban tesztelni
+  >    kimeríti a Free Tier aggregát rate limitjét — egyesével, pár másodperc
+  >    szünettel tesztelj, vagy vedd figyelembe, hogy egy "sikertelen" teszt
+  >    utáni "mindenki 429" nem jelenti azt, hogy korábban működő modellek is
+  >    elromlottak.
+
 > [!warning] Következő munkamenet — itt folytasd
-> Három konkrét, nyitva hagyott tétel a 2026-08-23-i ingatlan-kereső munkából:
-> 1. **AI Gateway 403/429 fiók-szintű hiba megoldása** (Vercel support vagy
->    fiók-vizsgálat — nem kódhiba, l. fent).
-> 2. **Admin státusz-workflow** (Új→Kapcsolatba lépve→Lezárva) a `/admin/demand`
+> Nyitva hagyott tételek:
+> 1. **Admin státusz-workflow** (Új→Kapcsolatba lépve→Lezárva) a `/admin/demand`
 >    oldalon, ha a csapat igényli — l. fent, "szándékosan elhalasztva".
-> 3. **Mobil nézet valós ellenőrzése** — a 2026-08-23-i session böngésző-
+> 2. **Mobil nézet valós ellenőrzése** — a 2026-08-23-i session böngésző-
 >    eszköze (`claude-in-chrome` `resize_window`) nem tudta átméretezni a
 >    tényleges renderelési viewportot (`window.innerWidth` 1920 maradt a
 >    hívás után is) — ez tooling-korlát volt, nem elvégzett és bukott
 >    ellenőrzés. Érdemes más úton (valós eszköz, vagy ha elérhető, Chrome
 >    DevTools MCP) leellenőrizni a `PropertySearchSection.tsx` és a többi
 >    érintett komponens reszponzív viselkedését.
-> 4. **Gyanú**: a fent leírt Resend-címzett hiba valószínűleg a `/api/contact`
->    és `/api/international-contact` route-okat is érinti — ellenőrizendő.
+> 3. **Gyanú**: a Resend-címzett hiba (l. fent, 5. hiba) valószínűleg a
+>    `/api/contact` és `/api/international-contact` route-okat is érinti —
+>    ellenőrizendő.
+> 4. **A `google/gemini-2.5-flash` + `perplexitySearch` kombináció Free
+>    Tier-en marad** — ha a keresési forgalom megnő, érdemes figyelni, nem
+>    fut-e bele ismét a fiókszintű rate limitbe (l. fent). Ha ez gondot okoz,
+>    a kreditvásárlás (Homola Lászlóval egyeztetve) továbbra is nyitott opció.
 
 ### Releváns szkriptek (`scripts/`, `n8n/`)
 
