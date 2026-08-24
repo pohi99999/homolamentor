@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { Loader2, Mail, MapPin, RefreshCw, Search, Tag, User } from "lucide-react";
-import type { DemandRow } from "@/app/api/demand-sync/route";
+import { DEMAND_STATUSES, type DemandRow, type DemandStatus } from "@/app/api/demand-sync/route";
+
+const STATUS_STYLES: Record<string, string> = {
+  Új: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  "Kapcsolatba lépve": "bg-amber-500/10 text-amber-300 border-amber-500/20",
+  Lezárva: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+};
+const FALLBACK_STATUS_STYLE = "bg-slate-800 text-slate-300 border-slate-700";
 
 export function DemandTable() {
   const [entries, setEntries] = useState<DemandRow[]>([]);
@@ -10,6 +17,8 @@ export function DemandTable() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [statusError, setStatusError] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -30,6 +39,31 @@ export function DemandTable() {
   useEffect(() => {
     void load();
   }, []);
+
+  const updateStatus = async (row: DemandRow, nextStatus: DemandStatus) => {
+    if (nextStatus === row.status) return;
+    const previousStatus = row.status;
+    setStatusError(null);
+    setUpdatingId(row.id);
+    setEntries((prev) => prev.map((e) => (e.id === row.id ? { ...e, status: nextStatus } : e)));
+
+    try {
+      const res = await fetch("/api/demand-sync", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: row.id, status: nextStatus }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Ismeretlen hiba");
+    } catch (err) {
+      // Roll back the optimistic update — the sheet write failed, so the UI
+      // must not keep showing a status that was never actually saved.
+      setEntries((prev) => prev.map((e) => (e.id === row.id ? { ...e, status: previousStatus } : e)));
+      setStatusError(err instanceof Error ? err.message : "Nem sikerült frissíteni az állapotot.");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   const filtered = entries.filter((e) => {
     const term = searchTerm.toLowerCase();
@@ -85,6 +119,11 @@ export function DemandTable() {
           {notice}
         </div>
       )}
+      {statusError && (
+        <div className="px-6 py-3 bg-rose-500/10 border-b border-rose-500/20 text-rose-300 text-xs">
+          {statusError}
+        </div>
+      )}
 
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-xs">
@@ -135,9 +174,28 @@ export function DemandTable() {
                   </td>
                   <td className="py-3.5 px-4 uppercase text-[11px] text-slate-400">{e.locale}</td>
                   <td className="py-3.5 px-4">
-                    <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                      {e.status}
-                    </span>
+                    <div className="relative inline-block">
+                      <select
+                        value={e.status}
+                        disabled={updatingId === e.id}
+                        onChange={(ev) => void updateStatus(e, ev.target.value as DemandStatus)}
+                        className={`appearance-none pl-2.5 pr-6 py-1 rounded-full text-[11px] font-semibold border cursor-pointer disabled:opacity-50 disabled:cursor-wait focus:outline-none ${
+                          STATUS_STYLES[e.status] || FALLBACK_STATUS_STYLE
+                        }`}
+                      >
+                        {!DEMAND_STATUSES.includes(e.status as DemandStatus) && (
+                          <option value={e.status}>{e.status}</option>
+                        )}
+                        {DEMAND_STATUSES.map((s) => (
+                          <option key={s} value={s} className="bg-slate-900 text-slate-200">
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                      {updatingId === e.id && (
+                        <Loader2 className="w-3 h-3 animate-spin absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
