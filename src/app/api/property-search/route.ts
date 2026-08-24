@@ -216,6 +216,7 @@ export async function POST(request: Request) {
           user: sessionId,
           tags: ["feature:property-search"],
           order: ["anthropic"],
+          only: ["anthropic"],
         },
       },
     });
