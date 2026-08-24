@@ -516,6 +516,23 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   >    utáni "mindenki 429" nem jelenti azt, hogy korábban működő modellek is
   >    elromlottak.
 
+- **2026-08-24 — Álriasztás: a felhasználó ékezet-torzulást látott egy teszt-e-mailben,
+  ez a saját Bash-teszt kódolási hibája volt, nem termékhiba.** A `property-search/interest`
+  route élő teszteléséhez (admin státusz-workflow ellenőrzéséhez, l. lentebb) a payload-ot
+  közvetlenül shell-parancsban adtam át ékezetes magyar szöveggel — a Windows Git Bash
+  parancssori argumentumban ez torzult (`eladó` → `elad�`), és ez a torzult szöveg jutott
+  el a Sheetbe és a csapat-e-mailbe is. A felhasználó a Gmail-ben látta meg és jelezte.
+  **Diagnózis**: egy második tesztet fájlból küldtem (`curl --data-binary @file.json`,
+  a fájl explicit UTF-8-ban írva és hexdump-pal ellenőrizve) — ez tökéletesen tiszta
+  ékezetekkel érkezett meg, mind a Sheetbe, mind az e-mailbe. **Ez bizonyítja, hogy a
+  hiba kizárólag a shell-parancsból-tesztelés artefaktuma volt** — egy valódi látogató
+  böngészője mindig helyesen UTF-8-ban küldi a JSON body-t, ott ez fizikailag nem
+  fordulhat elő. Nem volt szükség kódjavításra.
+  > [!warning] Tanulság
+  > Ha ékezetes/nem-ASCII teszt-adatot kell POST-olni egy API route-nak, **ne írd a
+  > payloadot közvetlenül a shell-parancsba** — írj egy ideiglenes UTF-8 fájlt (pl. a
+  > Write tool-lal), és `curl --data-binary @file`-lal küldd, hogy kizárd a
+  > terminál/shell kódlap-torzítás lehetőségét diagnózis előtt.
 - **2026-08-24 — Admin státusz-workflow leszállítva a Kereslet fülön (Új → Kapcsolatba
   lépve → Lezárva), és egy éles build-hiba menet közben javítva.** Három rész: (a) a
   `DemandRow.id` mostantól a tényleges Sheet sorszám (fejléc + 1-től, a blank-sor
