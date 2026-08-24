@@ -516,21 +516,56 @@ nincs köze — ezt a `next dev` nem kezeli/írja felül, kézzel karbantartott.
   >    utáni "mindenki 429" nem jelenti azt, hogy korábban működő modellek is
   >    elromlottak.
 
+- **2026-08-24 — Admin státusz-workflow leszállítva a Kereslet fülön (Új → Kapcsolatba
+  lépve → Lezárva), és egy éles build-hiba menet közben javítva.** Három rész: (a) a
+  `DemandRow.id` mostantól a tényleges Sheet sorszám (fejléc + 1-től, a blank-sor
+  filter ELŐTT számolva — a korábbi szintetikus `idx+1` elcsúszott volna egy üres
+  sor esetén); (b) admin-védett `PATCH /api/demand-sync` — `{ id, status }` body,
+  az állapot validálva a három megengedett érték egyikére, `values.update`-tel írja
+  a J oszlopot; (c) `DemandTable.tsx` — a statikus badge helyett interaktív legördülő,
+  optimista UI-frissítéssel, hiba esetén visszaállítással, a `CrmTable` szín-konvencióját
+  követve (kék=Új, sárga=Kapcsolatba lépve, zöld=Lezárva).
+  > [!warning] Éles build-hiba: futásidejű érték importálása szerver-only route-ból kliens-komponensbe
+  > Az első verzió a `DEMAND_STATUSES` konstanst **futásidejű értékként** exportálta a
+  > `demand-sync/route.ts`-ből, és a `DemandTable.tsx` (kliens-komponens) ezt importálta.
+  > A `DemandRow` **type-only** importja biztonságos (fordításkor törlődik), de egy
+  > **érték**-import az egész modult a kliens-bundle-be húzza — a `route.ts` pedig a
+  > `googleapis`-t importálja, ami Node-only `net`/`tls` modulokra hivatkozik. Eredmény:
+  > `npm run build` elhasalt Vercelen ("Module not found: Can't resolve 'net'/'tls'"),
+  > a commit pusholva lett, de mivel a Vercel egy sikertelen buildnél megtartja az előző
+  > eles deploy-t, a funkció NEM volt élesben elérhető, és ez a build-lista áttekintése
+  > nélkül észrevétlen maradt volna. **A felhasználó vette észre a Vercel build-hiba
+  > értesítésben** és jelezte — ez fedezte fel a hibát, nem az agent saját ellenőrzése.
+  > Javítva: a megosztott konstansok (`DEMAND_STATUSES`, `DemandStatus` típus) külön
+  > `src/lib/demandStatus.ts` fájlba kerültek, amit mind a route, mind a kliens-komponens
+  > importál — a route.ts-ből a kliens csak type-only importot kap.
+  > **Tanulság: minden push után ellenőrizd a Vercel deployment-listát ("Ready" vs
+  > "Error"), ne csak a saját `npm run build`/`tsc` futtatását bízd rá a lokális
+  > környezetre** — ez a hiba pont azért csúszott át, mert helyben nem futtattam
+  > `npm run build`-ot a push előtt (csak `tsc --noEmit`-et, ami type-only importokat
+  > nem különböztet meg érték-importoktól ugyanígy, de a bundlázási problémát nem látja).
+  > Élesben, böngészőben végigtesztelve (2026-08-24, a javítás után): valós keresés →
+  > "Érdekel" → CRM-sor létrejön "Új" státusszal → legördülőn "Kapcsolatba lépve" →
+  > "Lezárva" → oldal-újratöltés után is perzisztál → teszt-sor törölve a `gws` CLI-vel.
+  > **Mellékes megfigyelés**: a Vercel "Live Feedback" böngésző-widget (a Vercel-fiókkal
+  > bejelentkezett munkamenetekben aktív) időnként elfogja/összezavarja a kattintásokat
+  > és görgetést automatizált teszteléskor — ha egy böngészős teszt megmagyarázhatatlanul
+  > nem regisztrál kattintást vagy váratlanul görgeti az oldalt, ellenőrizd a konzolt
+  > `vercel.live` hibára, és inkább `find`-alapú `ref`-fel kattints koordináta helyett.
+
 > [!warning] Következő munkamenet — itt folytasd
 > Nyitva hagyott tételek:
-> 1. **Admin státusz-workflow** (Új→Kapcsolatba lépve→Lezárva) a `/admin/demand`
->    oldalon, ha a csapat igényli — l. fent, "szándékosan elhalasztva".
-> 2. **Mobil nézet valós ellenőrzése** — a 2026-08-23-i session böngésző-
+> 1. **Mobil nézet valós ellenőrzése** — a 2026-08-23-i session böngésző-
 >    eszköze (`claude-in-chrome` `resize_window`) nem tudta átméretezni a
 >    tényleges renderelési viewportot (`window.innerWidth` 1920 maradt a
 >    hívás után is) — ez tooling-korlát volt, nem elvégzett és bukott
 >    ellenőrzés. Érdemes más úton (valós eszköz, vagy ha elérhető, Chrome
 >    DevTools MCP) leellenőrizni a `PropertySearchSection.tsx` és a többi
 >    érintett komponens reszponzív viselkedését.
-> 3. **Gyanú**: a Resend-címzett hiba (l. fent, 5. hiba) valószínűleg a
+> 2. **Gyanú**: a Resend-címzett hiba (l. fent, 5. hiba) valószínűleg a
 >    `/api/contact` és `/api/international-contact` route-okat is érinti —
 >    ellenőrizendő.
-> 4. **A `google/gemini-2.5-flash` + `perplexitySearch` kombináció Free
+> 3. **A `google/gemini-2.5-flash` + `perplexitySearch` kombináció Free
 >    Tier-en marad** — ha a keresési forgalom megnő, érdemes figyelni, nem
 >    fut-e bele ismét a fiókszintű rate limitbe (l. fent). Ha ez gondot okoz,
 >    a kreditvásárlás (Homola Lászlóval egyeztetve) továbbra is nyitott opció.
