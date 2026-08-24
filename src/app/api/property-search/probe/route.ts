@@ -47,5 +47,24 @@ export async function GET() {
     }
   }
 
+  // Search-tool probe: gemini-2.5-flash + gateway-native Perplexity search tool
+  try {
+    const { text, toolResults } = await generateText({
+      model: gateway("google/gemini-2.5-flash"),
+      prompt: "Search the web: what is the current price of gold per ounce? Answer in one sentence.",
+      tools: { web_search: gateway.tools.perplexitySearch({ maxResults: 3 }) },
+      providerOptions: {
+        gateway: { tags: ["probe-search"] },
+      },
+    });
+    results["gemini-2.5-flash+perplexitySearch"] = {
+      ok: true,
+      message: `text=${text.slice(0, 150)} | toolResults=${JSON.stringify(toolResults).slice(0, 200)}`,
+    };
+  } catch (error: unknown) {
+    const { statusCode, message } = extractStatusCode(error);
+    results["gemini-2.5-flash+perplexitySearch"] = { ok: false, statusCode, message };
+  }
+
   return NextResponse.json(results);
 }
