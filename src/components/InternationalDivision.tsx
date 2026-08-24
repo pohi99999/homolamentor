@@ -93,7 +93,7 @@ export default function InternationalDivision() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl font-black tracking-tight mb-6 bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent"
+            className="text-3xl sm:text-5xl font-black tracking-tight break-words mb-6 bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent"
           >
             {t('title')}
           </motion.h2>

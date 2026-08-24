@@ -93,7 +93,7 @@ export default function Hero() {
           {/* Főcím */}
           <motion.h1
             variants={itemVariants}
-            className="text-4xl sm:text-6xl md:text-7xl font-black tracking-wide [text-wrap:balance] leading-[1.08] bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent"
+            className="text-3xl sm:text-6xl md:text-7xl font-black tracking-wide break-words [text-wrap:balance] leading-[1.08] bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent"
           >
             {t('title')}
           </motion.h1>

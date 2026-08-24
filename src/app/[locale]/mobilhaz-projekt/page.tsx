@@ -58,7 +58,7 @@ export default function MobileHomeProjectPage() {
           </div>
 
           {/* Cím */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-8 max-w-4xl mx-auto leading-tight bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight break-words mb-8 max-w-4xl mx-auto leading-tight bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
             {t('title')}
           </h1>
 
