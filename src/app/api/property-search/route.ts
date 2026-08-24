@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { gateway, generateText, RetryError } from "ai-gateway-sdk";
-import { anthropic } from "@ai-sdk/anthropic";
 import { getOrCreateDemandSessionId } from "@/lib/demandSession";
 import type { TeaserResult, PropertySearchResponse } from "@/lib/propertySearch";
 
@@ -203,20 +202,17 @@ export async function POST(request: Request) {
   }
 
   const sessionId = await getOrCreateDemandSessionId();
-  const webSearchTool = anthropic.tools.webSearch_20260209({ maxUses: 3 });
 
   try {
     const { text } = await generateText({
-      model: gateway("anthropic/claude-haiku-4.5"),
+      model: gateway("google/gemini-2.5-flash"),
       system: buildSystemPrompt(locale),
       prompt: `Ingatlanpiaci keresési kifejezés: "${query}"`,
-      tools: { web_search: webSearchTool },
+      tools: { web_search: gateway.tools.perplexitySearch({ maxResults: 5 }) },
       providerOptions: {
         gateway: {
           user: sessionId,
           tags: ["feature:property-search"],
-          order: ["anthropic"],
-          only: ["anthropic"],
         },
       },
     });
