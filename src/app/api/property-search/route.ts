@@ -207,7 +207,7 @@ export async function POST(request: Request) {
 
   try {
     const { text } = await generateText({
-      model: gateway("anthropic/claude-sonnet-5"),
+      model: gateway("anthropic/claude-haiku-4.5"),
       system: buildSystemPrompt(locale),
       prompt: `Ingatlanpiaci keresési kifejezés: "${query}"`,
       tools: { web_search: webSearchTool },
@@ -215,6 +215,7 @@ export async function POST(request: Request) {
         gateway: {
           user: sessionId,
           tags: ["feature:property-search"],
+          order: ["anthropic"],
         },
       },
     });
