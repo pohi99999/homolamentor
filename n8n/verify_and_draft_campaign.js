@@ -5,7 +5,7 @@ const path = require('path');
 // Környezeti változók beolvasása
 const envPath = path.join(__dirname, '..', '.env');
 let n8nApiKey = '';
-let n8nBaseUrl = 'https://n8n-latest-fulv.onrender.com';
+let n8nBaseUrl = 'https://n8n.pohankaestarsa.com';
 
 if (fs.existsSync(envPath)) {
   const envContent = fs.readFileSync(envPath, 'utf-8');
