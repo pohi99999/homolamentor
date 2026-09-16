@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { execFile } from 'child_process';
-import { promisify } from 'util';
+import { google } from 'googleapis';
 import { escapeHtml } from '@/lib/escapeHtml';
-
-const execFilePromise = promisify(execFile);
 
 // Resend inicializálása csak akkor, ha a kulcs rendelkezésre áll
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -229,7 +226,10 @@ export async function POST(request: Request) {
       console.log('--- END MOCK ---');
     }
 
-    // 3. Google Sheets CRM Ingestion via GWS CLI (csak mobilház esetén)
+    // 3. Google Sheets CRM Ingestion (googleapis JWT service-account, csak mobilház esetén)
+    //    A korábbi gws CLI-hívás a Vercel serverless PATH-ján nem érte el a binárist,
+    //    ezért a sor sosem került be a Sheetbe -- ugyanaz a JWT-minta, mint a
+    //    property-search/interest és demand-sync route-okban (2026-09-16).
     if (isMobileHome) {
       tasks.push(
         new Promise((resolve) => {
@@ -248,32 +248,36 @@ export async function POST(request: Request) {
                 'Uj Erdeklodo',
               ];
 
-              const paramsStr = JSON.stringify({
+              const serviceAccountEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+              let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+              if (!serviceAccountEmail || !privateKey) {
+                throw new Error('Hiányzó GOOGLE_SERVICE_ACCOUNT_EMAIL/GOOGLE_PRIVATE_KEY.');
+              }
+              privateKey = privateKey.replace(/\\n/g, '\n');
+              if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+                privateKey = privateKey.slice(1, -1);
+              }
+
+              const auth = new google.auth.JWT({
+                email: serviceAccountEmail,
+                key: privateKey,
+                scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+              });
+              const sheets = google.sheets({ version: 'v4', auth });
+
+              console.log('Ingesting Mobilház B2B inquiry to Google Sheets CRM (googleapis)...');
+              await sheets.spreadsheets.values.append({
                 spreadsheetId,
                 range: 'Mobilhaz_Jelentkezok!A1',
                 valueInputOption: 'USER_ENTERED',
+                insertDataOption: 'INSERT_ROWS',
+                requestBody: { values: [rowValues] },
               });
-
-              const bodyStr = JSON.stringify({
-                values: [rowValues],
-              });
-
-              console.log('Ingesting Mobilház B2B inquiry to GWS CRM...');
-              await execFilePromise('gws', [
-                'sheets',
-                'spreadsheets',
-                'values',
-                'append',
-                '--params',
-                paramsStr,
-                '--json',
-                bodyStr,
-              ]);
-              console.log('Sikeres Google Sheets CRM rögzítés GWS CLI-vel.');
+              console.log('Sikeres Google Sheets CRM rögzítés (googleapis).');
               resolve({ success: true, source: 'GWS' });
             } catch (err: unknown) {
-              const message = err instanceof Error ? err.message : 'Unknown GWS error';
-              console.error('Hiba a Google Sheets (GWS) CRM rögzítés közben:', message);
+              const message = err instanceof Error ? err.message : 'Unknown Sheets error';
+              console.error('Hiba a Google Sheets CRM rögzítés közben:', message);
               // Nem dobunk végzetes hibát, hogy a többi integráció (Resend, n8n) fusson tovább
               resolve({ error: true, source: 'GWS', message });
             }
