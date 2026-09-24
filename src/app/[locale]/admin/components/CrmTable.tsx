@@ -157,19 +157,19 @@ export function CrmTable({
           </div>
 
           {/* Szűrők sáv */}
-          <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-800/60 text-xs">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 pt-2 border-t border-slate-800/60 text-xs">
             <div className="flex items-center gap-1.5 text-slate-400 font-semibold mr-1">
               <Filter className="w-3.5 h-3.5 text-amber-400" />
               <span>Szűrők:</span>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 w-full sm:w-auto">
               <span className="text-slate-500 text-[11px]">Státusz:</span>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 aria-label="Szűrés státusz szerint"
-                className="bg-slate-900 border border-slate-800 text-slate-200 py-1.5 px-3 rounded-lg text-xs focus:outline-none focus:border-amber-500/50"
+                className="w-full sm:w-auto bg-slate-900 border border-slate-800 text-slate-200 py-2.5 sm:py-1.5 px-3 rounded-lg text-xs focus:outline-none focus:border-amber-500/50"
               >
                 <option value="all">Összes Státusz</option>
                 <option value="tárgyal">Aktív tárgyalás</option>
@@ -184,13 +184,13 @@ export function CrmTable({
               </select>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 w-full sm:w-auto">
               <span className="text-slate-500 text-[11px]">Téma / Projekt:</span>
               <select
                 value={topicFilter}
                 onChange={(e) => setTopicFilter(e.target.value)}
                 aria-label="Szűrés téma szerint"
-                className="bg-slate-900 border border-slate-800 text-slate-200 py-1.5 px-3 rounded-lg text-xs focus:outline-none focus:border-amber-500/50"
+                className="w-full sm:w-auto bg-slate-900 border border-slate-800 text-slate-200 py-2.5 sm:py-1.5 px-3 rounded-lg text-xs focus:outline-none focus:border-amber-500/50"
               >
                 <option value="all">Összes Téma</option>
                 <option value="Üllő">Üllő csarnok</option>
@@ -209,7 +209,7 @@ export function CrmTable({
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="ml-auto px-2.5 py-1 rounded-lg bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-[11px] font-semibold border border-rose-500/20 flex items-center gap-1 transition-colors"
+                className="self-start sm:self-auto sm:ml-auto px-2.5 py-1 rounded-lg bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-[11px] font-semibold border border-rose-500/20 flex items-center gap-1 transition-colors"
               >
                 <X className="w-3 h-3" />
                 Szűrők Törlése
@@ -218,8 +218,117 @@ export function CrmTable({
           </div>
         </div>
 
-        {/* CRM Táblázat */}
-        <div className="overflow-x-auto">
+        {/* Mobil (md alatt): kártyalista -- a 8 oszlopos táblázat telefonon olvashatatlan. */}
+        <ul className="md:hidden divide-y divide-slate-800/60" aria-label={title}>
+          {loading ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <li key={i} className="p-4 animate-pulse space-y-2">
+                <div className="h-4 w-40 bg-slate-800 rounded"></div>
+                <div className="h-3 w-28 bg-slate-800/60 rounded"></div>
+                <div className="h-5 w-24 bg-slate-800 rounded-full"></div>
+              </li>
+            ))
+          ) : filteredActivities.length > 0 ? (
+            filteredActivities.map((act) => {
+              const isExpanded = expandedRowId === act.id;
+              return (
+                <li
+                  key={act.id}
+                  data-testid="crm-card"
+                  className={`p-4 space-y-3 ${isExpanded ? "bg-slate-800/40 border-l-4 border-l-amber-400" : ""}`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-bold text-slate-100 text-sm break-words">{act.name}</p>
+                      <p className="text-slate-400 text-[11px] mt-0.5 flex items-center gap-1.5 break-words">
+                        <Building2 className="w-3 h-3 text-slate-500 shrink-0" />
+                        {act.company}
+                      </p>
+                    </div>
+                    <div className="shrink-0">
+                      <StatusPill act={act} />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px]">
+                    <span className="flex items-center gap-1 text-slate-400 font-mono">
+                      <Calendar className="w-3 h-3 text-slate-500" />
+                      {act.date}
+                    </span>
+                    {act.topic && act.topic !== "Nincs adat" && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg font-semibold bg-slate-800 text-amber-300 border border-slate-700">
+                        <Tag className="w-3 h-3 text-amber-400" />
+                        {act.topic}
+                      </span>
+                    )}
+                  </div>
+
+                  {(act.email !== "Nincs email" || act.phone !== "Nincs megadva") && (
+                    <div className="space-y-1 text-[12px]">
+                      {act.email && act.email !== "Nincs email" && (
+                        <a href={`mailto:${act.email}`} className="flex items-center gap-1.5 text-slate-300 hover:text-white font-mono break-all">
+                          <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          {act.email}
+                        </a>
+                      )}
+                      {act.phone && act.phone !== "Nincs megadva" && (
+                        <a href={`tel:${act.phone}`} className="flex items-center gap-1.5 text-amber-300/90 hover:text-amber-200 font-mono">
+                          <Phone className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                          {act.phone}
+                        </a>
+                      )}
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => toggleRowExpand(act.id)}
+                    aria-expanded={isExpanded}
+                    aria-controls={`crm-card-details-${act.id}`}
+                    className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 text-xs font-semibold transition-colors"
+                  >
+                    {isExpanded ? <ChevronUp className="w-4 h-4 text-amber-400" /> : <ChevronDown className="w-4 h-4" />}
+                    Részletek
+                  </button>
+
+                  {isExpanded && (
+                    <div id={`crm-card-details-${act.id}`}>
+                      <ExpandedDetails act={act} gmailMessages={gmailMessages} onOpenTimeline={() => setSelectedPartner(act)} />
+                    </div>
+                  )}
+                </li>
+              );
+            })
+          ) : (
+            <li className="py-12 px-4 text-center">
+              <p className="text-slate-500 text-xs">
+                {error ? "Nem sikerült betölteni az adatsorokat." : emptyMessage}
+              </p>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearFilters}
+                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-semibold border border-slate-700 inline-flex items-center gap-1.5"
+                  >
+                    <X className="w-3 h-3" />
+                    Szűrők Törlése
+                  </button>
+                )}
+                <button
+                  onClick={() => sync(true)}
+                  disabled={syncing}
+                  className="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-[11px] font-semibold border border-amber-500/30 inline-flex items-center gap-1.5 disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3 h-3 ${syncing ? "animate-spin" : ""}`} />
+                  Szinkronizálás Újra
+                </button>
+              </div>
+            </li>
+          )}
+        </ul>
+
+        {/* CRM Táblázat (md felett, változatlan) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="bg-slate-900/60 border-b border-slate-800/80 text-slate-400 uppercase tracking-wider font-semibold">
@@ -321,30 +430,7 @@ export function CrmTable({
                         </td>
 
                         <td className="py-4 px-4">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
-                              act.statusColor === "emerald"
-                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                                : act.statusColor === "amber"
-                                ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
-                                : act.statusColor === "blue"
-                                ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
-                                : "bg-rose-500/10 text-rose-400 border-rose-500/20"
-                            }`}
-                          >
-                            <span
-                              className={`w-1.5 h-1.5 rounded-full ${
-                                act.statusColor === "emerald"
-                                  ? "bg-emerald-400"
-                                  : act.statusColor === "amber"
-                                  ? "bg-amber-400"
-                                  : act.statusColor === "blue"
-                                  ? "bg-blue-400"
-                                  : "bg-rose-400"
-                              }`}
-                            ></span>
-                            {act.status}
-                          </span>
+                          <StatusPill act={act} />
                         </td>
 
                         <td className="py-4 px-4 max-w-xs">
@@ -373,6 +459,106 @@ export function CrmTable({
                       {isExpanded && (
                         <tr className="bg-slate-950/60 border-b border-slate-800/80">
                           <td colSpan={8} className="p-6">
+                            <ExpandedDetails
+                              act={act}
+                              gmailMessages={gmailMessages}
+                              onOpenTimeline={() => setSelectedPartner(act)}
+                            />
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={8} className="py-12 text-center">
+                    <p className="text-slate-500 text-xs">
+                      {error ? "Nem sikerült betölteni az adatsorokat." : emptyMessage}
+                    </p>
+                    <div className="mt-4 flex items-center justify-center gap-2">
+                      {hasActiveFilters && (
+                        <button
+                          onClick={clearFilters}
+                          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-semibold border border-slate-700 inline-flex items-center gap-1.5"
+                        >
+                          <X className="w-3 h-3" />
+                          Szűrők Törlése
+                        </button>
+                      )}
+                      <button
+                        onClick={() => sync(true)}
+                        disabled={syncing}
+                        className="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-[11px] font-semibold border border-amber-500/30 inline-flex items-center gap-1.5 disabled:opacity-50"
+                      >
+                        <RefreshCw className={`w-3 h-3 ${syncing ? "animate-spin" : ""}`} />
+                        Szinkronizálás Újra
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {selectedPartner && (
+        <PartnerDrawer
+          partner={selectedPartner}
+          onClose={() => setSelectedPartner(null)}
+          gmailMessages={gmailMessages}
+          loadingGmail={loadingGmail}
+          gmailError={gmailError}
+        />
+      )}
+    </>
+  );
+}
+
+type GmailMessage = ReturnType<typeof useGmailHistory>["messages"][number];
+
+/** Státusz-jelvény: a táblázat és a mobil kártya ugyanezt rendereli. */
+function StatusPill({ act }: { act: CrmActivity }) {
+  return (
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
+                              act.statusColor === "emerald"
+                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                : act.statusColor === "amber"
+                                ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
+                                : act.statusColor === "blue"
+                                ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                                : "bg-rose-500/10 text-rose-400 border-rose-500/20"
+                            }`}
+                          >
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full ${
+                                act.statusColor === "emerald"
+                                  ? "bg-emerald-400"
+                                  : act.statusColor === "amber"
+                                  ? "bg-amber-400"
+                                  : act.statusColor === "blue"
+                                  ? "bg-blue-400"
+                                  : "bg-rose-400"
+                              }`}
+                            ></span>
+                            {act.status}
+                          </span>
+  );
+}
+
+/** A kinyitott partner-részletek (idővonal + Gmail): a táblázat lenyíló sora és a mobil kártya közös tartalma. */
+function ExpandedDetails({
+  act,
+  gmailMessages,
+  onOpenTimeline,
+}: {
+  act: CrmActivity;
+  gmailMessages: GmailMessage[];
+  onOpenTimeline: () => void;
+}) {
+  return (
                             <div className="bg-[#0B0F17] border border-slate-800 rounded-xl p-5 space-y-4">
                               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                                 <div>
@@ -387,7 +573,7 @@ export function CrmTable({
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <button
-                                    onClick={() => setSelectedPartner(act)}
+                                    onClick={onOpenTimeline}
                                     className="px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 border border-amber-500/30 text-xs font-semibold flex items-center gap-1.5"
                                   >
                                     <Eye className="w-3.5 h-3.5" />
@@ -453,54 +639,5 @@ export function CrmTable({
                                 </div>
                               )}
                             </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={8} className="py-12 text-center">
-                    <p className="text-slate-500 text-xs">
-                      {error ? "Nem sikerült betölteni az adatsorokat." : emptyMessage}
-                    </p>
-                    <div className="mt-4 flex items-center justify-center gap-2">
-                      {hasActiveFilters && (
-                        <button
-                          onClick={clearFilters}
-                          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-semibold border border-slate-700 inline-flex items-center gap-1.5"
-                        >
-                          <X className="w-3 h-3" />
-                          Szűrők Törlése
-                        </button>
-                      )}
-                      <button
-                        onClick={() => sync(true)}
-                        disabled={syncing}
-                        className="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-[11px] font-semibold border border-amber-500/30 inline-flex items-center gap-1.5 disabled:opacity-50"
-                      >
-                        <RefreshCw className={`w-3 h-3 ${syncing ? "animate-spin" : ""}`} />
-                        Szinkronizálás Újra
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {selectedPartner && (
-        <PartnerDrawer
-          partner={selectedPartner}
-          onClose={() => setSelectedPartner(null)}
-          gmailMessages={gmailMessages}
-          loadingGmail={loadingGmail}
-          gmailError={gmailError}
-        />
-      )}
-    </>
   );
 }

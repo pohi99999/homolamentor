@@ -2,6 +2,7 @@
 
 import { Link, usePathname } from "@/i18n/routing";
 import { signOut, useSession } from "next-auth/react";
+import { useEffect, useRef } from "react";
 import {
   Building2,
   Database,
@@ -13,8 +14,10 @@ import {
   Search,
   Settings,
   Users,
+  X,
 } from "lucide-react";
 import { useAdminData } from "./AdminDataContext";
+import { useAdminNav } from "./AdminNav";
 
 interface NavItem {
   name: string;
@@ -37,16 +40,55 @@ export function AdminSidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const { sync, syncing, loading, activities } = useAdminData();
+  const { open, setOpen, isDesktop } = useAdminNav();
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
+
+  // Mobilon: nyitáskor a fókusz a fiók bezáró gombjára kerül, záráskor vissza a hamburgerre.
+  useEffect(() => {
+    if (isDesktop) return;
+    if (open) closeRef.current?.focus();
+    else if (wasOpen.current) document.getElementById("admin-nav-toggle")?.focus();
+    wasOpen.current = open;
+  }, [open, isDesktop]);
+
+  const close = () => setOpen(false);
 
   const isActive = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
 
   return (
-    <aside className="w-64 bg-[#0F1420]/95 border-r border-slate-800/80 flex flex-col justify-between p-4 min-h-screen text-slate-200 backdrop-blur-xl">
+    <>
+    {/* Mobil háttér-sötétítés a nyitott fiók mögött; lg felett nincs. */}
+    {open && !isDesktop && (
+      <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" aria-hidden="true" onClick={close} />
+    )}
+    <aside
+      id="admin-sidebar"
+      aria-label="Admin menü"
+      // Mobilon a zárt fiók linkjei ne legyenek Tabbal elérhetők.
+      inert={!isDesktop && !open}
+      className={`w-64 bg-[#0F1420]/95 border-r border-slate-800/80 flex flex-col justify-between p-4 min-h-screen text-slate-200 backdrop-blur-xl fixed inset-y-0 left-0 z-50 h-full overflow-y-auto transition-[translate] duration-200 ease-out lg:static lg:z-auto lg:h-auto lg:overflow-visible lg:translate-none lg:transition-none ${
+        open ? "translate-x-0" : "-translate-x-full"
+      }`}
+    >
       <div>
+        {/* Mobil: a fiók bezáró gombja */}
+        <div className="flex justify-end lg:hidden">
+          <button
+            ref={closeRef}
+            type="button"
+            onClick={close}
+            aria-label="Menü bezárása"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
         {/* Brand Logo */}
         <Link
           href="/admin"
+          onClick={close}
           className="flex items-center gap-3 px-3 py-4 mb-6 border-b border-slate-800/60 group"
         >
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 p-0.5 shadow-lg shadow-amber-500/10">
@@ -77,6 +119,7 @@ export function AdminSidebar() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 onClick={() => {
+                  close();
                   // A Sync menüpont nem csak navigál: azonnal élő adatlekérést is indít.
                   if (item.triggersSync) void sync(true);
                 }}
@@ -109,6 +152,7 @@ export function AdminSidebar() {
         <div className="mt-6 pt-4 border-t border-slate-800/60">
           <Link
             href="/"
+            onClick={close}
             className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-all duration-200"
           >
             <ExternalLink className="w-4 h-4 text-slate-500" />
@@ -121,6 +165,7 @@ export function AdminSidebar() {
       <div className="pt-4 border-t border-slate-800/60">
         <Link
           href="/admin/settings"
+          onClick={close}
           className="bg-slate-900/80 border border-slate-800 hover:border-amber-500/30 p-3 rounded-xl mb-3 flex items-center gap-3 transition-colors"
         >
           {session?.user?.image ? (
@@ -154,5 +199,6 @@ export function AdminSidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

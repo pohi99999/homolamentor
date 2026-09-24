@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { Link } from "@/i18n/routing";
-import { Bell, LogOut, RefreshCw, ShieldAlert, ShieldCheck } from "lucide-react";
+import { Bell, LogOut, Menu, RefreshCw, ShieldAlert, ShieldCheck } from "lucide-react";
 import { useAdminData } from "./AdminDataContext";
+import { useAdminNav } from "./AdminNav";
 
 export function AdminHeader() {
   const { data: session } = useSession();
   const { sync, syncing, loading, error, lastSynced, activities } = useAdminData();
+  const { open: navOpen, setOpen: setNavOpen } = useAdminNav();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const notificationsRef = useRef<HTMLDivElement>(null);
 
@@ -37,12 +39,24 @@ export function AdminHeader() {
   const recent = activities.slice(0, 4);
 
   return (
-    <header className="h-16 bg-[#0F1420]/90 backdrop-blur-md border-b border-slate-800/80 px-6 flex items-center justify-between sticky top-0 z-30">
+    <header className="h-16 bg-[#0F1420]/90 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
       {/* Left side: Status indicators */}
       <div className="flex items-center gap-3">
+        {/* Mobil: az oldalmenü (fiók) nyitása; lg felett a menü mindig látszik. */}
+        <button
+          id="admin-nav-toggle"
+          type="button"
+          onClick={() => setNavOpen(true)}
+          aria-label="Menü megnyitása"
+          aria-expanded={navOpen}
+          aria-controls="admin-sidebar"
+          className="lg:hidden p-2 -ml-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
         <Link
           href="/admin/sync"
-          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
+          className={`inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
             error
               ? "bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20"
               : isBusy
@@ -55,8 +69,13 @@ export function AdminHeader() {
               error ? "bg-rose-400" : isBusy ? "bg-amber-400 animate-ping" : "bg-emerald-400 animate-pulse"
             }`}
           ></span>
-          Google Sheets CRM Sync:{" "}
-          {error ? "Hiba" : isBusy ? "Szinkronizálás…" : "Aktív"}
+          {/* Mobilon csak az állapot látszik; a teljes felirat képernyőolvasónak megmarad.
+              A külső span tartja egy flex-elemben a feliratot, ahogy eddig (különben a gap
+              is a szóköz mellé kerülne, és asztalon elcsúszna a jelvény). */}
+          <span>
+            <span className="sr-only sm:not-sr-only">Google Sheets CRM Sync:</span>{" "}
+            {error ? "Hiba" : isBusy ? "Szinkronizálás…" : "Aktív"}
+          </span>
         </Link>
         <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">
           <ShieldCheck className="w-3.5 h-3.5" />
@@ -65,7 +84,7 @@ export function AdminHeader() {
       </div>
 
       {/* Right side: Actions, Notifications, User Profile & Logout */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4">
         <button
           onClick={() => sync(true)}
           disabled={isBusy}
@@ -92,8 +111,9 @@ export function AdminHeader() {
             ></span>
           </button>
 
+          {/* Mobilon a panel a képernyő két széléhez igazodik (egy 320 px-es panel a csengőtől balra kilógna); sm felett az eredeti. */}
           {notificationsOpen && (
-            <div className="absolute right-0 mt-2 w-80 rounded-2xl bg-[#0F1420] border border-slate-800 shadow-2xl overflow-hidden z-40">
+            <div className="fixed left-4 right-4 top-16 sm:absolute sm:left-auto sm:right-0 sm:top-auto mt-2 sm:w-80 rounded-2xl bg-[#0F1420] border border-slate-800 shadow-2xl overflow-hidden z-40">
               <div className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-100">Rendszerértesítések</span>
                 <span className="text-[10px] text-slate-500 font-mono">
@@ -156,7 +176,7 @@ export function AdminHeader() {
           )}
         </div>
 
-        <div className="h-6 w-px bg-slate-800 mx-1"></div>
+        <div className="hidden sm:block h-6 w-px bg-slate-800 mx-1"></div>
 
         {/* User Session Info Badge */}
         <div className="flex items-center gap-3 bg-slate-900/90 border border-slate-800/90 py-1.5 px-3 rounded-xl">
