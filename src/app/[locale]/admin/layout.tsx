@@ -4,6 +4,7 @@ import { AdminDataProvider } from "./AdminDataContext";
 import { AdminSidebar } from "./AdminSidebar";
 import { AdminHeader } from "./AdminHeader";
 import { AdminToaster } from "./components/AdminToaster";
+import { AdminNavProvider } from "./AdminNav";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard | HOMOLA MENTOR KFT",
@@ -23,6 +24,7 @@ export default function AdminLayout({
         és a sidebar Sync gombja minden nézetet egyszerre frissít.
       */}
       <AdminDataProvider>
+        <AdminNavProvider>
         <div className="flex w-full min-h-screen bg-[#0B0F17] text-slate-100 font-sans antialiased">
           {/* Sidebar */}
           <AdminSidebar />
@@ -33,9 +35,10 @@ export default function AdminLayout({
             <AdminHeader />
 
             {/* Viewport content */}
-            <main className="flex-1 p-6 lg:p-8 overflow-y-auto">{children}</main>
+            <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">{children}</main>
           </div>
         </div>
+        </AdminNavProvider>
 
         {/* Globális toast értesítések (szinkronizáció visszajelzés) */}
         <AdminToaster />
