@@ -5,9 +5,14 @@ import { useTranslations } from 'next-intl';
 import { useChat } from '@ai-sdk/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, Loader2, Sparkles } from 'lucide-react';
+import { usePathname } from '@/i18n/routing';
 
 export default function AIChatAssistant() {
   const t = useTranslations('AIChatAssistant');
+  // Az admin felületen mobilon (lg alatt) a lebegő buborék a kártyák jobb szélére
+  // csúszott; ott elrejtjük. A publikus oldalon és az asztali adminon marad.
+  const pathname = usePathname();
+  const isAdmin = pathname === '/admin' || pathname.startsWith('/admin/');
   const [isOpen, setIsOpen] = useState(false);
   
   const [inputText, setInputText] = useState('');
@@ -37,7 +42,7 @@ export default function AIChatAssistant() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className={`fixed bottom-6 right-6 z-50${isAdmin ? ' max-lg:hidden' : ''}`}>
       <AnimatePresence>
         {/* Kinyílt chat ablak */}
         {isOpen && (
