@@ -4,8 +4,10 @@ import { getToken } from 'next-auth/jwt';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 import { isAllowedAdminEmail } from './lib/adminAccess';
+import { nextAuthSecret } from './lib/nextAuthSecret';
 
 const intlMiddleware = createMiddleware(routing);
+const NEXTAUTH_SECRET = nextAuthSecret();
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -27,7 +29,7 @@ export async function proxy(req: NextRequest) {
   if (isAdminRoute) {
     const token = await getToken({
       req,
-      secret: process.env.NEXTAUTH_SECRET || "homolamentor-secret-key-change-in-prod"
+      secret: NEXTAUTH_SECRET,
     });
 
     if (!token) {

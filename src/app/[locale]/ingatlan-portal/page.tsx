@@ -6,7 +6,10 @@ import { Link } from '@/i18n/routing';
 
 const PropertyTeaserGrid = dynamic(() => import('@/components/PropertyTeaserGrid'));
 const VIPAccessGateway = dynamic(() => import('@/components/VIPAccessGateway'));
-const PropertySearchSection = dynamic(() => import('@/components/PropertySearchSection'));
+const PropertySearchPreview = dynamic(() => import('@/components/PropertySearchPreview'));
+
+// Card f1798734: the two-stage search (free Gemini tier, source-checked) is live since 2026-10-04
+// (Péter, Telegram 5947). The first prototype (PropertySearchSection, paid AI Gateway) is retired.
 
 export async function generateMetadata({
   params,
@@ -54,8 +57,8 @@ export default function RealEstatePortalPage() {
         {/* Ingatlan Hero Fejléc */}
         <RealEstateHero />
 
-        {/* Élő AI Ingatlankereső */}
-        <PropertySearchSection />
+        {/* Élő AI Ingatlankereső: kétfokozatú, forrás-ellenőrzött (f1798734) */}
+        <PropertySearchPreview />
 
         {/* Kiemelt Ajánlatok Grid (Teaser) */}
         <PropertyTeaserGrid />

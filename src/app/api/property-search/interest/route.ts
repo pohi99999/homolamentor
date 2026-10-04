@@ -1,175 +1,160 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { google } from "googleapis";
 import { Resend } from "resend";
-import { escapeHtml } from "@/lib/escapeHtml";
-import type { TeaserResult } from "@/lib/propertySearch";
+import { str, validateInterest, type InterestBody } from "@/lib/propertyInterest";
+import { openCard, type CardSecret } from "@/lib/propertyResearch/cardToken";
+import { findSources } from "@/lib/propertyResearch/preview";
+import { buildResearchPrompt, buildTeamEmail, sheetRow, RESEARCH_MAX, type Lead } from "@/lib/propertyResearch/lead";
+import { groundedGenerate, resolveSourceUrls, DEFAULT_MODEL } from "@/lib/propertyResearch/gemini";
+import { WindowLimiter, DailyCap, envInt, looksLikeBot } from "@/lib/propertyResearch/limits";
+import { fetchPageText } from "@/lib/propertyResearch/pageText";
+import { handleLegacyInterest, type LegacyInterestBody } from "@/lib/propertyResearch/legacyInterest";
 
-const SPREADSHEET_ID =
-  process.env.GOOGLE_SPREADSHEET_ID_MASTER ||
-  "1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ";
+// Stage 2 of the two-stage property search (card f1798734, contract src/lib/propertyPreview.ts):
+// the "Érdekel" form. The lead is recorded first (Sheet row, status "queued"), the visitor gets
+// { ok: true }, and the detailed, source-checked research runs after the response (next/server
+// after()); its result goes to the team e-mail and the row's status becomes "sent" or
+// "email_failed". Personal data is never sent to the model.
+
+export const maxDuration = 300;
+
+const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID_MASTER || "1sUFyo5mjohe5kTs2bTNbVvKJLr3_tIF8MxsCETRp4uQ";
 const SHEET_NAME = "Kereslet_Talalatok";
+// Resend's sandbox sender delivers only to the Resend account's own address (measured on
+// production 2026-08-23), so the test recipient is that address; office.homlamentor@gmail.com needs
+// a verified sending domain first. The recipient is configuration, not code.
+const LEAD_TO = process.env.LEAD_TO || "peterpohankapersonal@gmail.com";
+const LEAD_FROM = process.env.LEAD_FROM || "HOMLAMENTOR <onboarding@resend.dev>";
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const perIp = new WindowLimiter(envInt(process.env.PROPERTY_INTEREST_PER_HOUR, 20, 1), 3_600_000);
+const researchCap = new DailyCap(envInt(process.env.PROPERTY_RESEARCH_DAILY_CAP, 10, 0));
 
-const SUPPORTED_LOCALES = ["hu", "en", "de", "fr"];
-
-async function appendDemandRow(row: string[]): Promise<{ success: boolean; message?: string }> {
+function sheetsClient() {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  let privateKey = process.env.GOOGLE_PRIVATE_KEY;
-  if (!email || !privateKey) {
-    return { success: false, message: "Hiányzó GOOGLE_SERVICE_ACCOUNT_EMAIL/GOOGLE_PRIVATE_KEY." };
-  }
-  privateKey = privateKey.replace(/\\n/g, "\n");
-  if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
-    privateKey = privateKey.slice(1, -1);
-  }
+  let key = process.env.GOOGLE_PRIVATE_KEY;
+  if (!email || !key) return null;
+  key = key.replace(/\\n/g, "\n");
+  if (key.startsWith('"') && key.endsWith('"')) key = key.slice(1, -1);
+  const auth = new google.auth.JWT({ email, key, scopes: ["https://www.googleapis.com/auth/spreadsheets"] });
+  return google.sheets({ version: "v4", auth });
+}
 
+/** Appends the row; returns the A1 address of its status cell (column J), or null. */
+async function appendQueued(row: string[]): Promise<string | null> {
+  const sheets = sheetsClient();
+  if (!sheets) return null;
   try {
-    const auth = new google.auth.JWT({
-      email,
-      key: privateKey,
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-    });
-    const sheets = google.sheets({ version: "v4", auth });
-    await sheets.spreadsheets.values.append({
+    const res = await sheets.spreadsheets.values.append({
       spreadsheetId: SPREADSHEET_ID,
-      range: `'${SHEET_NAME}'!A1:J1`,
+      range: `'${SHEET_NAME}'!A1:O1`,
       valueInputOption: "USER_ENTERED",
       insertDataOption: "INSERT_ROWS",
       requestBody: { values: [row] },
     });
-    return { success: true };
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    return { success: false, message };
+    const m = res.data.updates?.updatedRange?.match(/![A-Z]+(\d+)/);
+    return m ? `'${SHEET_NAME}'!J${m[1]}` : null;
+  } catch (err) {
+    console.error("Kereslet_Talalatok append:", err instanceof Error ? err.message : err);
+    return null;
   }
 }
 
+async function setStatus(cell: string | null, status: string) {
+  const sheets = sheetsClient();
+  if (!sheets || !cell) return;
+  try {
+    await sheets.spreadsheets.values.update({ spreadsheetId: SPREADSHEET_ID, range: cell, valueInputOption: "RAW", requestBody: { values: [[status]] } });
+  } catch (err) {
+    console.error("Kereslet_Talalatok status:", err instanceof Error ? err.message : err);
+  }
+}
+
+function clientIp(request: Request): string {
+  return (request.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || request.headers.get("x-real-ip") || "unknown";
+}
+
 export async function POST(request: Request) {
-  let body: {
-    query?: string;
-    matchedResult?: TeaserResult;
-    name?: string;
-    email?: string;
-    locale?: string;
-  };
+  let body: InterestBody & { cardId?: unknown };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { query, matchedResult, name, email, locale } = body;
-
-  if (!query || !matchedResult || !name || !email) {
-    return NextResponse.json(
-      { error: "A keresési kifejezés, a találat, a név és az e-mail cím megadása kötelező." },
-      { status: 400 }
-    );
+  // The old production UI still posts the first prototype's shape here: keep it working unchanged.
+  if (body && typeof body === "object" && "matchedResult" in body) {
+    return handleLegacyInterest(body as LegacyInterestBody);
   }
 
-  const safeLocale = locale && SUPPORTED_LOCALES.includes(locale) ? locale : "hu";
-  const today = new Date().toISOString().split("T")[0];
+  // Spam: answer like a success so the bot learns nothing, record nothing.
+  if (looksLikeBot(body.website, body.startedAt, Date.now())) {
+    return NextResponse.json({ ok: true });
+  }
+  const limited = perIp.take(`ip:${clientIp(request)}`);
+  if (!limited.ok) {
+    return NextResponse.json({ error: "rate_limited", retryAfter: limited.retryAfter }, { status: 429 });
+  }
+  const errors = validateInterest(body);
+  const query = str(body.query).slice(0, 300);
+  if (query.length < 3) errors.query = "Hiányzik a keresés szövege.";
+  if (Object.keys(errors).length) {
+    return NextResponse.json({ ok: false, errors }, { status: 400 });
+  }
 
-  const row = [
-    `'${today}`,
+  const secret = process.env.PROPERTY_SEARCH_SECRET;
+  const chosen: CardSecret | null = secret && typeof body.cardId === "string" ? openCard(body.cardId, secret) : null;
+  const lead: Lead = {
+    name: str(body.name),
+    email: str(body.email),
+    phone: str(body.phone),
+    marketing: body.marketing === true,
     query,
-    matchedResult.category || "",
-    matchedResult.locationHint || "",
-    matchedResult.priceRange || "",
-    matchedResult.summary || "",
-    name,
-    email,
-    safeLocale,
-    "Új",
-  ];
+    receivedAt: Date.now(),
+  };
 
-  const teamEmailHtml = `
-    <div style="background-color: #0b0f19; color: #f1f5f9; font-family: sans-serif; padding: 40px; border-radius: 16px; max-width: 600px; margin: 0 auto; border: 1px solid #1e293b;">
-      <h1 style="color: #ffffff; font-size: 20px; margin: 0 0 20px 0;">Új kereslet-találat érdeklődés</h1>
-      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-        <tr><td style="padding: 8px 0; color: #94a3b8; width: 140px;">Keresési kifejezés:</td><td style="padding: 8px 0; color: #ffffff;">${escapeHtml(query)}</td></tr>
-        <tr><td style="padding: 8px 0; color: #94a3b8;">Kategória:</td><td style="padding: 8px 0; color: #ffffff;">${escapeHtml(matchedResult.category || "")}</td></tr>
-        <tr><td style="padding: 8px 0; color: #94a3b8;">Lokáció:</td><td style="padding: 8px 0; color: #ffffff;">${escapeHtml(matchedResult.locationHint || "")}</td></tr>
-        <tr><td style="padding: 8px 0; color: #94a3b8;">Ár-tartomány:</td><td style="padding: 8px 0; color: #34d399;">${escapeHtml(matchedResult.priceRange || "Nincs megadva")}</td></tr>
-        <tr><td style="padding: 8px 0; color: #94a3b8; vertical-align: top;">AI-összefoglaló:</td><td style="padding: 8px 0; color: #ffffff; white-space: pre-wrap;">${escapeHtml(matchedResult.summary || "")}</td></tr>
-        <tr><td style="padding: 8px 0; color: #94a3b8;">Érdeklődő:</td><td style="padding: 8px 0; color: #ffffff;">${escapeHtml(name)}</td></tr>
-        <tr><td style="padding: 8px 0; color: #94a3b8;">E-mail:</td><td style="padding: 8px 0; color: #38bdf8;"><a href="mailto:${escapeHtml(email)}" style="color: #38bdf8;">${escapeHtml(email)}</a></td></tr>
-      </table>
-    </div>
-  `;
+  const statusCell = await appendQueued(sheetRow(lead, chosen));
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!statusCell && !resendKey) {
+    // no durable record anywhere: do not tell the visitor it worked
+    console.error("property-search/interest: neither the Sheet nor Resend is configured");
+    return NextResponse.json({ error: "unavailable" }, { status: 503 });
+  }
 
-  // A visitor confirmation email is intentionally NOT sent here: this project
-  // has no verified Resend sending domain yet, and the shared sandbox sender
-  // (onboarding@resend.dev, used below) can only deliver to the Resend
-  // account's own verified address (peterpohankapersonal@gmail.com — see
-  // sendTeamEmail() below). Sending to an arbitrary visitor address from that
-  // sender fails outright. Once a custom domain is verified in Resend, a
-  // visitor confirmation can be added back using CONFIRMATION_COPY-style
-  // per-locale text.
-
-  async function sendTeamEmail(): Promise<{ success: boolean; message?: string }> {
-    if (!resend) return { success: false, message: "RESEND_API_KEY not configured" };
-    // Live-verified on production (2026-08-23): Resend's sandbox sender can
-    // only deliver to the Resend ACCOUNT's own verified address, which is
-    // peterpohankapersonal@gmail.com — NOT office.homlamentor@gmail.com,
-    // even though that alias is what other routes in this codebase send to.
-    // office.homlamentor@gmail.com is a "send mail as" alias on that same
-    // Gmail account, but Resend's sandbox restriction checks the literal
-    // verified address, not aliases. Sending to office.homlamentor@gmail.com
-    // here failed with: "You can only send testing emails to your own email
-    // address (peterpohankapersonal@gmail.com)."
-    const res = await resend.emails.send({
-      from: "HOMLAMENTOR <onboarding@resend.dev>",
-      to: ["peterpohankapersonal@gmail.com"],
-      subject: `Új kereslet-találat érdeklődés: ${query}`,
-      html: teamEmailHtml,
-    });
-    if (res.error) {
-      return { success: false, message: res.error.message };
+  after(async () => {
+    let research: Awaited<ReturnType<typeof findSources>>["found"] | null = null;
+    let researchError: string | null = null;
+    const apiKey = process.env.PROPERTY_SEARCH_GEMINI_API_KEY;
+    if (!apiKey) researchError = "nincs Gemini-kulcs beállítva";
+    else if (!researchCap.take()) researchError = "a napi ingyenes kutatási keret elfogyott";
+    else {
+      try {
+        const r = await findSources(
+          query,
+          {
+            grounded: (p) => groundedGenerate(p, apiKey, { model: process.env.PROPERTY_SEARCH_MODEL || DEFAULT_MODEL }),
+            resolve: (u) => resolveSourceUrls(u),
+            pageText: (u) => fetchPageText(u),
+            secret: secret ?? "",
+            now: Date.now,
+          },
+          RESEARCH_MAX,
+          buildResearchPrompt(query, chosen),
+        );
+        research = r.found;
+        console.info("property-search/interest research audit:", JSON.stringify(r.audit));
+      } catch (err) {
+        researchError = err instanceof Error ? err.message : String(err);
+      }
     }
-    return { success: true };
-  }
-
-  const [sheetResult, teamEmailResult] = await Promise.allSettled([
-    appendDemandRow(row),
-    sendTeamEmail(),
-  ]);
-
-  const sheetOk = sheetResult.status === "fulfilled" && sheetResult.value.success;
-  if (!sheetOk) {
-    console.error(
-      "Kereslet_Talalatok írási hiba:",
-      sheetResult.status === "fulfilled" ? sheetResult.value.message : sheetResult.reason
-    );
-  }
-  const teamEmailOk = teamEmailResult.status === "fulfilled" && teamEmailResult.value.success;
-  if (!teamEmailOk) {
-    console.error(
-      "Csapat-értesítő e-mail hiba:",
-      teamEmailResult.status === "fulfilled" ? teamEmailResult.value.message : teamEmailResult.reason
-    );
-  }
-
-  // Honest status (I2): if neither the Sheets row nor the team notification
-  // actually landed anywhere, this lead has no durable record at all — the
-  // caller must not be told this succeeded.
-  if (!sheetOk && !teamEmailOk) {
-    return NextResponse.json(
-      {
-        success: false,
-        integrations: { sheet: "failed", teamEmail: resend ? "failed" : "mocked", userEmail: "skipped" },
-      },
-      { status: 502 }
-    );
-  }
-
-  return NextResponse.json({
-    success: true,
-    integrations: {
-      sheet: sheetOk ? "success" : "failed",
-      teamEmail: resend ? (teamEmailOk ? "sent" : "failed") : "mocked",
-      userEmail: "skipped",
-    },
+    const { subject, html } = buildTeamEmail(lead, chosen, research, researchError);
+    let sent = false;
+    if (resendKey) {
+      const res = await new Resend(resendKey).emails.send({ from: LEAD_FROM, to: [LEAD_TO], subject, html });
+      sent = !res.error;
+      if (res.error) console.error("property-search/interest e-mail:", res.error.message);
+    }
+    await setStatus(statusCell, sent ? "sent" : "email_failed");
   });
+
+  return NextResponse.json({ ok: true });
 }
