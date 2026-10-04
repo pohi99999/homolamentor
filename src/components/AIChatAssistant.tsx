@@ -42,9 +42,9 @@ export default function AIChatAssistant() {
   };
 
   return (
-    // The launcher is a tab in the page's 24 px right gutter (every section has px-6), so it never
-    // covers text or a button, whatever the scroll position (card 101bbcda: the round 56 px bubble
-    // sat on the search title at 390 px and on the footer's "Kapcsolat" link at every width).
+    // The launcher is a 20 px tab in the page's 24 px right gutter (every section has px-6), so a text
+    // line always stays at least 4 px away from it (card 101bbcda: the round 56 px bubble covered the
+    // search title at 390 px and "Kapcsolat" at every width; a 24 px tab still touched line ends).
     <div className={`fixed bottom-6 right-0 z-50 flex flex-col items-end ${isAdmin ? 'max-lg:hidden' : ''}`}>
       <AnimatePresence>
         {/* Kinyílt chat ablak */}
@@ -150,7 +150,7 @@ export default function AIChatAssistant() {
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         whileTap={{ scale: 0.95 }}
-        className="relative flex h-16 w-6 items-center justify-center rounded-l-xl bg-gradient-to-b from-amber-500 to-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/25 cursor-pointer hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+        className="relative flex h-16 w-5 items-center justify-center rounded-l-xl bg-gradient-to-b from-amber-500 to-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/25 cursor-pointer hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
         aria-label={isOpen ? 'AI Chat asszisztens bezárása' : 'AI Chat asszisztens megnyitása'}
         aria-expanded={isOpen}
         title="AI Chat asszisztens"
