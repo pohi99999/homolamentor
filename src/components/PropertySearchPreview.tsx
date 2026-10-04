@@ -14,15 +14,27 @@ import { QUERY_MAX, QUERY_MIN, type PreviewCard, type PreviewResponse } from '@/
 const PREVIEW_URL = '/api/property-search/preview';
 const INTEREST_URL = '/api/property-search/interest';
 
+// Stub mode is read from the URLs, so pointing them at the real endpoints also switches off every
+// "nothing is sent" text below; those would be false once real leads go out.
+const USES_STUBS = PREVIEW_URL.endsWith('-stub') || INTEREST_URL.endsWith('-preview');
+
 const PROMPTS = ['Ipari terület Szeged környékén', 'Építési telek 1000 m² fölött, közművel', 'Üzlethelyiség belvárosban'];
 
-type Phase = 'idle' | 'loading' | 'results' | 'empty' | 'error' | 'limited';
+type Phase = 'idle' | 'loading' | 'results' | 'empty' | 'error' | 'limited' | 'unavailable';
+
+// 429 retryAfter (seconds) as words; a long wait (daily limit) is not worth a number.
+function waitText(seconds: number | null) {
+  if (!seconds || seconds <= 0) return 'később';
+  if (seconds > 90 * 60) return 'később';
+  return `kb. ${Math.max(1, Math.ceil(seconds / 60))} perc múlva`;
+}
 type FormState = 'editing' | 'sending' | 'sent';
 
 export default function PropertySearchPreview() {
   const [query, setQuery] = useState('');
   const [phase, setPhase] = useState<Phase>('idle');
   const [cards, setCards] = useState<PreviewCard[]>([]);
+  const [retryAfter, setRetryAfter] = useState<number | null>(null);
   const [chosen, setChosen] = useState<PreviewCard | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -37,7 +49,12 @@ export default function PropertySearchPreview() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: text }),
       });
-      if (res.status === 429) return setPhase('limited');
+      if (res.status === 429) {
+        const body = await res.json().catch(() => ({}));
+        setRetryAfter(typeof body.retryAfter === 'number' ? body.retryAfter : null);
+        return setPhase('limited');
+      }
+      if (res.status === 503) return setPhase('unavailable');
       if (!res.ok) return setPhase('error');
       const data: PreviewResponse = await res.json();
       if (data.status === 'ok' && data.cards.length) {
@@ -61,7 +78,11 @@ export default function PropertySearchPreview() {
       <div className="max-w-4xl mx-auto">
         <p className="mx-auto mb-6 flex w-fit max-w-full items-start gap-2 rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-xs text-amber-200">
           <FlaskConical className="h-4 w-4 shrink-0" aria-hidden="true" />
-          <span>Előnézet: a keresés mintaadatokkal fut, az űrlap nem küld és nem tárol adatot.</span>
+          <span>
+            {USES_STUBS
+              ? 'Előnézet: a keresés mintaadatokkal fut, az űrlap nem küld és nem tárol adatot.'
+              : 'Tesztüzem: a kereső kipróbálás alatt áll.'}
+          </span>
         </p>
 
         <div className="text-center mb-8">
@@ -112,7 +133,8 @@ export default function PropertySearchPreview() {
           ))}
         </div>
         <p className="mt-4 text-center text-xs text-slate-500">
-          Az összegzést mesterséges intelligencia készíti, a találatok ellenőrzés alatt állnak.
+          Az összegzést mesterséges intelligencia készíti, a találatok ellenőrzés alatt állnak. Kérjük, ne írjon a
+          keresőbe személyes adatot.
         </p>
 
         <div aria-live="polite" className="mt-10">
@@ -182,13 +204,15 @@ export default function PropertySearchPreview() {
             </div>
           )}
 
-          {(phase === 'error' || phase === 'limited') && (
+          {(phase === 'error' || phase === 'limited' || phase === 'unavailable') && (
             <div role="alert" className="mx-auto max-w-xl rounded-2xl border border-red-400/30 bg-red-500/5 px-6 py-8 text-center text-sm leading-relaxed text-slate-300">
               <AlertTriangle className="mx-auto mb-3 h-6 w-6 text-red-300" aria-hidden="true" />
               <p>
                 {phase === 'limited'
-                  ? 'Most nem indíthat több keresést. Kérjen ajánlatot, és a csapatunk kézzel utánanéz.'
-                  : 'A keresés most nem sikerült. Próbálja újra néhány perc múlva, vagy kérjen ajánlatot, és a csapatunk kézzel utánanéz.'}
+                  ? `Most nem indíthat több keresést, próbálja újra ${waitText(retryAfter)}. Addig kérjen ajánlatot, és a csapatunk kézzel utánanéz.`
+                  : phase === 'unavailable'
+                    ? 'A kereső most nem érhető el. Kérjen ajánlatot, és a csapatunk kézzel utánanéz.'
+                    : 'A keresés most nem sikerült. Próbálja újra néhány perc múlva, vagy kérjen ajánlatot, és a csapatunk kézzel utánanéz.'}
               </p>
               <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
                 {phase === 'error' && (
@@ -373,7 +397,7 @@ function InterestDialog({
               {state === 'sending' && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
               Elküldöm
             </button>
-            <p className="text-center text-[11px] text-slate-500">Előnézet: a gomb nem küld el semmit.</p>
+            {USES_STUBS && <p className="text-center text-[11px] text-slate-500">Előnézet: a gomb nem küld el semmit.</p>}
           </form>
         )}
       </div>
