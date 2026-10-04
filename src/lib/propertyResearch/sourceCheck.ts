@@ -19,6 +19,17 @@ export const PORTAL_DENYLIST = [
   'immobilienscout24.de',
 ];
 
+// Official sellers (state, enforcement, municipal): the only pages the content check may fetch.
+// Every other non-denied source stays "pending" (from the search tool's data, never fetched),
+// because its terms of use have not been checked (ch. 7.1).
+export const OFFICIAL_SUFFIXES = ['gov.hu', 'mnv.hu', 'mbvk.hu', 'magyarorszag.hu'];
+
+export function isOfficial(raw: string): boolean {
+  const host = hostOf(raw);
+  if (!host) return false;
+  return OFFICIAL_SUFFIXES.some((d) => host === d || host.endsWith(`.${d}`));
+}
+
 export type SourceCandidate = {
   sourceUrl: string;
   quote?: string | null;
@@ -84,6 +95,25 @@ export function filterByOrigin<T extends SourceCandidate>(
     else dropped.push({ candidate: c, verdict });
   }
   return { kept, dropped };
+}
+
+export type ResultSource = { uri: string; url: string | null };
+export type MatchVerdict = OriginVerdict | 'unresolved';
+
+/**
+ * The model cites the search tool's redirect URIs (it never sees the real URLs), or sometimes the
+ * real URL. A card's source matches if it equals either the URI or the resolved URL of a real
+ * result; the card then carries the resolved real URL, and the portal rule is checked on that.
+ * Anything else was not returned by the search: invented, dropped.
+ */
+export function matchSource(cardUrl: string, results: ResultSource[]): { verdict: MatchVerdict; url: string | null } {
+  const n = normalizeUrl(cardUrl);
+  if (!n) return { verdict: 'invalid_url', url: null };
+  const hit = results.find((r) => normalizeUrl(r.uri) === n || (r.url !== null && normalizeUrl(r.url) === n));
+  if (!hit) return { verdict: 'not_in_results', url: null };
+  if (!hit.url) return { verdict: 'unresolved', url: null };
+  if (isDeniedPortal(hit.url)) return { verdict: 'denied_portal', url: hit.url };
+  return { verdict: 'ok', url: hit.url };
 }
 
 /** Lower-case, accents off, whitespace collapsed: for "does the page say this number" checks. */

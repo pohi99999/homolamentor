@@ -42,7 +42,9 @@ export async function groundedGenerate(
     body: JSON.stringify({
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       tools: [{ google_search: {} }],
-      generationConfig: { temperature: opts.temperature ?? 0.1 },
+      // Thinking off: measured 2026-10-04, with thinking on the answer hit MAX_TOKENS and came back
+      // WITHOUT groundingChunks; with thinkingBudget 0 the same question gave 9 chunks + 6 supports.
+      generationConfig: { temperature: opts.temperature ?? 0.1, maxOutputTokens: 4000, thinkingConfig: { thinkingBudget: 0 } },
     }),
   });
   if (!res.ok) {
@@ -73,33 +75,34 @@ export function parseGrounded(json: unknown): GroundedAnswer {
 const REDIRECT_HOSTS = ['vertexaisearch.cloud.google.com'];
 
 /**
- * Grounding URIs are redirect wrappers; the origin check needs the real page URL. Reads only the
- * Location header (redirect: 'manual'), never the page itself. Unresolvable URIs are left out.
+ * Grounding URIs are redirect wrappers (vertexaisearch.cloud.google.com/grounding-api-redirect/...),
+ * and the model only ever sees and cites those (measured 2026-10-04). Each one is resolved to the
+ * real page by reading only its Location header (redirect: 'manual'); the page itself is not
+ * fetched. `url` is null when the wrapper could not be resolved.
  */
 export async function resolveSourceUrls(
   uris: string[],
   deps: GeminiDeps = { fetch: (...a) => fetch(...a) },
   timeoutMs = 4000,
-): Promise<string[]> {
-  const out = await Promise.all(
+): Promise<{ uri: string; url: string | null }[]> {
+  return Promise.all(
     uris.map(async (uri) => {
       let host = '';
       try {
         host = new URL(uri).hostname;
       } catch {
-        return null;
+        return { uri, url: null };
       }
-      if (!REDIRECT_HOSTS.includes(host)) return uri;
+      if (!REDIRECT_HOSTS.includes(host)) return { uri, url: uri };
       try {
         const res = await deps.fetch(uri, { method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(timeoutMs) });
         const loc = res.headers.get('location');
-        return loc && /^https?:\/\//.test(loc) ? loc : null;
+        return { uri, url: loc && /^https?:\/\//.test(loc) ? loc : null };
       } catch {
-        return null;
+        return { uri, url: null };
       }
     }),
   );
-  return out.filter((u): u is string => !!u);
 }
 
 /** The model's answer is asked as JSON; tolerate the fenced block it often wraps it in. */

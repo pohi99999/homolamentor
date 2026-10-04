@@ -1,7 +1,7 @@
 // node --test --experimental-strip-types src/lib/propertyResearch/__tests__/*.test.ts
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { checkOrigin, filterByOrigin, isDeniedPortal, normalizeUrl, quoteFoundIn } from '../sourceCheck.ts';
+import { checkOrigin, filterByOrigin, isDeniedPortal, isOfficial, matchSource, normalizeUrl, quoteFoundIn } from '../sourceCheck.ts';
 import { WindowLimiter, DailyCap, budapestDay, looksLikeBot } from '../limits.ts';
 import { sealCard, openCard, type CardSecret } from '../cardToken.ts';
 import { parseGrounded, resolveSourceUrls, extractJson, type GroundedAnswer } from '../gemini.ts';
@@ -101,8 +101,37 @@ test('resolveSourceUrls follows only the redirect wrapper, via the Location head
     return new Response(null, { status: 302, headers: { location: REAL } });
   }) as unknown as typeof fetch;
   const out = await resolveSourceUrls(['https://vertexaisearch.cloud.google.com/grounding-api-redirect/abc', REAL2], { fetch: fakeFetch });
-  assert.deepEqual(out, [REAL, REAL2]);
+  assert.deepEqual(out, [
+    { uri: 'https://vertexaisearch.cloud.google.com/grounding-api-redirect/abc', url: REAL },
+    { uri: REAL2, url: REAL2 },
+  ]);
   assert.equal(calls.length, 1); // the plain URL was not fetched
+});
+
+const R = (i: number) => `https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQ${i}`;
+
+test('matchSource: the cited redirect URI maps to the real page; the real URL itself also matches', () => {
+  const results = [{ uri: R(1), url: REAL }, { uri: R(2), url: REAL2 }];
+  assert.deepEqual(matchSource(R(1), results), { verdict: 'ok', url: REAL });
+  assert.deepEqual(matchSource(REAL2, results), { verdict: 'ok', url: REAL2 });
+});
+
+test('matchSource: an invented redirect URI or URL is not in the results (negative probe)', () => {
+  const results = [{ uri: R(1), url: REAL }];
+  assert.equal(matchSource(R(999), results).verdict, 'not_in_results');
+  assert.equal(matchSource('https://kitalalt.hu/telek', results).verdict, 'not_in_results');
+  assert.equal(matchSource(R(1), [{ uri: R(1), url: null }]).verdict, 'unresolved');
+});
+
+test('matchSource: a portal hidden behind a redirect URI is still dropped', () => {
+  assert.equal(matchSource(R(3), [{ uri: R(3), url: 'https://ingatlan.com/szeged/123' }]).verdict, 'denied_portal');
+});
+
+test('only official pages are content-checked', () => {
+  assert.equal(isOfficial(REAL), true);
+  assert.equal(isOfficial('https://arveres.nav.gov.hu/x'), true);
+  assert.equal(isOfficial(REAL2), false);
+  assert.equal(isOfficial('https://dh.hu/x'), false);
 });
 
 test('extractJson tolerates a fenced block', () => {
@@ -110,15 +139,22 @@ test('extractJson tolerates a fenced block', () => {
   assert.equal(extractJson('no json here'), null);
 });
 
-function deps(modelText: string, resultUrls: string[], pages: Record<string, string> = {}): PreviewDeps {
-  const answer: GroundedAnswer = { text: modelText, sourceUris: resultUrls.map((uri) => ({ uri, title: null })), searchQueries: [] };
-  return { grounded: async () => answer, resolve: async (u) => u, pageText: async (u) => pages[u] ?? null, secret: SECRET, now: () => 42 };
+// The search tool returns redirect URIs; resultUrls[i] is the real page behind R(i).
+function deps(modelText: string, resultUrls: string[], pages: Record<string, string> = {}, fetched: string[] = []): PreviewDeps {
+  const answer: GroundedAnswer = { text: modelText, sourceUris: resultUrls.map((_, i) => ({ uri: R(i), title: null })), searchQueries: [] };
+  return {
+    grounded: async () => answer,
+    resolve: async (uris) => uris.map((uri) => ({ uri, url: resultUrls[Number(uri.replace(/.*AUZIYQ/, ''))] ?? null })),
+    pageText: async (u) => { fetched.push(u); return pages[u] ?? null; },
+    secret: SECRET,
+    now: () => 42,
+  };
 }
 
 test('stage 1: a real source -> card without URL; a made-up URL never reaches the visitor', async () => {
   const model = JSON.stringify({ cards: [
-    { category: 'Ipari terület', place: 'Szeged', area: 'kb. 1,5 ha', utilities: 'víz, villany', priceBand: '180 M Ft', sourceUrl: REAL, quote: 'Az ingatlan területe 1,52 hektár, teljes közművel.' },
-    { category: 'Ipari terület', place: 'Szeged', area: '2 ha', utilities: null, priceBand: null, sourceUrl: 'https://kitalalt-hirdetes.hu/telek/1', quote: 'kitalált' },
+    { category: 'Ipari terület', place: 'Szeged', area: 'kb. 1,5 ha', utilities: 'víz, villany', priceBand: '180 M Ft', sourceUrl: R(0), quote: 'Az ingatlan területe 1,52 hektár, teljes közművel.' },
+    { category: 'Ipari terület', place: 'Szeged', area: '2 ha', utilities: null, priceBand: null, sourceUrl: R(7), quote: 'kitalált' },
   ] });
   const out = await runPreview('szegedi iparterület 1,5 ha közműves', deps(model, [REAL], { [REAL]: 'Az ingatlan területe 1,52 hektár, teljes közművel. Kikiáltási ár 180 millió Ft.' }));
   assert.equal(out.response.status, 'ok');
@@ -126,29 +162,36 @@ test('stage 1: a real source -> card without URL; a made-up URL never reaches th
   assert.equal(cards.length, 1);
   assert.equal(cards[0].verification, 'verified');
   assert.equal(JSON.stringify(cards).includes('http'), false);
-  assert.equal(JSON.stringify(cards).includes('kitalalt'), false);
   assert.equal(openCard(cards[0].id, SECRET)?.sourceUrl, REAL);
-  assert.deepEqual(out.audit.dropped, [{ sourceUrl: 'https://kitalalt-hirdetes.hu/telek/1', verdict: 'not_in_results' }]);
+  assert.deepEqual(out.audit.dropped, [{ sourceUrl: R(7), verdict: 'not_in_results' }]);
 });
 
 test('stage 1: only made-up sources -> empty, not invented cards', async () => {
-  const model = JSON.stringify({ cards: [{ category: 'Telek', place: 'Szeged', sourceUrl: 'https://nincs-ilyen.hu/a', quote: 'x' }] });
+  const model = JSON.stringify({ cards: [{ category: 'Telek', place: 'Szeged', sourceUrl: R(5), quote: 'x' }, { category: 'Telek', place: 'Szeged', sourceUrl: 'https://nincs-ilyen.hu/a', quote: 'x' }] });
   const out = await runPreview('szeged telek', deps(model, [REAL]));
   assert.deepEqual(out.response, { status: 'empty' });
 });
 
 test('stage 1: a portal page from the search is dropped; unparseable model text is empty', async () => {
   const portal = 'https://ingatlan.com/szeged/123';
-  const out = await runPreview('szeged telek', deps(JSON.stringify({ cards: [{ category: 'Telek', place: 'Szeged', sourceUrl: portal, quote: 'x' }] }), [portal]));
+  const out = await runPreview('szeged telek', deps(JSON.stringify({ cards: [{ category: 'Telek', place: 'Szeged', sourceUrl: R(0), quote: 'x' }] }), [portal]));
   assert.deepEqual(out.response, { status: 'empty' });
   assert.equal(out.audit.dropped[0].verdict, 'denied_portal');
   assert.deepEqual((await runPreview('szeged telek', deps('sajnos nem találtam', [REAL]))).response, { status: 'empty' });
 });
 
-test('stage 1: an unverifiable quote stays "pending"; contact data is scrubbed from the fields', async () => {
-  const model = JSON.stringify({ cards: [{ category: 'Ipari terület', place: 'Szeged, hívja: +36 30 123 4567 info@x.hu', area: '1,5 ha', sourceUrl: REAL2, quote: 'Ez a mondat nincs az oldalon sehol.' }] });
-  const out = await runPreview('szeged', deps(model, [REAL2], { [REAL2]: 'egészen más szöveg' }));
+test('stage 1: a non-official source is never fetched and stays "pending"; contact data is scrubbed', async () => {
+  const fetched: string[] = [];
+  const model = JSON.stringify({ cards: [{ category: 'Ipari terület', place: 'Szeged, hívja: +36 30 123 4567 info@x.hu', area: '1,5 ha', sourceUrl: R(0), quote: 'Ez a mondat akár ott is lehetne az oldalon.' }] });
+  const out = await runPreview('szeged', deps(model, [REAL2], { [REAL2]: 'Ez a mondat akár ott is lehetne az oldalon.' }, fetched));
   const c = out.response.status === 'ok' ? out.response.cards[0] : null;
   assert.equal(c?.verification, 'pending');
+  assert.deepEqual(fetched, []);
   assert.equal(/\d{3}|@/.test(c?.place ?? ''), false);
+});
+
+test('stage 1: an official source whose quote is NOT on the page stays "pending"', async () => {
+  const model = JSON.stringify({ cards: [{ category: 'Ipari terület', place: 'Szeged', sourceUrl: R(0), quote: 'Ez a mondat nincs az oldalon sehol.' }] });
+  const out = await runPreview('szeged', deps(model, [REAL], { [REAL]: 'egészen más szöveg' }));
+  assert.equal(out.response.status === 'ok' ? out.response.cards[0].verification : null, 'pending');
 });

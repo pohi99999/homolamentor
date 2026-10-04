@@ -1,7 +1,7 @@
 // Stage 1 of the property search (card f1798734, contract src/lib/propertyPreview.ts): the
 // visitor's text -> at most 3 cards, each backed by a page the search tool really returned.
 // Pure orchestration; the route supplies the Gemini call, the page fetcher and the secret.
-import { filterByOrigin, isDeniedPortal, quoteFoundIn, PORTAL_DENYLIST } from './sourceCheck.ts';
+import { matchSource, isOfficial, quoteFoundIn, PORTAL_DENYLIST, type ResultSource } from './sourceCheck.ts';
 import { extractJson, type GroundedAnswer } from './gemini.ts';
 import { sealCard, type CardSecret } from './cardToken.ts';
 
@@ -29,8 +29,8 @@ export type ModelCard = {
 
 export type PreviewDeps = {
   grounded: (prompt: string) => Promise<GroundedAnswer>;
-  resolve: (uris: string[]) => Promise<string[]>;
-  /** Visible text of an allowed (non-portal) page, or null; used for the content check. */
+  resolve: (uris: string[]) => Promise<ResultSource[]>;
+  /** Visible text of an official page (see isOfficial), or null; used for the content check. */
   pageText: (url: string) => Promise<string | null>;
   secret: string;
   now: () => number;
@@ -47,7 +47,7 @@ export function buildPrompt(query: string): string {
     `- NE használd ezeket a portálokat, és ne hivatkozz rájuk: ${PORTAL_DENYLIST.join(', ')}.`,
     '- Előnyben: állami és önkormányzati értékesítés (pl. e-arveres.mnv.hu, arveres.nav.gov.hu, arveres.mbvk.hu, önkormányzati pályázati felhívások), ipari parkok, fejlesztők saját oldalai.',
     '- Csak olyan ingatlant írj, amelyet egy konkrét találati oldal tényleg leír. Ha nincs ilyen, adj üres listát. Semmit ne találj ki.',
-    '- Minden találathoz add meg a forrásoldal teljes URL-jét (sourceUrl) és egy szó szerinti, legalább egy mondatos idézetet az oldalról, amely a területet vagy az árat tartalmazza (quote).',
+    '- Minden találathoz add meg a forrásoldal URL-jét pontosan úgy, ahogy a keresési találatokban kaptad (sourceUrl), és egy szó szerinti, legalább egy mondatos idézetet az oldalról, amely a területet vagy az árat tartalmazza (quote).',
     '- A place mező csak település vagy térség legyen, pontos cím, helyrajzi szám, hirdető, telefon vagy e-mail SOHA.',
     `- Legfeljebb ${MAX_CARDS} találat.`,
     '',
@@ -76,22 +76,32 @@ export async function findSources(query: string, deps: PreviewDeps, max: number,
   const answer = await deps.grounded(prompt);
   const parsed = extractJson<{ cards?: ModelCard[] }>(answer.text);
   const proposed = Array.isArray(parsed?.cards) ? parsed!.cards.slice(0, 10) : [];
-  const resultUrls = await deps.resolve(answer.sourceUris.map((s) => s.uri));
-  const withUrl = proposed.filter((c): c is ModelCard & { sourceUrl: string } => typeof c.sourceUrl === 'string');
-  const { kept, dropped } = filterByOrigin(withUrl, resultUrls);
-
+  const results = await deps.resolve(answer.sourceUris.map((s) => s.uri));
+  const dropped: { sourceUrl: string; verdict: string }[] = [];
   const found: FoundSource[] = [];
-  for (const c of kept.slice(0, max)) {
+  for (const c of proposed) {
+    if (found.length >= max) break;
+    if (typeof c.sourceUrl !== 'string') {
+      dropped.push({ sourceUrl: '', verdict: 'invalid_url' });
+      continue;
+    }
+    const m = matchSource(c.sourceUrl, results);
+    if (m.verdict !== 'ok' || !m.url) {
+      dropped.push({ sourceUrl: (m.url ?? c.sourceUrl).slice(0, 200), verdict: m.verdict });
+      continue;
+    }
     const category = clean(c.category, 60);
     const place = clean(c.place, 60);
     if (!category || !place) continue;
+    // Content check only on official pages; any other source is never fetched (its terms are
+    // unchecked) and stays "pending" for the team to open by hand.
     let verification: 'verified' | 'pending' = 'pending';
-    if (!isDeniedPortal(c.sourceUrl) && c.quote) {
-      const text = await deps.pageText(c.sourceUrl).catch(() => null);
+    if (isOfficial(m.url) && c.quote) {
+      const text = await deps.pageText(m.url).catch(() => null);
       if (text && quoteFoundIn(text, c.quote)) verification = 'verified';
     }
     found.push({
-      sourceUrl: c.sourceUrl,
+      sourceUrl: m.url,
       quote: typeof c.quote === 'string' ? c.quote.slice(0, 500) : null,
       category,
       place,
@@ -108,8 +118,8 @@ export async function findSources(query: string, deps: PreviewDeps, max: number,
     audit: {
       proposed: proposed.length,
       kept: found.length,
-      dropped: dropped.map((d) => ({ sourceUrl: String(d.candidate.sourceUrl).slice(0, 200), verdict: d.verdict })),
-      resultUrls: resultUrls.length,
+      dropped,
+      resultUrls: results.length,
     },
   };
 }
