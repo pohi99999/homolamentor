@@ -6,6 +6,7 @@ import { WindowLimiter, DailyCap, budapestDay, looksLikeBot } from '../limits.ts
 import { sealCard, openCard, type CardSecret } from '../cardToken.ts';
 import { parseGrounded, resolveSourceUrls, extractJson, type GroundedAnswer } from '../gemini.ts';
 import { runPreview, type PreviewDeps } from '../preview.ts';
+import { buildTeamEmail, statusHu } from '../lead.ts';
 
 const REAL = 'https://e-arveres.mnv.hu/arveres/12345';
 const REAL2 = 'https://www.szeged.hu/palyazat/ipari-telek-2026';
@@ -194,4 +195,19 @@ test('stage 1: an official source whose quote is NOT on the page stays "pending"
   const model = JSON.stringify({ cards: [{ category: 'Ipari terület', place: 'Szeged', sourceUrl: R(0), quote: 'Ez a mondat nincs az oldalon sehol.' }] });
   const out = await runPreview('szeged', deps(model, [REAL], { [REAL]: 'egészen más szöveg' }));
   assert.equal(out.response.status === 'ok' ? out.response.cards[0].verification : null, 'pending');
+});
+
+test('team e-mail: honest status per source type, escaped HTML', () => {
+  assert.match(statusHu('pending', 'https://iparszeged.hu/'), /nem töltöttük le/);
+  assert.match(statusHu('pending', REAL), /hivatalos oldal, de az idézetet nem találtuk/);
+  assert.match(statusHu('verified', REAL), /ELLENŐRIZVE/);
+  const { html } = buildTeamEmail(
+    { name: 'Teszt <b>Elek</b>', email: 'a@b.hu', phone: '+36 30 000 0000', marketing: false, query: 'szeged', receivedAt: 0 },
+    null,
+    [{ ...sample, utilities: null, sourceUrl: 'https://iparszeged.hu/' }],
+    null,
+  );
+  assert.equal(html.includes('<b>Elek</b>'), false); // escaped
+  assert.match(html, /iparszeged\.hu/);
+  assert.match(html, /nem töltöttük le/);
 });

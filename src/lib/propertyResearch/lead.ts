@@ -3,6 +3,7 @@
 // phone) never goes to the model: the free Gemini tier may use prompts to improve Google's products.
 import { buildPrompt, type FoundSource } from './preview.ts';
 import type { CardSecret } from './cardToken.ts';
+import { isOfficial } from './sourceCheck.ts';
 
 export const RESEARCH_MAX = 5;
 
@@ -24,14 +25,20 @@ export type Lead = {
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-const statusHu = (v: 'verified' | 'pending') => (v === 'verified' ? 'ELLENŐRIZVE (az idézet szerepel az oldalon)' : 'ELLENŐRIZETLEN (az idézetet nem találtuk az oldalon, kézzel nyisd meg)');
+// Honest wording: a non-official page is never downloaded, so "not found on the page" would be false.
+export const statusHu = (v: 'verified' | 'pending', url: string) =>
+  v === 'verified'
+    ? 'ELLENŐRIZVE (az idézet szerepel a hivatalos oldalon)'
+    : isOfficial(url)
+      ? 'ELLENŐRIZETLEN (hivatalos oldal, de az idézetet nem találtuk rajta; nyisd meg kézzel)'
+      : 'NEM ELLENŐRIZVE (nem hivatalos forrás, az oldalt nem töltöttük le; nyisd meg kézzel)';
 
 function sourceBlock(s: Pick<FoundSource, 'category' | 'place' | 'area' | 'priceBand' | 'sourceUrl' | 'quote' | 'verification'>): string {
   const href = /^https?:\/\//.test(s.sourceUrl) ? esc(s.sourceUrl) : '#';
   return `<li style="margin:0 0 12px 0">
   <b>${esc(s.category)}</b>, ${esc(s.place)}${s.area ? `, ${esc(s.area)}` : ''}${s.priceBand ? `, ${esc(s.priceBand)}` : ''}<br>
   Forrás: <a href="${href}">${esc(s.sourceUrl)}</a><br>
-  ${s.quote ? `Idézet: „${esc(s.quote)}”<br>` : ''}Állapot: ${statusHu(s.verification)}
+  ${s.quote ? `Idézet: „${esc(s.quote)}”<br>` : ''}Állapot: ${statusHu(s.verification, s.sourceUrl)}
 </li>`;
 }
 
