@@ -1,45 +1,57 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Search, Loader2, MapPin, Ruler, Plug, Tag, X, CheckCircle2, FlaskConical } from 'lucide-react';
+import { Search, Loader2, MapPin, Ruler, Plug, Tag, X, CheckCircle2, FlaskConical, ShieldCheck, Clock, AlertTriangle } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { validateInterest } from '@/lib/propertyInterest';
+import { QUERY_MAX, QUERY_MIN, type PreviewCard, type PreviewResponse } from '@/lib/propertyPreview';
 
-// PREVIEW of the property-search module (card f1798734, content: homola-artifaktok 01, chapter 8).
-// Search results are the made-up examples of chapter 8.2, nothing is fetched; the "Érdekel" form
-// posts to /api/property-search/interest-preview, which validates and then drops everything.
-// The model call, the office e-mail address and the sending domain wait for Péter's decision.
+// PREVIEW of the two-stage property-search module (card f1798734, content 75acc820, ch. 2.2 and 8).
+// Stage 1 (visitor preview) and stage 2 (lead form) talk to STUB endpoints in the shape of the draft
+// contract in src/lib/propertyPreview.ts; the real backend (Kenshin) replaces them. The stubs answer
+// with the made-up examples of ch. 8.2 and send or store nothing.
 
-type Example = { category: string; place: string; area: string; utilities: string; price: string };
-
-const EXAMPLES: Example[] = [
-  { category: 'Ipari terület', place: 'Szeged környéke', area: 'kb. 1,4-1,6 ha', utilities: 'víz, villany, csatorna', price: 'egyeztetendő' },
-  { category: 'Ipari terület', place: 'Szeged környéke', area: 'kb. 1,5 ha', utilities: 'villany, víz; csatorna tervezett', price: 'egyeztetendő' },
-  { category: 'Építési telek', place: 'Csongrád-Csanád vármegye', area: 'kb. 2 ha', utilities: 'közmű a telekhatáron', price: 'egyeztetendő' },
-];
+const PREVIEW_URL = '/api/property-search/preview-stub';
+const INTEREST_URL = '/api/property-search/interest-preview';
 
 const PROMPTS = ['Ipari terület Szeged környékén', 'Építési telek 1000 m² fölött, közművel', 'Üzlethelyiség belvárosban'];
 
-// The mock "finds" the examples only for queries they plausibly answer, so the empty state shows too.
-const MATCH = /szeged|csongr|ipar|telek|ha\b|hektár|közm/i;
-
-type Phase = 'idle' | 'loading' | 'results' | 'empty';
+type Phase = 'idle' | 'loading' | 'results' | 'empty' | 'error' | 'limited';
 type FormState = 'editing' | 'sending' | 'sent';
 
 export default function PropertySearchPreview() {
   const [query, setQuery] = useState('');
   const [phase, setPhase] = useState<Phase>('idle');
-  const [chosen, setChosen] = useState<Example | null>(null);
+  const [cards, setCards] = useState<PreviewCard[]>([]);
+  const [chosen, setChosen] = useState<PreviewCard | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const search = (q: string) => {
-    if (q.trim().length < 3 || phase === 'loading') return;
+  const search = async (q: string) => {
+    const text = q.trim();
+    if (text.length < QUERY_MIN || phase === 'loading') return;
     setQuery(q);
     setPhase('loading');
-    window.setTimeout(() => setPhase(MATCH.test(q) ? 'results' : 'empty'), 1400);
+    try {
+      const res = await fetch(PREVIEW_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: text }),
+      });
+      if (res.status === 429) return setPhase('limited');
+      if (!res.ok) return setPhase('error');
+      const data: PreviewResponse = await res.json();
+      if (data.status === 'ok' && data.cards.length) {
+        setCards(data.cards.slice(0, 3));
+        setPhase('results');
+      } else {
+        setPhase('empty');
+      }
+    } catch {
+      setPhase('error');
+    }
   };
 
-  const openForm = (example: Example | null) => {
+  const openForm = (example: PreviewCard | null) => {
     setChosen(example);
     dialogRef.current?.showModal();
   };
@@ -73,12 +85,13 @@ export default function PropertySearchPreview() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="pl. szegedi iparterületet keresek, 1,5 ha, közműves"
-            minLength={3}
+            minLength={QUERY_MIN}
+            maxLength={QUERY_MAX}
             className="min-w-0 flex-1 bg-slate-900/60 border border-slate-800 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none focus:border-blue-500/50 rounded-xl px-5 py-4 text-base sm:text-sm text-slate-100 placeholder-slate-500"
           />
           <button
             type="submit"
-            disabled={phase === 'loading' || query.trim().length < 3}
+            disabled={phase === 'loading' || query.trim().length < QUERY_MIN}
             className="px-6 py-4 bg-gradient-to-r from-blue-500 to-sky-400 disabled:opacity-50 text-slate-950 font-bold rounded-xl flex items-center justify-center gap-2 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
           >
             {phase === 'loading' ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : <Search className="w-5 h-5" aria-hidden="true" />}
@@ -113,29 +126,47 @@ export default function PropertySearchPreview() {
           )}
 
           {phase === 'results' && (
-            <ul className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {EXAMPLES.map((ex, i) => (
-                <li key={i} className="flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-5">
-                  <span className="mb-3 w-fit rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-1 text-[11px] font-semibold text-amber-200">
-                    Példa, nem valós hirdetés
-                  </span>
-                  <h3 className="text-base font-bold text-white">{ex.category}</h3>
-                  <dl className="mt-3 space-y-2 text-sm text-slate-300">
-                    <div className="flex gap-2"><dt className="sr-only">Település</dt><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" /><dd>{ex.place}</dd></div>
-                    <div className="flex gap-2"><dt className="sr-only">Terület</dt><Ruler className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" /><dd>{ex.area}</dd></div>
-                    <div className="flex gap-2"><dt className="sr-only">Közmű</dt><Plug className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" /><dd>{ex.utilities}</dd></div>
-                    <div className="flex gap-2"><dt className="sr-only">Ársáv</dt><Tag className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" /><dd>Ár: {ex.price}</dd></div>
-                  </dl>
-                  <button
-                    type="button"
-                    onClick={() => openForm(ex)}
-                    className="mt-5 w-full rounded-xl border border-blue-500/30 bg-blue-500/10 py-2.5 text-sm font-semibold text-blue-200 hover:bg-blue-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300"
-                  >
-                    Érdekel, kérek további információt
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className="grid grid-cols-1 gap-5 md:grid-cols-3">
+                {cards.map((c) => (
+                  <li key={c.id} className="flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-5">
+                    <div className="mb-3 flex flex-wrap gap-2">
+                      {c.verification === 'verified' ? (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-200">
+                          <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" /> Forrás ellenőrizve
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-slate-600 bg-slate-800/60 px-2.5 py-1 text-[11px] font-semibold text-slate-300">
+                          <Clock className="h-3.5 w-3.5" aria-hidden="true" /> Ellenőrzés alatt
+                        </span>
+                      )}
+                      {c.example && (
+                        <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-1 text-[11px] font-semibold text-amber-200">
+                          Példa, nem valós hirdetés
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-base font-bold text-white">{c.category}</h3>
+                    <dl className="mt-3 flex-1 space-y-2 text-sm text-slate-300">
+                      <div className="flex gap-2"><dt className="sr-only">Település</dt><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" /><dd>{c.place}</dd></div>
+                      {c.area && <div className="flex gap-2"><dt className="sr-only">Terület</dt><Ruler className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" /><dd>{c.area}</dd></div>}
+                      {c.utilities && <div className="flex gap-2"><dt className="sr-only">Közmű</dt><Plug className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" /><dd>{c.utilities}</dd></div>}
+                      <div className="flex gap-2"><dt className="sr-only">Ársáv</dt><Tag className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" /><dd>Ár: {c.priceBand ?? 'egyeztetendő'}</dd></div>
+                    </dl>
+                    <button
+                      type="button"
+                      onClick={() => openForm(c)}
+                      className="mt-5 w-full rounded-xl border border-blue-500/30 bg-blue-500/10 py-2.5 text-sm font-semibold text-blue-200 hover:bg-blue-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300"
+                    >
+                      Érdekel, kérek további információt
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 text-center text-xs text-slate-500 [text-wrap:balance]">
+                A részletes, ellenőrzött kutatást a jelentkezése után végezzük el, és munkatársunk egyezteti Önnel.
+              </p>
+            </>
           )}
 
           {phase === 'empty' && (
@@ -148,6 +179,35 @@ export default function PropertySearchPreview() {
               >
                 Kérek kézi keresést
               </button>
+            </div>
+          )}
+
+          {(phase === 'error' || phase === 'limited') && (
+            <div role="alert" className="mx-auto max-w-xl rounded-2xl border border-red-400/30 bg-red-500/5 px-6 py-8 text-center text-sm leading-relaxed text-slate-300">
+              <AlertTriangle className="mx-auto mb-3 h-6 w-6 text-red-300" aria-hidden="true" />
+              <p>
+                {phase === 'limited'
+                  ? 'Most nem indíthat több keresést. Kérjen ajánlatot, és a csapatunk kézzel utánanéz.'
+                  : 'A keresés most nem sikerült. Próbálja újra néhány perc múlva, vagy kérjen ajánlatot, és a csapatunk kézzel utánanéz.'}
+              </p>
+              <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
+                {phase === 'error' && (
+                  <button
+                    type="button"
+                    onClick={() => search(query)}
+                    className="rounded-xl border border-slate-700 px-5 py-2.5 font-semibold text-slate-200 hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300"
+                  >
+                    Újrapróbálom
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => openForm(null)}
+                  className="rounded-xl bg-gradient-to-r from-blue-500 to-sky-400 px-5 py-2.5 font-bold text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
+                >
+                  Kérek kézi keresést
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -165,7 +225,7 @@ function InterestDialog({
 }: {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   query: string;
-  chosen: Example | null;
+  chosen: PreviewCard | null;
 }) {
   const [state, setState] = useState<FormState>('editing');
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -195,6 +255,7 @@ function InterestDialog({
       marketing: f.get('marketing') === 'on',
       website: String(f.get('website') ?? ''),
       query,
+      cardId: chosen?.id ?? null,
       startedAt: startedAt.current,
     };
     const found = validateInterest(body);
@@ -206,14 +267,14 @@ function InterestDialog({
     }
     setState('sending');
     try {
-      const res = await fetch('/api/property-search/interest-preview', {
+      const res = await fetch(INTEREST_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
       const data = await res.json();
       if (!res.ok) {
-        setErrors(data.errors ?? { form: 'Nem sikerült elküldeni. Próbálja újra.' });
+        setErrors(data.errors ?? { form: res.status === 429 ? 'Túl sok beküldés. Próbálja újra később.' : 'Nem sikerült elküldeni. Próbálja újra.' });
         setState('editing');
         return;
       }
