@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { isAllowedAdminEmail } from "./adminAccess";
+import { nextAuthSecret } from "./nextAuthSecret";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -20,5 +21,5 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET || "homolamentor-secret-key-change-in-prod",
+  secret: nextAuthSecret(),
 };

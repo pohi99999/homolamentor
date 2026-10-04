@@ -183,6 +183,13 @@ function extractStatusCode(error: unknown): number | undefined {
 }
 
 export async function POST(request: Request) {
+  // Card f1798734: while the free-tier two-stage search is tested, this paid path (Vercel AI
+  // Gateway + Perplexity) is off everywhere except production, where the old UI still calls it.
+  // The preview UI uses /api/property-search/preview instead.
+  if (process.env.VERCEL_ENV !== "production") {
+    return NextResponse.json({ error: "gone", use: "/api/property-search/preview" }, { status: 410 });
+  }
+
   let body: { query?: string; locale?: string };
   try {
     body = await request.json();

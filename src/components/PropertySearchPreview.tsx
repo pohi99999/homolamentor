@@ -11,8 +11,8 @@ import { QUERY_MAX, QUERY_MIN, type PreviewCard, type PreviewResponse } from '@/
 // contract in src/lib/propertyPreview.ts; the real backend (Kenshin) replaces them. The stubs answer
 // with the made-up examples of ch. 8.2 and send or store nothing.
 
-const PREVIEW_URL = '/api/property-search/preview-stub';
-const INTEREST_URL = '/api/property-search/interest-preview';
+const PREVIEW_URL = '/api/property-search/preview';
+const INTEREST_URL = '/api/property-search/interest';
 
 const PROMPTS = ['Ipari terület Szeged környékén', 'Építési telek 1000 m² fölött, közművel', 'Üzlethelyiség belvárosban'];
 
