@@ -42,7 +42,10 @@ export default function AIChatAssistant() {
   };
 
   return (
-    <div className={`fixed bottom-6 right-6 z-50${isAdmin ? ' max-lg:hidden' : ''}`}>
+    // The launcher is a tab in the page's 24 px right gutter (every section has px-6), so it never
+    // covers text or a button, whatever the scroll position (card 101bbcda: the round 56 px bubble
+    // sat on the search title at 390 px and on the footer's "Kapcsolat" link at every width).
+    <div className={`fixed bottom-6 right-0 z-50 flex flex-col items-end ${isAdmin ? 'max-lg:hidden' : ''}`}>
       <AnimatePresence>
         {/* Kinyílt chat ablak */}
         {isOpen && (
@@ -51,7 +54,7 @@ export default function AIChatAssistant() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 100, damping: 15 }}
-            className="w-[90vw] sm:w-[380px] h-[500px] bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-3xl shadow-2xl shadow-slate-950/80 flex flex-col overflow-hidden mb-4"
+            className="mr-4 sm:mr-6 w-[90vw] sm:w-[380px] h-[min(500px,calc(100dvh-8rem))] bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-3xl shadow-2xl shadow-slate-950/80 flex flex-col overflow-hidden mb-4"
           >
             {/* Fejléc */}
             <div className="bg-slate-950/80 border-b border-slate-850 px-6 py-4 flex justify-between items-center shrink-0">
@@ -146,13 +149,14 @@ export default function AIChatAssistant() {
       {/* Lebegő gomb */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500 to-emerald-400 flex items-center justify-center text-slate-950 shadow-2xl shadow-emerald-500/25 hover:shadow-black/40 cursor-pointer relative focus-visible:ring-2 focus-visible:ring-emerald-450 focus-visible:outline-none"
-        aria-label="AI Chat asszisztens megnyitása"
+        className="relative flex h-16 w-6 items-center justify-center rounded-l-xl bg-gradient-to-b from-amber-500 to-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/25 cursor-pointer hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+        aria-label={isOpen ? 'AI Chat asszisztens bezárása' : 'AI Chat asszisztens megnyitása'}
+        aria-expanded={isOpen}
+        title="AI Chat asszisztens"
       >
-        <span className="absolute inset-0 rounded-full bg-emerald-400/20 scale-110 animate-ping pointer-events-none" />
-        <MessageSquare className="w-6 h-6" />
+        <span className="pointer-events-none absolute top-1.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-white/90 motion-safe:animate-pulse" />
+        <MessageSquare className="h-4 w-4" aria-hidden="true" />
       </motion.button>
     </div>
   );
