@@ -83,6 +83,13 @@ export default function AdatkezelesPage() {
                 <li><strong>Google (Google Sheets, Gmail API)</strong> — a beérkezett érdeklődők nyilvántartására (CRM) és a levelezéstörténet megjelenítésére az admin felületen.</li>
                 <li><strong>n8n</strong> automatizációs platform — a megkeresések belső feldolgozási folyamatba történő továbbítására.</li>
               </ul>
+              {/* Approved by Péter (Telegram 5938), card f1798734; Gemini API terms, EEA clause, last updated 2026-04-28. */}
+              <p className="mt-3">
+                <strong>Ingatlan-kereső:</strong> a keresőmezőbe írt szöveget a találatok előállításához a Google LLC Gemini API
+                szolgáltatása dolgozza fel, adatfeldolgozóként. A Gemini API feltételei szerint az Európai Gazdasági Térségben a
+                Google ezt a tartalmat nem használja termékei fejlesztésére, de korlátozott ideig naplózza a visszaélések
+                felderítése érdekében. Kérjük, ne írjon a keresőbe személyes adatot.
+              </p>
               <p className="mt-3">Az adatokat harmadik fél részére, a fentieken túl, reklám vagy egyéb célú értékesítésre nem adjuk át.</p>
             </section>
 
