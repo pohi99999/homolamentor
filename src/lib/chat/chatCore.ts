@@ -6,10 +6,12 @@
 // are masked before anything is sent to Gemini.
 import { GEMINI_BASE } from '../propertyResearch/gemini.ts';
 
-// A different model from the property search (gemini-2.5-flash): Google lists the free-tier limits
-// per model, so the chat should not use up the search's daily requests (from the docs, not measured
-// here). The chat's own daily cap in the route is the guard that does not depend on that.
-export const DEFAULT_CHAT_MODEL = 'gemini-2.5-flash-lite';
+// A different model from the property search (gemini-2.5-flash). gemini-2.5-flash-lite answered 404
+// on this key on the preview (2026-10-06): Google's models page says access to the 2.5 models is now
+// limited to projects that used them before, and names 3.5 Flash-Lite for new projects (read through
+// the quarantine reader, a summary, confirmed by the live preview call). The chat's own daily cap
+// in the route is the guard that does not depend on Google's per-model limits.
+export const DEFAULT_CHAT_MODEL = 'gemini-3.5-flash-lite';
 export const MAX_TURNS = 12;
 export const MAX_CHARS_PER_TURN = 2000;
 export const CONTACT_EMAIL = 'office.homlamentor@gmail.com';
@@ -67,6 +69,14 @@ const FALLBACK: Record<Lang, string> = {
 };
 export const fallbackText = (lang: Lang) => FALLBACK[lang];
 
+// thinkingBudget is a 2.5-model setting; other models get no thinking config and more output room,
+// so any thinking they do cannot cut the visible answer short.
+export function generationConfig(model: string) {
+  return model.startsWith('gemini-2.5')
+    ? { temperature: 0.3, maxOutputTokens: 1024, thinkingConfig: { thinkingBudget: 0 } }
+    : { temperature: 0.3, maxOutputTokens: 4096 };
+}
+
 /** One Gemini call; any failure (no key, 429, 503, network, empty answer) becomes the fallback. */
 export async function answer(
   turns: ChatTurn[],
@@ -85,7 +95,7 @@ export async function answer(
       body: JSON.stringify({
         system_instruction: { parts: [{ text: system }] },
         contents: turns.map((t) => ({ role: t.role, parts: [{ text: redactPersonal(t.text) }] })),
-        generationConfig: { temperature: 0.3, maxOutputTokens: 1024, thinkingConfig: { thinkingBudget: 0 } },
+        generationConfig: generationConfig(model),
       }),
     });
     if (!res.ok) {

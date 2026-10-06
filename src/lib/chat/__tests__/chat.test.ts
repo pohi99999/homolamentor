@@ -1,7 +1,7 @@
 // node --test --experimental-strip-types src/lib/chat/__tests__/*.test.ts   (npm run test:chat)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { toTurns, redactPersonal, detectLang, answer, uiMessageStream, UI_STREAM_HEADERS, DEFAULT_CHAT_MODEL, CONTACT_EMAIL, fallbackText } from '../chatCore.ts';
+import { toTurns, redactPersonal, detectLang, answer, uiMessageStream, UI_STREAM_HEADERS, DEFAULT_CHAT_MODEL, CONTACT_EMAIL, fallbackText, generationConfig } from '../chatCore.ts';
 // The exact client the site ships: @ai-sdk/react 4 bundles AI SDK 7 (its own nested "ai").
 import { DefaultChatTransport, readUIMessageStream } from '../../../../node_modules/@ai-sdk/react/node_modules/ai/dist/index.js';
 
@@ -86,4 +86,10 @@ test('why the chat was dead even with a key: the old plain-text answer is not re
     for await (const m of readUIMessageStream({ stream })) text = (m as { parts: { type: string; text?: string }[] }).parts.filter((p) => p.type === 'text').map((p) => p.text).join('');
   } catch { failed = true; }
   assert.ok(failed || text === '', `the old format must not render as an answer (got "${text}")`);
+});
+
+test('generation config: thinkingBudget only for 2.5 models', () => {
+  assert.deepEqual(generationConfig('gemini-2.5-flash').thinkingConfig, { thinkingBudget: 0 });
+  assert.equal('thinkingConfig' in generationConfig(DEFAULT_CHAT_MODEL), false);
+  assert.equal(DEFAULT_CHAT_MODEL, 'gemini-3.5-flash-lite');
 });
