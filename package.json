@@ -9,7 +9,8 @@
     "lint": "eslint",
     "create-drafts": "node scripts/create_portfolio_drafts.js",
     "sync-campaign": "node scripts/sync_campaign_delivery.js",
-    "test:property": "node --test --experimental-strip-types --no-warnings src/lib/propertyResearch/__tests__/*.test.ts"
+    "test:property": "node --test --experimental-strip-types --no-warnings src/lib/propertyResearch/__tests__/*.test.ts",
+    "test:chat": "node --test --experimental-strip-types --no-warnings src/lib/chat/__tests__/*.test.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.41",
