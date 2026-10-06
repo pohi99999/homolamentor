@@ -17,12 +17,11 @@ export default function AIChatAssistant() {
   
   const [inputText, setInputText] = useState('');
   
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const { messages, append, isLoading } = useChat({
-    // @ts-expect-error - custom baseURL client routing mismatch
-    api: '/api/chat',
-  }) as any;
-  /* eslint-enable @typescript-eslint/no-explicit-any */
+  // @ai-sdk/react 4 is the AI SDK 7 client: no append/isLoading/content any more, it is
+  // sendMessage + status + message.parts, and it reads a UI message stream from /api/chat
+  // (card 06c41d5e: the old append() call threw before anything was sent).
+  const { messages, sendMessage, status } = useChat();
+  const isLoading = status === 'submitted' || status === 'streaming';
 
 
 
@@ -37,7 +36,7 @@ export default function AIChatAssistant() {
     e.preventDefault();
     if (!inputText.trim()) return;
 
-    append({ role: 'user', content: inputText });
+    sendMessage({ text: inputText });
     setInputText('');
   };
 
@@ -91,7 +90,7 @@ export default function AIChatAssistant() {
                 </div>
               </div>
 
-              {messages.map((msg: { id: string; role: string; content: string }) => (
+              {messages.map((msg) => (
                 <div
                   key={msg.id}
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -103,7 +102,9 @@ export default function AIChatAssistant() {
                         : 'bg-slate-900/60 border border-slate-850 text-slate-200 rounded-tl-none font-light'
                     }`}
                   >
-                    <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                    <p className="leading-relaxed whitespace-pre-wrap">
+                      {msg.parts.map((part) => (part.type === 'text' ? part.text : '')).join('')}
+                    </p>
                   </div>
                 </div>
               ))}
