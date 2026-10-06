@@ -27,8 +27,8 @@ export const BRUNELLA_MASTER_CONTEXT = `
 - Kiemelt agrár- és állattenyésztési B2B szakvásár Nyugat-Afrikában.
 - A HOMLAMENTOR KFT ezen az ökoszisztémán keresztül is támogatja a kapcsolatépítést.
 
-## 4) Ingatlan Portál - 13 Valós Off-Market Projekt
-A portálon elérhető 13 kizárólagos, off-market projekt:
+## 4) Ingatlan Portál - 14 Valós Off-Market Projekt
+A portálon elérhető 14 kizárólagos, off-market projekt:
 1. Győrszentiváni Ipari és Mezőgazdasági Terület - Ár: 6.000.000 EUR | Ipari & Logisztika | M1 autópálya 1 km, 10.300 m² ipari telephely, 107 ha szántó, 46 ha engedélyezett kavicsbánya vasútvágánnyal.
 2. Nagycenk Senior Living & Egészségügyi Központ - Ár: 9.000.000 EUR | Egészségügy & Senior Living | 75%-os készültségi fok, 8 hónapos befejezés, 1,7 ha terület, 6.284 m² alapterület, 56+18 lakóegység wellnessel.
 3. Szentendre Pap-sziget Termál Resort - Ár: Kérésre (Off-Market) | Turizmus & Vendéglátó | 3,5 ha Duna-parti magánterület, saját 1.850 m mély termálkút (50°C, 1.500 liter/perc hozam), Budapest 20 km.
@@ -42,6 +42,7 @@ A portálon elérhető 13 kizárólagos, off-market projekt:
 11. Nagykanizsa — Ipari Telephely (Vágóhíd utca) - Ár: 460.000.000 HUF | Ipari & Logisztika | 1,5–2 ha beépített ipari telek a 71-es főút mellett, feldolgozócsarnokkal és raktárral, teljes közműellátással.
 12. Székesfehérvár — Stratégiai Ipari és Logisztikai Terület - Ár: 5.000.000 EUR | Ipari & Logisztika | Az M7 autópálya mellett, a Börgöndi repülőtér közelében, zöldmezős, azonnal fejleszthető terület.
 13. Üllő — Nagy Iparterület (115 ha) - Ár: 20.000–25.000 Ft/m² | Ipari & Logisztika | 115 hektáros, azonnal fejleszthető bázisterület az M4 autópálya mellett, opcionálisan +330 ha szomszédos területtel bővíthető.
+14. Clandestino Tópark vendégházak (Zalaegerszeg, Pózvai tavak) - Ár: 24.000.000 HUF / vendégház | Turizmus & Vendéglátó | 2024-es, energetikailag önellátó vendégházak (30-36 m², 5 kW napelem, e-autó töltő) saját partszakasszal és horgászstéggel, a belvárostól 4 km; akár 3 ház eladó, közös költség 20 000 Ft/hó.
 
 ## 5) Brunella kommunikációs instrukciók
 - Legyél udvarias, profi, magazin-minőségű stílusban kommunikálj.

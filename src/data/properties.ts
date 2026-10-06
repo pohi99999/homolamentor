@@ -216,5 +216,22 @@ export const properties: Property[] = [
     ],
     description: "Kiemelkedő méretű, 115 hektáros ipari fejlesztési bázisterület Üllőn, közvetlenül a 4-es autópálya mellett, a repülőtér közelében. A kivett (beépítésre szánt) terület azonnal fejleszthető, 12 méteres megengedett építési magassággal. A csatlakozó 330 hektáros szomszédos terület megegyezés alapján, kb. féláron is megszerezhető.",
     translationKey: "prop13"
+  },
+  {
+    id: "14",
+    title: "Clandestino Tópark vendégházak (Zalaegerszeg)",
+    location: "Zalaegerszeg, Pózvai tavak (a belvárostól 4 km)",
+    price: "24.000.000 HUF / vendégház",
+    currency: "",
+    category: "Turizmus & Vendéglátó",
+    features: [
+      "Akár 3 vendégház eladó: egyenként 30-36 m², 500-800 m² terület tulajdoni hányaddal",
+      "50-70 m saját partszakasz horgászstéggel",
+      "2024-es építés: 1 szoba, fürdő+WC, teakonyha, hűtő-fűtő klíma, akadálymentes",
+      "Energetikailag önellátó: 5 kW napelem házanként, saját e-autó töltőpont",
+      "Bekerített, parkosított, elektromos kapu; 3x40 A, ivóvíz; közös költség 20 000 Ft/hó"
+    ],
+    description: "Újszerű, 2024-ben épült vendégházak a Zalaegerszeg melletti Pózvai tavaknál, a Clandestino Tóparkban, a belvárostól 4 km-re. A házak energetikailag önellátók (5 kW napelem házanként, saját e-autó töltőpont), 10 cm-es szigeteléssel és hűtő-fűtő klímával. Mindegyikhez saját partszakasz és horgászstég tartozik. A bekerített, parkosított parkban jelenleg 4 felszerelt vendégház áll; akár 3 ház is megvásárolható, kiadásra vagy saját pihenésre.",
+    translationKey: "prop14"
   }
 ];
